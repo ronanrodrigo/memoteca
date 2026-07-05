@@ -52,47 +52,5 @@
       "mode": "subagent",
       "color": "secondary"
     }
-  },
-  "command": {
-    "memotek-research": {
-      "template": "Execute o agente Researcher: busque projetos similares no GitHub para a feature descrita na issue atual. Use make search-projects.",
-      "description": "Busca projetos open source para benchmarking",
-      "agent": "researcher"
-    },
-    "memotek-stack": {
-      "template": "Execute o agente Stack Selector: analise a pesquisa e selecione a stack tecnológica ideal para o projeto.",
-      "description": "Seleciona stack tecnológica",
-      "agent": "stack-selector"
-    },
-    "memotek-implement": {
-      "template": "Execute o agente Implementer: configure o projeto Next.js com make scaffold PROJECT_NAME=\".\" e implemente as features da issue.",
-      "description": "Implementa projeto e features",
-      "agent": "implementer"
-    },
-    "memotek-deploy": {
-      "template": "Execute o agente Deploy Agent: configure GitHub Actions com make gh-actions-setup e faça deploy preview com make deploy-preview.",
-      "description": "Configura CI/CD e faz deploy preview",
-      "agent": "deploy-agent"
-    },
-    "memotek-ci": {
-      "template": "Execute o agente CI Agent: configure o pipeline de testes com make gh-actions-setup. Valide make install, make lint, make typecheck, make test, make build.",
-      "description": "Configura pipeline de CI/CD",
-      "agent": "ci-agent"
-    },
-    "memotek-pr": {
-      "template": "Execute o agente PR Validator: monitore os checks do PR, teste o preview com make test-preview, e faça merge com make pr-merge quando tudo verde.",
-      "description": "Monitora e valida PRs",
-      "agent": "pr-validator"
-    },
-    "memotek-memory": {
-      "template": "Execute o agente Memory Agent: atualize a issue com o progresso atual, marque checkboxes e adicione diagrama Mermaid. Use make memory-update.",
-      "description": "Atualiza issue com progresso",
-      "agent": "memory-agent"
-    },
-    "memotek-pipeline": {
-      "template": "Execute o pipeline completo do memotek: Research → Stack → Implement → Deploy → CI → PR → Memory. Coordene cada etapa via make targets.",
-      "description": "Executa pipeline completo do memotek",
-      "agent": "orchestrator"
-    }
   }
 }
