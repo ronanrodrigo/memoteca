@@ -6,15 +6,42 @@
    - Proibido: `gh`, `curl`, `jq`, `yq`, `npm run`, `jest`, etc. diretamente
    - Exceção: comandos internos do agente (ler arquivos, escrever código)
 2. **Repositório obrigatório** — O usuário DEVE ter um repo no GitHub (criado via "Use this template")
-3. **Projetos dentro do memotek** — NÃO criar projetos dentro do memotek que não sejam o próprio memotek
+3. **Projetos dentro do memotek** — NÃO criar projetos dentro de `~/Developer/memotek/` que não sejam o próprio memotek
 4. **Precedência** — O que está no AGENTS.md tem precedência sobre definições de agentes/skills
 5. **Versionamento** — Cada implementação é versionada com código do modelo: `memotek-<modelo>`
 
 ## Diretório de Implementação
 
-Cada versão (modelo diferente) cria seu próprio diretório dentro de `~/Developer/memotek/`.
+### Onde vive o código do projeto
 
-Ex: `~/Developer/memotek/memotek-gpt-4o/`, `~/Developer/memotek/memotek-claude-sonnet-4/`
+O código do projeto gerado vive **DENTRO do repo-projeto** criado via "Use this template".
+
+Exemplo:
+```
+~/Developer/explain-memotek-mimo/     ← repo-projeto (código do projeto vive aqui)
+├── src/                              ← código gerado pelo scaffold
+├── package.json
+├── Makefile
+├── AGENTS.md
+├── .memotek/                         ← agentes e scripts do template
+└── .github/workflows/                ← CI/CD
+```
+
+### Onde ficam as cópias do template
+
+`~/Developer/memotek/memotek-<modelo>/` é apenas para **CÓPIAS do template** versionadas por modelo, **não** para código de projeto.
+
+Exemplo:
+```
+~/Developer/memotek/memotek-mimo-v2-5-free/   ← cópia do template (não editar)
+~/Developer/memotek/memotek-gpt-4o/           ← outra versão do template
+```
+
+### Regra 3 detalhada
+
+- **PROIBIDO** criar projetos dentro de `~/Developer/memotek/`
+- O código de projeto **SEMPRE** fica no repo-projeto (ex: `~/Developer/explain-memotek-mimo/`)
+- `make scaffold PROJECT_NAME="."` roda **dentro do repo-projeto** para configurar in-place
 
 ## Pipeline de Implementação
 
@@ -56,13 +83,40 @@ USUÁRIO (input)
 | 3.1 | Benchmarking | Researcher | Analisa top 3 por stars | (interno) |
 | 3.2 | Fallback | Researcher | Se nada encontrado, pergunta ao usuário | (interação) |
 | 4 | Stack | Stack Selector | Seleciona da lista predefinida | (interno) |
-| 5 | Implement | Implementer | Gera projeto Next.js completo via create-next-app | `make scaffold` |
-| 6 | Deploy | Deploy Agent | Configura preview na Vercel | `make setup-gh-actions` + `make deploy-preview` |
-| 7 | CI | CI Agent | Configura pipeline de testes | `make setup-gh-actions` |
+| 5 | Implement | Implementer | Configura projeto Next.js via scaffold | `make scaffold PROJECT_NAME="."` |
+| 6 | Deploy | Deploy Agent | Configura preview na Vercel | `make gh-actions-setup` + `make deploy-preview` |
+| 7 | CI | CI Agent | Configura pipeline de testes | `make gh-actions-setup` |
 | 8 | Validate | PR Validator | Monitora checks, testa preview URL | `make test-preview` |
 | 8.1 | Merge | PR Validator | Merge PR quando tudo verde | `make pr-merge` |
 | 8.2 | Prod | PR Validator | Deploy produção | `make deploy-production` |
 | 9 | Memory | Memory Agent | Atualiza issue com progresso + Mermaid | `make memory-update` |
+
+## Targets do Makefile
+
+### Pipeline (memotek)
+| Target | Descrição |
+|--------|-----------|
+| `make scaffold` | Cria/configura projeto Next.js |
+| `make gh-actions-setup` | Copia workflows para .github/workflows/ |
+| `make memory-update` | Atualiza issue com progresso |
+| `make search-projects` | Busca projetos similares no GitHub |
+| `make listen-issues` | Polling de issues abertas |
+| `make test-preview` | Testa preview URL via HTTP |
+| `make pr-create` | Cria Pull Request |
+| `make pr-merge` | Merge Pull Request |
+| `make deploy-preview` | Deploy preview na Vercel |
+| `make deploy-production` | Deploy produção na Vercel |
+
+### CI/CD (repo-projeto)
+| Target | Descrição |
+|--------|-----------|
+| `make install` | Instala dependências (npm ci ou npm install) |
+| `make lint` | Roda linter |
+| `make typecheck` | Verifica tipos (tsc --noEmit) |
+| `make build` | Builda o projeto |
+| `make test` | Roda testes unitários (Jest) |
+| `make install-playwright` | Instala Playwright + Chromium |
+| `make test-e2e` | Roda testes E2E (Playwright) |
 
 ## Três Tipos de Input
 
@@ -86,7 +140,7 @@ Exemplo: "O campo abreviação não está salvando letras maiúsculas"
 - **Next.js** — Framework
 - **React** — UI
 - **Vercel** — Deploy
-- **Supabase** — Backend/Database
+- **Supabase** — Backend/Database (opcional via `SUPABASE=1`)
 - **Chakra UI** — Component library
 - **Playwright** — E2E tests
 - **TypeScript** — Language

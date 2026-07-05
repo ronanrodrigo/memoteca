@@ -1,3 +1,11 @@
+# CI Tests
+#
+# Requer que o repo-projeto tenha targets no Makefile:
+#   make install, make lint, make typecheck, make test, make build,
+#   make install-playwright, make test-e2e
+#
+# Esses targets são criados automaticamente pelo scaffold.
+
 name: CI Tests
 on:
   push:
@@ -16,7 +24,8 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - run: make install
+      - name: Install dependencies
+        run: make install
 
       - name: Lint
         run: make lint

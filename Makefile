@@ -1,4 +1,4 @@
-.PHONY: memory-update search-projects gh-actions-setup listen-issues test test-preview pr-create pr-merge deploy-preview deploy-production scaffold
+.PHONY: memory-update search-projects gh-actions-setup listen-issues test test-preview pr-create pr-merge deploy-preview deploy-production scaffold install lint typecheck build install-playwright test-e2e
 
 # === MEMORY ===
 memory-update:
@@ -16,10 +16,29 @@ gh-actions-setup:
 listen-issues:
 	@.memotek/scripts/listen-issues.sh
 
-# === TESTES ===
-test:
-	@.memotek/scripts/run-tests.sh
+# === CI: Project Build/Test Targets ===
+install:
+	@if [ -f package-lock.json ]; then npm ci; else npm install; fi
 
+lint:
+	npm run lint
+
+typecheck:
+	npm run typecheck
+
+build:
+	npm run build
+
+test:
+	npm test
+
+install-playwright:
+	npx playwright install --with-deps chromium
+
+test-e2e:
+	npm run test:e2e
+
+# === TESTES (memotek) ===
 test-preview:
 	@.memotek/scripts/validate-preview.sh
 
