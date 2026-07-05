@@ -60,7 +60,7 @@ repo-projeto/
 ```
 USUÁRIO (input)
 ├── Prompt manual → Intake faz perguntas → Cria issue no GitHub
-└── /listen-issues (schedule_job) → Polling de issues abertas
+└── /start → Verifica e processa issues abertas
          │
          ▼
     ┌─────────────────────────────────────┐
@@ -83,7 +83,7 @@ USUÁRIO (input)
 graph TB
     User([USUÁRIO])
     User -->|Prompt Manual| Intake[Intake Skill]
-    User -->|/listen-issues| Polling[Polling Issues]
+    User -->|/start| Polling[Polling Issues]
     Intake --> Issue[Issue Criada]
     Polling --> Issue
     Issue --> Orch[ORCHESTRATOR]
@@ -107,7 +107,7 @@ graph TB
 |---|-------|--------|------|-------------|
 | 1 | Input | - | Usuário clona template via "Use this template" | - |
 | 2 | Intake | Intake (skill) | Cria issue GitHub com template de perguntas | `make memory-update` |
-| 2.1 | Polling | - | schedule_job roda `make listen-issues` a cada 5min | `make listen-issues` |
+| 2.1 | Polling | - | Usuário digita `/start` para verificar issues | `make listen-issues` |
 | 3 | Research | Researcher | Busca projetos open source no GitHub | `make search-projects` |
 | 3.1 | Benchmarking | Researcher | Analisa top 3 por stars | (interno) |
 | 3.2 | Fallback | Researcher | Se nada encontrado, pergunta ao usuário | (interação) |

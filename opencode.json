@@ -11,11 +11,10 @@
       ".memotek/skills"
     ]
   },
-  "plugin": ["opencode-scheduler"],
   "command": {
-    "listen-issues": {
-      "template": "Use a ferramenta schedule_job para agendar um job que roda 'make listen-issues' a cada 5 minutos no diretório atual. NÃO execute make listen-issues diretamente.",
-      "description": "Agenda polling recorrente de issues abertas com label memotek"
+    "start": {
+      "template": "Execute make listen-issues para verificar issues abertas com label memotek. Se encontrar issues pendentes, processe cada uma seguindo o pipeline: research → stack → implement → deploy → ci → pr → memory.",
+      "description": "Verifica e processa issues abertas com label memotek"
     }
   }
 }
