@@ -12,19 +12,21 @@
 
 O agente primário é o orquestrador. Ao receber uma task, execute as etapas na ordem:
 
+**IMPORTANTE:** Após CADA etapa, execute `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<etapa concluída>"` para manter a issue atualizada em tempo real.
+
 ### Pipeline completo (criação de projeto)
-1. **Research** — Leia `.memotek/agents/researcher.md` e execute `make search-projects QUERY="<palavras-chave>"`
-2. **Stack** — Leia `.memotek/agents/stack-selector.md` e defina a stack
-3. **Implement** — Leia `.memotek/agents/implementer.md` e execute `make scaffold PROJECT_NAME="."`
-4. **Deploy** — Leia `.memotek/agents/deploy-agent.md` e execute `make gh-actions-setup` + `make deploy-preview`
-5. **CI** — Leia `.memotek/agents/ci-agent.md` e valide `make install && make lint && make typecheck && make test && make build`
-6. **PR** — Leia `.memotek/agents/pr-validator.md` e execute `make pr-create`
-7. **Memory** — Leia `.memotek/agents/memory-agent.md` e execute `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<etapa>"`
+1. **Research** — Leia `.memotetek/agents/researcher.md` → execute `make search-projects QUERY="<palavras-chave>"` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Research: benchmarking concluído"`
+2. **Stack** — Leia `.memotek/agents/stack-selector.md` → defina a stack → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Stack definida"`
+3. **Implement** — Leia `.memotek/agents/implementer.md` → execute `make scaffold PROJECT_NAME="."` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Código implementado"`
+4. **Deploy** — Leia `.memotek/agents/deploy-agent.md` → execute `make gh-actions-setup && make deploy-preview` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Deploy preview funcional"`
+5. **CI** — Leia `.memotek/agents/ci-agent.md` → valide `make install && make lint && make typecheck && make test && make build` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Pipeline CI configurada"`
+6. **PR** — Leia `.memotek/agents/pr-validator.md` → execute `make pr-create` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="PR criado"`
+7. **Validação** — Aguarde checks verdes → `make pr-merge` → `make deploy-production` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Deploy produção concluído"`
 
 ### Ciclo parcial (adição/correção)
 1. Leia o agente correspondente em `.memotek/agents/`
 2. Execute o make target apropriado
-3. Atualize a issue com `make memory-update`
+3. Atualize a issue com `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<etapa>"`
 
 ### Regra de ouro
 - Antes de cada etapa, leia o agente correspondente em `.memotek/agents/`
