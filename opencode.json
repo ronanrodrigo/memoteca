@@ -1,47 +1,14 @@
 {
-  "$schema": "https://opencode.ai/schema.json",
-  "name": "memotek-mimo-v2-5-free",
-  "version": "1.0.0",
+  "$schema": "https://opencode.ai/config.json",
   "model": "opencode/mimo-v2.5-free",
-  "description": "Sistema de agentes autônomos para desenvolvimento de software",
-  "agents": {
-    "orchestrator": {
-      "file": ".memotek/agents/orchestrator.md",
-      "description": "Coordena todo o pipeline de implementação"
-    },
-    "researcher": {
-      "file": ".memotek/agents/researcher.md",
-      "description": "Busca projetos open source para benchmarking"
-    },
-    "stack-selector": {
-      "file": ".memotek/agents/stack-selector.md",
-      "description": "Seleciona stack tecnológica baseado na pesquisa"
-    },
-    "implementer": {
-      "file": ".memotek/agents/implementer.md",
-      "description": "Gera e implementa código do projeto"
-    },
-    "deploy-agent": {
-      "file": ".memotek/agents/deploy-agent.md",
-      "description": "Configura e realiza deploy na Vercel"
-    },
-    "ci-agent": {
-      "file": ".memotek/agents/ci-agent.md",
-      "description": "Configura pipeline de CI/CD"
-    },
-    "pr-validator": {
-      "file": ".memotek/agents/pr-validator.md",
-      "description": "Monitora e valida PRs"
-    },
-    "memory-agent": {
-      "file": ".memotek/agents/memory-agent.md",
-      "description": "Atualiza issue com progresso"
-    }
-  },
+  "instructions": [
+    "AGENTS.md",
+    ".memotek/agents/*.md",
+    ".memotek/rules/*.md"
+  ],
   "skills": {
-    "intake": {
-      "file": ".memotek/skills/intake/SKILL.md",
-      "description": "Coleta input do usuário e cria issue"
-    }
+    "paths": [
+      ".memotek/skills"
+    ]
   }
 }
