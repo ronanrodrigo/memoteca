@@ -1,8 +1,11 @@
-.PHONY: memory-update search-projects gh-actions-setup listen-issues process-issue test test-preview pr-create pr-merge deploy-preview deploy-production setup-vercel-secrets scaffold install lint typecheck build install-playwright test-e2e
+.PHONY: memory-update memory-finalize search-projects gh-actions-setup listen-issues process-issue test test-preview pr-create pr-merge deploy-preview deploy-production setup-vercel-secrets scaffold install lint typecheck build install-playwright test-e2e
 
 # === MEMORY ===
 memory-update:
 	@.memotek/scripts/update-memory.sh
+
+memory-finalize:
+	@ISSUE_NUMBER="$(ISSUE_NUMBER)" FINALIZE=1 .memotek/scripts/update-memory.sh
 
 # === SEARCH ===
 search-projects:

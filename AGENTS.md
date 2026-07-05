@@ -12,7 +12,7 @@
 
 O agente primário é o orquestrador. Ao receber uma task, execute as etapas na ordem:
 
-**IMPORTANTE:** Após CADA etapa, execute `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<etapa concluída>"` para manter a issue atualizada em tempo real.
+**CRÍTICO:** Após CADA etapa do pipeline, SEMPRE execute `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<texto exato do checkbox>"` para marcar o checkbox correspondente no corpo da issue. Não pule essa etapa — os checkboxes `[ ]` devem virar `[x]` em tempo real. Ao final do pipeline, execute `make memory-finalize ISSUE_NUMBER=<num>` para marcar todos os checkboxes restantes e fechar a issue.
 
 ### Pipeline completo (criação de projeto)
 1. **Research** — Leia `.memotetek/agents/researcher.md` → execute `make search-projects QUERY="<palavras-chave>"` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Research: benchmarking concluído"`
@@ -21,9 +21,11 @@ O agente primário é o orquestrador. Ao receber uma task, execute as etapas na 
 4. **Deploy** — Leia `.memotek/agents/deploy-agent.md` → execute `make gh-actions-setup && make deploy-preview` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Deploy preview funcional"`
 5. **CI** — Leia `.memotek/agents/ci-agent.md` → valide `make install && make lint && make typecheck && make test && make build` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Pipeline CI configurada"`
 6. **PR** — Leia `.memotek/agents/pr-validator.md` → execute `make pr-create` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="PR criado"`
-7. **Validação + Merge** — `make pr-merge PR_NUMBER=<num>` (o script aguarda os checks terminarem, até 15min, e mergeia automaticamente se verdes) → `make deploy-production` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Deploy produção concluído"`
+7. **Validação + Merge** — `make pr-merge PR_NUMBER=<num>` (o script aguarda os checks terminarem, até 15min, e mergeia automaticamente se verdes) → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Checks todos verdes"` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="PR mergeado"` → `make deploy-production` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Deploy produção concluído"`
+8. **Finalizar** — `make memory-finalize ISSUE_NUMBER=<num>` (marca todos os checkboxes restantes + fecha a issue)
    - **Não pergunte ao usuário antes de mergear** — se os checks estão verdes, merge é automático
    - Se checks falharem, diagnosticar via `gh pr checks`, corrigir, push, e reexecutar `make pr-merge`
+   - Os textos do CHECKBOX devem corresponder EXATAMENTE aos rótulos do template `feature_request.yml`
 
 ### Ciclo parcial (adição/correção)
 1. Leia o agente correspondente em `.memotek/agents/`
@@ -131,7 +133,8 @@ graph TB
 |--------|-----------|
 | `make scaffold` | Cria/configura projeto Next.js |
 | `make gh-actions-setup` | Copia workflows para .github/workflows/ |
-| `make memory-update` | Atualiza issue com progresso |
+| `make memory-update` | Marca checkbox no corpo da issue |
+| `make memory-finalize` | Marca TODOS checkboxes + fecha a issue |
 | `make search-projects` | Busca projetos similares no GitHub |
 | `make listen-issues` | Polling de issues abertas |
 | `make test-preview` | Testa preview URL via HTTP |
