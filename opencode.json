@@ -10,5 +10,6 @@
     "paths": [
       ".memotek/skills"
     ]
-  }
+  },
+  "plugin": ["opencode-scheduler"]
 }
