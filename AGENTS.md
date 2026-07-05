@@ -6,42 +6,31 @@
    - Proibido: `gh`, `curl`, `jq`, `yq`, `npm run`, `jest`, etc. diretamente
    - Exceção: comandos internos do agente (ler arquivos, escrever código)
 2. **Repositório obrigatório** — O usuário DEVE ter um repo no GitHub (criado via "Use this template")
-3. **Projetos dentro do memotek** — NÃO criar projetos dentro de `~/Developer/memotek/` que não sejam o próprio memotek
-4. **Precedência** — O que está no AGENTS.md tem precedência sobre definições de agentes/skills
-5. **Versionamento** — Cada implementação é versionada com código do modelo: `memotek-<modelo>`
+3. **Precedência** — O que está no AGENTS.md tem precedência sobre definições de agentes/skills
 
-## Diretório de Implementação
+## Estrutura do Repo-Projeto
 
-### Onde vive o código do projeto
+Ao clonar via "Use this template", o repo-projeto já contém tudo necessário. Após `make scaffold PROJECT_NAME="."`, a estrutura é:
 
-O código do projeto gerado vive **DENTRO do repo-projeto** criado via "Use this template".
-
-Exemplo:
 ```
-~/Developer/explain-memotek-mimo/     ← repo-projeto (código do projeto vive aqui)
-├── src/                              ← código gerado pelo scaffold
+repo-projeto/
+├── src/                    ← código do projeto
 ├── package.json
 ├── Makefile
+├── jest.config.js
+├── jest.setup.ts
+├── playwright.config.ts
+├── .gitignore
+├── .env-example
 ├── AGENTS.md
-├── .memotek/                         ← agentes e scripts do template
-└── .github/workflows/                ← CI/CD
+├── .memotek/               ← agentes e scripts
+│   ├── agents/
+│   ├── skills/
+│   ├── scripts/
+│   ├── templates/
+│   └── ...
+└── .github/workflows/      ← CI/CD
 ```
-
-### Onde ficam as cópias do template
-
-`~/Developer/memotek/memotek-<modelo>/` é apenas para **CÓPIAS do template** versionadas por modelo, **não** para código de projeto.
-
-Exemplo:
-```
-~/Developer/memotek/memotek-mimo-v2-5-free/   ← cópia do template (não editar)
-~/Developer/memotek/memotek-gpt-4o/           ← outra versão do template
-```
-
-### Regra 3 detalhada
-
-- **PROIBIDO** criar projetos dentro de `~/Developer/memotek/`
-- O código de projeto **SEMPRE** fica no repo-projeto (ex: `~/Developer/explain-memotek-mimo/`)
-- `make scaffold PROJECT_NAME="."` roda **dentro do repo-projeto** para configurar in-place
 
 ## Pipeline de Implementação
 
@@ -53,15 +42,11 @@ USUÁRIO (input)
          ▼
     ┌─────────────────────────────────────┐
     │  ISSUE CRIADA (feature_request.yml) │
-    │  - Descrição do que precisa         │
-    │  - Checklist de etapas              │
-    │  - Campos de stack/referências      │
     └──────────────┬──────────────────────┘
                    │
                    ▼
     ┌─────────────────────────────────────┐
     │         ORCHESTRATOR (agent)        │
-    │  Coordena pipeline completo         │
     └──┬────┬────┬────┬────┬────┬────────┘
        │    │    │    │    │    │
        ▼    ▼    ▼    ▼    ▼    ▼
@@ -141,7 +126,6 @@ Exemplo: "O campo abreviação não está salvando letras maiúsculas"
 - **React** — UI
 - **Vercel** — Deploy
 - **Supabase** — Backend/Database (opcional via `SUPABASE=1`)
-- **Chakra UI** — Component library
 - **Playwright** — E2E tests
 - **TypeScript** — Language
 - **Jest** — Unit tests
