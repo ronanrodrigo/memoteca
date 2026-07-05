@@ -45,14 +45,13 @@ USUÁRIO (input)
     └──────────────┬──────────────────────┘
                    │
                    ▼
-    ┌─────────────────────────────────────┐
-    │         ORCHESTRATOR (agent)        │
-    └──┬────┬────┬────┬────┬────┬────────┘
-       │    │    │    │    │    │
-       ▼    ▼    ▼    ▼    ▼    ▼
-     Res  Stk  Imp  Dep  CI  PR
-     ea   ac   le   lo   id  val
-     rch  Sel  ment mnt      id
+    ┌────────────────────────────────────────────────────────────────┐
+    │                      ORCHESTRATOR                             │
+    └──┬──────────┬──────────┬──────────┬──────────┬──────────┬─────┘
+       │          │          │          │          │          │
+       ▼          ▼          ▼          ▼          ▼          ▼
+    Research   Stack     Implement   Deploy      CI       PR
+    Searcher  Selector                Agent     Agent   Validator
 
     Todos executam via: make <target>
 ```
