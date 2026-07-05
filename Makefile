@@ -1,4 +1,4 @@
-.PHONY: memory-update search-projects gh-actions-setup listen-issues test test-preview pr-create pr-merge deploy-preview deploy-production scaffold install lint typecheck build install-playwright test-e2e
+.PHONY: memory-update search-projects gh-actions-setup listen-issues process-issue test test-preview pr-create pr-merge deploy-preview deploy-production scaffold install lint typecheck build install-playwright test-e2e
 
 # === MEMORY ===
 memory-update:
@@ -15,6 +15,9 @@ gh-actions-setup:
 # === INTAKE ===
 listen-issues:
 	@.memotek/scripts/listen-issues.sh
+
+process-issue:
+	@.memotek/scripts/process-issue.sh
 
 # === CI: Project Build/Test Targets ===
 install:
