@@ -1,27 +1,27 @@
 # Skill: Listen Issues
 
 ## Trigger
-Quando o usuário digitar `/listen-issues` ou "escutar issues" ou "iniciar polling de issues".
+Quando o usuário digitar `/listen-issues` ou "escutar issues" ou "iniciar polling".
 
-## Ação
-Agende um job recorrente usando o `schedule_job` do opencode-scheduler para verificar issues abertas com label `memotek` a cada 5 minutos.
+## Ação OBRIGATÓRIA
+Use a ferramenta `schedule_job` para agendar um job recorrente. NÃO execute `make listen-issues` diretamente.
 
-## Prompt do Job
+## Como agendar
+Execute a ferramenta `schedule_job` com este prompt:
 ```
 Execute make listen-issues para verificar issues abertas com label memotek no repositório. Se encontrar issues pendentes, processe cada uma seguindo o pipeline: research → stack → implement → deploy → ci → pr → memory.
 ```
 
-## Configuração
+Configuração do job:
 - **Intervalo:** a cada 5 minutos
 - **Workdir:** diretório atual do projeto
-- **Timeout:** 300 segundos (5 minutos)
 
-## Comando para agendar
-```
-Schedule a job every 5 minutes to run make listen-issues and process any open memotek issues
-```
+## O que NÃO fazer
+- NÃO execute `make listen-issues` diretamente
+- NÃO crie cron jobs manuais
+- Use APENAS a ferramenta `schedule_job`
 
-## Comandos úteis
+## Comandos úteis após agendar
 - `Show my scheduled jobs` — lista jobs ativos
 - `Run the listen-issues job now` — executa imediatamente
 - `Show logs for listen-issues` — vê logs
