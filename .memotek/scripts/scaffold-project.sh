@@ -41,6 +41,40 @@ npm install -D @playwright/test
 # Instalar Jest para unit tests
 npm install -D jest @types/jest ts-jest
 
+echo "📝 Criando Makefile do projeto..."
+
+# Criar Makefile com targets para o projeto
+cat > Makefile << 'MAKEFILE'
+.PHONY: install build lint typecheck test test-e2e install-playwright deploy
+
+install:
+	npm ci
+
+build:
+	npm run build
+
+lint:
+	npm run lint
+
+typecheck:
+	npm run typecheck
+
+test:
+	npm test
+
+test-e2e:
+	npx playwright test
+
+install-playwright:
+	npx playwright install --with-deps
+
+deploy:
+	vercel --prod
+
+deploy-preview:
+	vercel --pre
+MAKEFILE
+
 echo "✅ Projeto criado com sucesso!"
 echo "📁 Diretório: $PROJECT_NAME"
 echo ""
