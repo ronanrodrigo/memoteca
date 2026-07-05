@@ -29,3 +29,5 @@ Issue Criada → Orchestrator → Researcher → Stack → Implement → Deploy 
 - SEMPRE via `make <target>` — NUNCA executar comandos diretamente
 - Cada agente atualiza a issue com seu progresso
 - Se um agente falhar, reportar na issue e tentar retry
+- **Merge é automático** quando os checks ficam verdes — não pergunte ao usuário
+- Após merge, deploy produção é automático

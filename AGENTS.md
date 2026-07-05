@@ -21,7 +21,9 @@ O agente primário é o orquestrador. Ao receber uma task, execute as etapas na 
 4. **Deploy** — Leia `.memotek/agents/deploy-agent.md` → execute `make gh-actions-setup && make deploy-preview` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Deploy preview funcional"`
 5. **CI** — Leia `.memotek/agents/ci-agent.md` → valide `make install && make lint && make typecheck && make test && make build` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Pipeline CI configurada"`
 6. **PR** — Leia `.memotek/agents/pr-validator.md` → execute `make pr-create` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="PR criado"`
-7. **Validação** — Aguarde checks verdes → `make pr-merge` → `make deploy-production` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Deploy produção concluído"`
+7. **Validação + Merge** — `make pr-merge PR_NUMBER=<num>` (o script aguarda os checks terminarem, até 15min, e mergeia automaticamente se verdes) → `make deploy-production` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Deploy produção concluído"`
+   - **Não pergunte ao usuário antes de mergear** — se os checks estão verdes, merge é automático
+   - Se checks falharem, diagnosticar via `gh pr checks`, corrigir, push, e reexecutar `make pr-merge`
 
 ### Ciclo parcial (adição/correção)
 1. Leia o agente correspondente em `.memotek/agents/`
@@ -137,6 +139,7 @@ graph TB
 | `make pr-merge` | Merge Pull Request |
 | `make deploy-preview` | Deploy preview na Vercel |
 | `make deploy-production` | Deploy produção na Vercel |
+| `make setup-vercel-secrets` | Configura secrets Vercel no GitHub Actions |
 
 ### CI/CD (repo-projeto)
 | Target | Descrição |

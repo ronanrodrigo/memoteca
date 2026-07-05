@@ -1,4 +1,4 @@
-.PHONY: memory-update search-projects gh-actions-setup listen-issues process-issue test test-preview pr-create pr-merge deploy-preview deploy-production scaffold install lint typecheck build install-playwright test-e2e
+.PHONY: memory-update search-projects gh-actions-setup listen-issues process-issue test test-preview pr-create pr-merge deploy-preview deploy-production setup-vercel-secrets scaffold install lint typecheck build install-playwright test-e2e
 
 # === MEMORY ===
 memory-update:
@@ -58,6 +58,10 @@ deploy-preview:
 
 deploy-production:
 	@.memotek/scripts/deploy-production.sh
+
+# === SECRETS ===
+setup-vercel-secrets:
+	@.memotek/scripts/setup-vercel-secrets.sh
 
 # === SCAFFOLD ===
 scaffold:

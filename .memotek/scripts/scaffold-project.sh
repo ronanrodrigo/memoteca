@@ -176,6 +176,7 @@ export default defineConfig({
     command: 'npx serve out -l 3000',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
   },
 });
 PW
@@ -296,3 +297,4 @@ echo "   make test             — roda testes unitários (Jest)"
 echo "   make test-e2e         — roda testes E2E (Playwright)"
 echo "   make deploy-preview   — deploy preview na Vercel"
 echo "   make deploy-production — deploy produção na Vercel"
+echo "   make setup-vercel-secrets — configura secrets Vercel no GitHub Actions"

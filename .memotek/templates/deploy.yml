@@ -1,12 +1,11 @@
 # Deploy Preview/Production
 #
-# Requer secrets no repo-projeto (Settings → Secrets and variables → Actions):
-#   VERCEL_TOKEN     — Token de acesso Vercel
-#   VERCEL_ORG_ID    — ID da organização Vercel
+# Requer secrets no repo-projeto (Settings -> Secrets and variables -> Actions):
+#   VERCEL_TOKEN      — Token de acesso Vercel
+#   VERCEL_ORG_ID     — ID da organizacao Vercel
 #   VERCEL_PROJECT_ID — ID do projeto Vercel
 #
-# Sem esses secrets, o job deploy-preview falha com:
-#   "Input required and not supplied: vercel-token"
+# Configurar secrets via: make setup-vercel-secrets
 
 name: Deploy Preview/Production
 on:
@@ -33,14 +32,15 @@ jobs:
       - name: Build
         run: make build
 
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
       - name: Deploy to Vercel (Preview)
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--pre'
-          working-directory: ./
+        run: vercel --yes --token $VERCEL_TOKEN
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
   deploy-production:
     runs-on: ubuntu-latest
@@ -59,11 +59,12 @@ jobs:
       - name: Build
         run: make build
 
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
       - name: Deploy to Vercel (Production)
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-          working-directory: ./
+        run: vercel --prod --yes --token $VERCEL_TOKEN
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
