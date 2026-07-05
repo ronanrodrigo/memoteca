@@ -10,47 +10,5 @@
     "paths": [
       ".memotek/skills"
     ]
-  },
-  "agent": {
-    "orchestrator": {
-      "description": "Coordena todo o pipeline de implementação de um projeto",
-      "mode": "subagent",
-      "color": "primary"
-    },
-    "researcher": {
-      "description": "Busca projetos open source no GitHub para benchmarking e referências",
-      "mode": "subagent",
-      "color": "info"
-    },
-    "stack-selector": {
-      "description": "Seleciona a stack tecnológica ideal baseado na pesquisa e requisitos",
-      "mode": "subagent",
-      "color": "info"
-    },
-    "implementer": {
-      "description": "Gera e implementa código do projeto baseado na issue e stack selecionada",
-      "mode": "subagent",
-      "color": "success"
-    },
-    "deploy-agent": {
-      "description": "Configura e realiza deploy na Vercel",
-      "mode": "subagent",
-      "color": "success"
-    },
-    "ci-agent": {
-      "description": "Configura pipeline de CI/CD no repositório",
-      "mode": "subagent",
-      "color": "warning"
-    },
-    "pr-validator": {
-      "description": "Monitora e valida Pull Requests antes do merge",
-      "mode": "subagent",
-      "color": "warning"
-    },
-    "memory-agent": {
-      "description": "Atualiza a issue original com progresso e status",
-      "mode": "subagent",
-      "color": "secondary"
-    }
   }
 }

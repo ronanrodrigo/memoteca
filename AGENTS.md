@@ -8,6 +8,29 @@
 2. **Repositório obrigatório** — O usuário DEVE ter um repo no GitHub (criado via "Use this template")
 3. **Precedência** — O que está no AGENTS.md tem precedência sobre definições de agentes/skills
 
+## Orquestração
+
+O agente primário é o orquestrador. Ao receber uma task, execute as etapas na ordem:
+
+### Pipeline completo (criação de projeto)
+1. **Research** — Leia `.memotek/agents/researcher.md` e execute `make search-projects QUERY="<palavras-chave>"`
+2. **Stack** — Leia `.memotek/agents/stack-selector.md` e defina a stack
+3. **Implement** — Leia `.memotek/agents/implementer.md` e execute `make scaffold PROJECT_NAME="."`
+4. **Deploy** — Leia `.memotek/agents/deploy-agent.md` e execute `make gh-actions-setup` + `make deploy-preview`
+5. **CI** — Leia `.memotek/agents/ci-agent.md` e valide `make install && make lint && make typecheck && make test && make build`
+6. **PR** — Leia `.memotek/agents/pr-validator.md` e execute `make pr-create`
+7. **Memory** — Leia `.memotek/agents/memory-agent.md` e execute `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<etapa>"`
+
+### Ciclo parcial (adição/correção)
+1. Leia o agente correspondente em `.memotek/agents/`
+2. Execute o make target apropriado
+3. Atualize a issue com `make memory-update`
+
+### Regra de ouro
+- Antes de cada etapa, leia o agente correspondente em `.memotek/agents/`
+- Cada etapa deve ser concluída antes de passar para a próxima
+- Se uma etapa falhar, reporte na issue e aguarde decisão do usuário
+
 ## Estrutura do Repo-Projeto
 
 Ao clonar via "Use this template", o repo-projeto já contém tudo necessário. Após `make scaffold PROJECT_NAME="."`, a estrutura é:
