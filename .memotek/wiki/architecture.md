@@ -70,4 +70,4 @@ memotek/
 2. **Scripts via Make** — Todos os comandos são executados via `make <target>`
 3. **Stack predefinida** — Next.js + React + Vercel + Supabase + Chakra UI
 4. **Templates de issue** — Um único template para 3 tipos de task
-5. **Cron jobs locais** — Polling e validação via cron local
+5. **Agendamento via opencode-scheduler** — Polling recorrente via schedule_job

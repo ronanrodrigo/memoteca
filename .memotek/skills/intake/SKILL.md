@@ -5,7 +5,7 @@ Coleta input do usuário e cria issue no GitHub com template apropriado.
 
 ## Trigger
 - Usuário fornece prompt manual descrevendo o que precisa
-- Cron job detecta nova issue aberta
+- schedule_job detecta nova issue aberta via `make listen-issues`
 
 ## Fluxo
 

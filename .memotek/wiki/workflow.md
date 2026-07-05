@@ -5,7 +5,7 @@
 ### 1. Input do Usuário
 O usuário pode fornecer input de duas formas:
 - **Prompt manual** — Usuário descreve o que precisa
-- **Cron /listen-issues** — Polling de issues abertas
+- **/listen-issues** — Polling de issues via schedule_job
 
 ### 2. Intake
 A skill Intake coleta informações e cria issue no GitHub:
@@ -55,17 +55,19 @@ O Memory Agent atualiza a issue:
 - Adiciona comentários
 - Inclui diagramas Mermaid
 
-## Cron Jobs
+## Agendamento (opencode-scheduler)
 
 ### Listen Issues (a cada 5 minutos)
+O polling é feito pelo plugin `opencode-scheduler`:
 ```
-*/5 * * * * cd ~/Developer/memotek-mimo-v2-5-free && make listen-issues >> /tmp/memotek-listen.log 2>&1
+Schedule a job every 5 minutes to run make listen-issues and process any open memotek issues
 ```
 
-### PR Validator (a cada 3 minutos)
-```
-*/3 * * * * cd ~/Developer/memotek-mimo-v2-5-free && make test-preview >> /tmp/memotek-pr.log 2>&1
-```
+- `make listen-issues` — execução única do script
+- `schedule_job` — agendador que roda o make periodicamente
+
+### PR Validator
+O PR Validator é acionado automaticamente quando um PR é criado via `make pr-create`.
 
 ## Comandos Disponíveis
 

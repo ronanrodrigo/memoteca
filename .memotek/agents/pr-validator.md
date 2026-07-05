@@ -4,10 +4,9 @@
 Monitora e valida Pull Requests antes do merge.
 
 ## Responsabilidades
-1. Criar cron job para monitorar status do PR
-2. Usar `make test-preview` para testar preview URL via HTTP
-3. Quando tudo verde: `make pr-merge`
-4. Após merge: `make deploy-production`
+1. Usar `make test-preview` para testar preview URL via HTTP
+2. Quando tudo verde: `make pr-merge`
+3. Após merge: `make deploy-production`
 
 ## Comandos
 - `make test-preview PREVIEW_URL="<url>"` — Testar preview
