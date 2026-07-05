@@ -56,6 +56,28 @@ USUÁRIO (input)
     Todos executam via: make <target>
 ```
 
+```mermaid
+graph TB
+    User([USUÁRIO])
+    User -->|Prompt Manual| Intake[Intake Skill]
+    User -->|Cron /listen-issues| Polling[Polling Issues]
+    Intake --> Issue[Issue Criada]
+    Polling --> Issue
+    Issue --> Orch[ORCHESTRATOR]
+    Orch --> Research[Researcher]
+    Orch --> StackSel[Stack Selector]
+    Orch --> Impl[Implementer]
+    Orch --> Dep[Deploy Agent]
+    Orch --> CI[CI Agent]
+    Orch --> PR[PR Validator]
+    Research --> StackSel --> Impl --> Dep --> CI --> PR
+    PR -->|Checks verdes| Merge[Merge PR]
+    PR -->|Checks vermelhos| Retry[Retry]
+    Retry --> PR
+    Merge --> Prod[Deploy Produção]
+    Memory[Memory Agent] -.->|atualiza| Issue
+```
+
 ## Etapas do Pipeline
 
 | # | Etapa | Agente | Ação | Make Target |
