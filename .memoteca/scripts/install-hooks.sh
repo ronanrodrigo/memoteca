@@ -1,5 +1,5 @@
 #!/bin/bash
-# install-hooks.sh — Install the Memotek commit-msg hook into the current repo's
+# install-hooks.sh — Install the Memoteca commit-msg hook into the current repo's
 # .git/hooks directory (no Husky, no Node). Idempotent and safe to re-run.
 # Usage: make install-hooks
 

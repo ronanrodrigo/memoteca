@@ -2,7 +2,7 @@
 # project-create.sh — Create the central private board titled "Memoteca" (default),
 # with the standard Status + Task Type single-select fields. Idempotent.
 # Usage: make project-create
-#   (title can be overridden via env var MEMOTEK_PROJECT_TITLE)
+#   (title can be overridden via env var MEMOTEKA_PROJECT_TITLE)
 #
 # Personal-account Projects V2 are PRIVATE by default at the GitHub tier —
 # no --private flag is required (and none exists in the gh CLI).
@@ -12,34 +12,34 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/project-common.sh"
 
-MEMOTEK_PROJECT_TITLE="${MEMOTEK_PROJECT_TITLE:-Memoteca}"
+MEMOTEKA_PROJECT_TITLE="${MEMOTEKA_PROJECT_TITLE:-Memoteca}"
 
 # ─ 1. Reject duplicates ─────────────────────────────────────────────────
 # (Use the resolver via the helper, but tolerate the "not found" case.)
 projects=$(gh project list --owner "@me" --format json 2>/dev/null || echo "")
-existing=$(MEMOTEK_PROJECT_TITLE="$MEMOTEK_PROJECT_TITLE" printf '%s' "$projects" | node -e '
+existing=$(MEMOTEKA_PROJECT_TITLE="$MEMOTEKA_PROJECT_TITLE" printf '%s' "$projects" | node -e '
   let s=""; process.stdin.on("data",d=>s+=d); process.stdin.on("end",()=>{
-    const t=process.env.MEMOTEK_PROJECT_TITLE;
+    const t=process.env.MEMOTEKA_PROJECT_TITLE;
     let all; try{ all=JSON.parse(s);}catch(e){process.exit(0);}
     const ms=all.filter(p=>p&&p.title===t);
     if(ms.length>0) console.error(ms[0].url);
   });
 ' 2>&1 || true)
 if [ -n "$existing" ]; then
-  echo "⚠️  A project titled \"$MEMOTEK_PROJECT_TITLE\" already exists:"
+  echo "⚠️  A project titled \"$MEMOTEKA_PROJECT_TITLE\" already exists:"
   echo "    $existing"
   echo "    Reusing it (no fields will be re-created if they already exist)."
   # fall through — ensure fields exist below.
 else
   # ─ 2. Create the private board ───────────────────────────────────────
-  echo "🏗️  Creating private project \"$MEMOTEK_PROJECT_TITLE\"..."
-  gh project create --owner "@me" --title "$MEMOTEK_PROJECT_TITLE" >/dev/null
-  echo "✅ Private project \"$MEMOTEK_PROJECT_TITLE\" created."
+  echo "🏗️  Creating private project \"$MEMOTEKA_PROJECT_TITLE\"..."
+  gh project create --owner "@me" --title "$MEMOTEKA_PROJECT_TITLE" >/dev/null
+  echo "✅ Private project \"$MEMOTEKA_PROJECT_TITLE\" created."
 fi
 
 # ─ 3. Resolve board identity ───────────────────────────────────────────
-memotek_load_project
-PN="$MEMOTEK_PROJECT_NUMBER"
+memoteca_load_project
+PN="$MEMOTEKA_PROJECT_NUMBER"
 
 # ─ 4. Ensure the Status + Task Type single-select fields exist ─────────
 ensure_single_select() {
@@ -75,9 +75,9 @@ ensure_single_select "Status" "$STATUS_OPTIONS"
 ensure_single_select "Task Type" "$TYPE_OPTIONS"
 
 echo ""
-echo "🎉 Board ready: $MEMOTEK_PROJECT_TITLE (#$PN)"
-echo "   Owner: $MEMOTEK_PROJECT_OWNER"
+echo "🎉 Board ready: $MEMOTEKA_PROJECT_TITLE (#$PN)"
+echo "   Owner: $MEMOTEKA_PROJECT_OWNER"
 echo ""
 echo "next:"
 echo "   make project-link-repo          # link the current repo (allows its issues to be added)"
-echo "   make project-add-issue ISSUE_URL=<url>   # add a memotek-labelled issue to the board"
+echo "   make project-add-issue ISSUE_URL=<url>   # add a memoteca-labelled issue to the board"

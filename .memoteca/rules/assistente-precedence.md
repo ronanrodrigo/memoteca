@@ -5,10 +5,10 @@
 1. Platform configurations / system instructions.
 2. Tool security policies.
 3. Current explicit user requests compatible with this skill.
-4. **Assistant Skill** (`.memotek/skills/assistente/SKILL.md`) — governs topics covered by it (GitHub native Mermaid, GitHub issue as source of truth without plan/memory files in the repo, `gcp`/`gpr` shortcuts, Assistant Loop, worktree, PR Visual Evidence, human approval gate).
-5. `AGENTS.md` and `.memotek/agents/*.md` — memotek pipeline orchestration.
-6. `.memotek/rules/project-rules.md` — project operational rules.
-7. `.memotek/skills/<others>` — other skills.
+4. **Assistant Skill** (`.memoteca/skills/assistente/SKILL.md`) — governs topics covered by it (GitHub native Mermaid, GitHub issue as source of truth without plan/memory files in the repo, `gcp`/`gpr` shortcuts, Assistant Loop, worktree, PR Visual Evidence, human approval gate).
+5. `AGENTS.md` and `.memoteca/agents/*.md` — memoteca pipeline orchestration.
+6. `.memoteca/rules/project-rules.md` — project operational rules.
+7. `.memoteca/skills/<others>` — other skills.
 
 ## When there is a conflict
 

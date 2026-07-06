@@ -26,8 +26,8 @@ if [ -z "$INPUT" ]; then
   exit 1
 fi
 
-memotek_load_project
-PN="$MEMOTEK_PROJECT_NUMBER"
+memoteca_load_project
+PN="$MEMOTEKA_PROJECT_NUMBER"
 
 # ─ 1. Resolve to a full https URL ──────────────────────────────────────
 URL=""
@@ -49,7 +49,7 @@ else
   exit 1
 fi
 
-echo "➕ Adding $URL to board \"$MEMOTEK_PROJECT_TITLE\" (#$PN)..."
+echo "➕ Adding $URL to board \"$MEMOTEKA_PROJECT_TITLE\" (#$PN)..."
 ADD_OUT=$(gh project item-add "$PN" --owner "@me" --url "$URL" --format json 2>/dev/null || echo "")
 ITEM_ID=$(printf '%s' "$ADD_OUT" | node -e '
   let s=""; process.stdin.on("data",d=>s+=d); process.stdin.on("end",()=>{
@@ -135,9 +135,9 @@ if [ -z "$TASK_TYPE_DETECT" ]; then
   exit 0
 fi
 
-TYPE_OPTION_PARSED=$(printf '%s' "$FIELDS_JSON" | MEMOTEK_TASK_TYPE_DETECT="$TASK_TYPE_DETECT" node -e '
+TYPE_OPTION_PARSED=$(printf '%s' "$FIELDS_JSON" | MEMOTEKA_TASK_TYPE_DETECT="$TASK_TYPE_DETECT" node -e '
   let s=""; process.stdin.on("data",d=>s+=d); process.stdin.on("end",()=>{
-    const want = process.env.MEMOTEK_TASK_TYPE_DETECT;
+    const want = process.env.MEMOTEKA_TASK_TYPE_DETECT;
     let fields; try{fields=JSON.parse(s);}catch(e){process.exit(1);}
     const typeF = fields.find(f=>f.name==="Task Type" && f.dataType==="SINGLE_SELECT");
     if(!typeF){process.exit(0);}

@@ -1,18 +1,18 @@
 name: "Feature Request / Task"
-description: "Template for memotek tasks (creation, addition, bug fix)"
-labels: ["memotek"]
+description: "Template for memoteca tasks (creation, addition, bug fix)"
+labels: ["memoteca"]
 body:
   - type: markdown
     attributes:
       value: |
-        # New Memotek Task
+        # New Memoteca Task
         Fill in the information below to start the pipeline.
 
         > After filing, **add this issue to the central board** so the orchestrator picks it up:
         > ```
         > make project-add-issue ISSUE_URL=https://github.com/<owner>/<repo>/issues/<NN>
         > ```
-        > (Or skip this step if the Projects V2 "Auto-add" workflow for the `memotek` label is configured on the board.)
+        > (Or skip this step if the Projects V2 "Auto-add" workflow for the `memoteca` label is configured on the board.)
 
   - type: dropdown
     id: task-type

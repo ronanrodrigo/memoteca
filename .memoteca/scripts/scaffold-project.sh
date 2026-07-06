@@ -30,8 +30,8 @@ fi
 
 if [ "$IS_INPLACE" = "yes" ]; then
   # In-place: create-next-app in non-empty directory creates in a temp subfolder
-  # and we move the files here, preserving .memotek, Makefile, AGENTS.md, etc.
-  TEMP_DIR="memotek-scaffold-tmp"
+  # and we move the files here, preserving .memoteca, Makefile, AGENTS.md, etc.
+  TEMP_DIR="memoteca-scaffold-tmp"
   rm -rf "$TEMP_DIR"
   npx create-next-app@latest "$TEMP_DIR" \
     --typescript \
@@ -44,7 +44,7 @@ if [ "$IS_INPLACE" = "yes" ]; then
     --no-git
 
   # Move scaffold files to root, preserving existing template files
-  PRESERVE_LIST=".memotek .github AGENTS.md Makefile opencode.json .env-example .git .gitignore"
+  PRESERVE_LIST=".memoteca .github AGENTS.md Makefile opencode.json .env-example .git .gitignore"
 
   for item in "$TEMP_DIR"/*; do
     basename_item="$(basename "$item")"
@@ -257,17 +257,17 @@ mkdir -p src/app src/components src/lib src/__tests__ e2e
 # GitHub issue. The gcp/gpr shortcuts already live in the main Makefile. Here we only
 # copy the worktree workflow as an operational reference in docs/.
 
-MEMOTEK_ROOT=""
+MEMOTEKA_ROOT=""
 for candidate in "$PWD" "$PWD/.." "$PWD/../.."; do
-  if [ -f "$candidate/.memotek/templates/worktree-workflow.md" ]; then
-    MEMOTEK_ROOT="$candidate"
+  if [ -f "$candidate/.memoteca/templates/worktree-workflow.md" ]; then
+    MEMOTEKA_ROOT="$candidate"
     break
   fi
 done
 
-if [ -n "$MEMOTEK_ROOT" ]; then
+if [ -n "$MEMOTEKA_ROOT" ]; then
   mkdir -p docs
-  cp "$MEMOTEK_ROOT/.memotek/templates/worktree-workflow.md" docs/worktree-workflow.md 2>/dev/null || true
+  cp "$MEMOTEKA_ROOT/.memoteca/templates/worktree-workflow.md" docs/worktree-workflow.md 2>/dev/null || true
   echo "✅ docs/worktree-workflow.md copied (operational reference)"
   echo "   Plan and memory are NOT files — they live in the GitHub issue."
 else

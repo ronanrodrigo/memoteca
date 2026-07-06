@@ -14,8 +14,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/project-common.sh"
 
-memotek_load_project
-PN="$MEMOTEK_PROJECT_NUMBER"
+memoteca_load_project
+PN="$MEMOTEKA_PROJECT_NUMBER"
 
 # ─ Fetch all items ────────────────────────────────────────────────────
 # Each item's JSON shape (defensively parsed):
@@ -62,7 +62,7 @@ PARSED=$(printf '%s' "$ITEMS_JSON" | node -e '
 ' 2>/dev/null || echo "")
 
 if [ -z "$PARSED" ]; then
-  echo "📭 No items on the board \"$MEMOTEK_PROJECT_TITLE\" (#$PN)."
+  echo "📭 No items on the board \"$MEMOTEKA_PROJECT_TITLE\" (#$PN)."
   exit 0
 fi
 
@@ -90,9 +90,9 @@ done <<< "$PARSED"
 
 # ─ Print Todo queue, oldest first ────────────────────────────────────
 if [ -z "$TODOS" ]; then
-  echo "📭 No items with Status=\"Todo\" on board \"$MEMOTEK_PROJECT_TITLE\" (#$PN)."
+  echo "📭 No items with Status=\"Todo\" on board \"$MEMOTEKA_PROJECT_TITLE\" (#$PN)."
 else
-  echo "📋 Todo queue on board \"$MEMOTEK_PROJECT_TITLE\" (#$PN, owner $MEMOTEK_PROJECT_OWNER):"
+  echo "📋 Todo queue on board \"$MEMOTEKA_PROJECT_TITLE\" (#$PN, owner $MEMOTEKA_PROJECT_OWNER):"
   echo ""
   printf '%s\n' "$TODOS" | grep -v '^$' | sort -t'|' -k7 | awk -F'|' '{
     printf "  #%-6s %s  %-30s %5s  %s\n", $1, $2, $3, $4, $5

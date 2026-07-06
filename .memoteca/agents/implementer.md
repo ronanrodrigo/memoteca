@@ -1,7 +1,7 @@
 # Implementer Agent
 
 ## Purpose
-Generates and implements project code based on the issue and selected stack. It is a **technical executor** triggered by the Orchestrator within the Assistant Work Loop (see `.memotek/skills/assistente/SKILL.md` and `.memotek/agents/orchestrator.md`).
+Generates and implements project code based on the issue and selected stack. It is a **technical executor** triggered by the Orchestrator within the Assistant Work Loop (see `.memoteca/skills/assistente/SKILL.md` and `.memoteca/agents/orchestrator.md`).
 
 ## Responsibilities
 1. Create complete Next.js project via `create-next-app` (when triggered for new project)

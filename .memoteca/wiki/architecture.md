@@ -1,8 +1,8 @@
-# Memotek Architecture
+# Memoteca Architecture
 
 ## Overview
 
-Memotek is a system of autonomous agents for software development, built as a template repository.
+Memoteca is a system of autonomous agents for software development, built as a template repository.
 
 ## Components
 
@@ -27,7 +27,7 @@ Shell scripts that encapsulate complex commands:
 - `project-common.sh` — Resolves the central "Memoteca" board (sourced helper)
 - `project-create.sh` — Create the private board + fields
 - `project-link-repo.sh` — Link a repo to the board
-- `project-add-issue.sh` — Add a `memotek`-labelled issue to the board
+- `project-add-issue.sh` — Add a `memoteca`-labelled issue to the board
 - `tasks-listen.sh` — Query the board for items Status=Todo (oldest first) — entry point
 - `process-issue.sh` — Fetch an issue (cross-repo) and print next make targets
 - `update-memory.sh` — Check an issue checkbox, post comment, AND mirror Status to the board
@@ -52,7 +52,7 @@ User → Intake → Issue in target repo → make project-add-issue → Memoteca
 ## Directory Structure
 
 ```
-memotek/
+memoteca/
 ├── AGENTS.md              # Rules for agents
 ├── Makefile               # Targets for scripts
 ├── opencode.json          # opencode configuration
@@ -60,7 +60,7 @@ memotek/
 ├── .github/
 │   └── ISSUE_TEMPLATE/
 │       └── feature_request.yml
-├── .memotek/
+├── .memoteca/
 │   ├── agents/            # Agent definitions
 │   ├── skills/            # Available skills
 │   ├── scripts/           # Shell scripts
@@ -80,5 +80,5 @@ memotek/
 5. **Predefined stack** — Next.js + React + Vercel + Supabase + Chakra UI
 6. **Issue templates** — A single template for 3 task types
 7. **Manual execution** — User types `/issues` to `make tasks-listen`
-8. **Fixed workspace dir** — Orchestrator runs from `~/Developer/memotek-workspaces/`, cloning target repos on demand and creating a worktree `feature/<NN>-<short>` per task
+8. **Fixed workspace dir** — Orchestrator runs from `~/Developer/memoteca-workspaces/`, cloning target repos on demand and creating a worktree `feature/<NN>-<short>` per task
 9. **Commit format** — `<type>: <description> (#<NN>)` enforced by `make install-hooks`

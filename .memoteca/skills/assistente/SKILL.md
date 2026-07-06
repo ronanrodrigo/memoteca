@@ -8,7 +8,7 @@ The rules of this skill are MANDATORY and must prevail over any other competing 
 
 ## The issue is the source of truth — NO plan/memory files in the repository
 
-Memotek ALWAYS uses the GitHub issue as the source of truth. NO memory, plan, TODO, or task board file should ever be committed or ignored (.gitignore) in the repository. Do NOT create `docs/agent-plans/<proj>/MEMORY.md`, `TODO.md`, `plan-<proj>.md`, or any equivalent file. The plan, memory, task board, and decision history live in the issue: body (updated via `make memory-update`) + comments (added via `make memory-update ... COMMENT="..."`). All traceability (links, anchors, decisions, state, dependencies) is maintained as sequential comments in the issue itself.
+Memoteca ALWAYS uses the GitHub issue as the source of truth. NO memory, plan, TODO, or task board file should ever be committed or ignored (.gitignore) in the repository. Do NOT create `docs/agent-plans/<proj>/MEMORY.md`, `TODO.md`, `plan-<proj>.md`, or any equivalent file. The plan, memory, task board, and decision history live in the issue: body (updated via `make memory-update`) + comments (added via `make memory-update ... COMMENT="..."`). All traceability (links, anchors, decisions, state, dependencies) is maintained as sequential comments in the issue itself.
 
 ## Operational Rules
 
@@ -36,7 +36,7 @@ Memotek ALWAYS uses the GitHub issue as the source of truth. NO memory, plan, TO
 
 13. The **central "Memoteca" board** (private GitHub Projects V2, owned by the user's personal account, cross-repo) is the cross-task queue. `make tasks-listen` queries it for items with `Status=Todo` (oldest first). The issue is the source of truth (per-task timeline); the board mirrors the pipeline stage via `Status` (Backlog / Todo / Research / Implementation / Review / PR/Merge / Deploy / Done). `make memory-update` writes to both — issue body checkbox AND board Status (the second is best-effort, non-fatal).
 
-11. WHEN visual evidence is requested for a PR (screenshots, screen recordings, simulator videos, "visual proof", "evidence"), FOLLOW the **PR Visual Evidence** skill described in `.memotek/skills/pr-visual-evidence/SKILL.md`. Media must be hosted by GitHub (user-attachments) and never committed to the repository.
+11. WHEN visual evidence is requested for a PR (screenshots, screen recordings, simulator videos, "visual proof", "evidence"), FOLLOW the **PR Visual Evidence** skill described in `.memoteca/skills/pr-visual-evidence/SKILL.md`. Media must be hosted by GitHub (user-attachments) and never committed to the repository.
 
 ## Loading Confirmation
 

@@ -2,44 +2,44 @@
 
 # === MEMORY (issue body = source of truth; board Status mirrors pipeline phase) ===
 memory-update:
-	@.memotek/scripts/update-memory.sh
+	@.memoteca/scripts/update-memory.sh
 
 memory-finalize:
-	@ISSUE_NUMBER="$(ISSUE_NUMBER)" FINALIZE=1 .memotek/scripts/update-memory.sh
+	@ISSUE_NUMBER="$(ISSUE_NUMBER)" FINALIZE=1 .memoteca/scripts/update-memory.sh
 
 # === SEARCH ===
 search-projects:
-	@.memotek/scripts/search-projects.sh
+	@.memoteca/scripts/search-projects.sh
 
 # === GITHUB AUTOMATION ===
 gh-actions-setup:
-	@.memotek/scripts/setup-gh-actions.sh
+	@.memoteca/scripts/setup-gh-actions.sh
 
 # === BOARD INTAKE — the central "Memoteca" project (private, cross-repo) ===
 # First-time setup: create the private board + standard Status/Task Type fields.
 project-create:
-	@.memotek/scripts/project-create.sh
+	@.memoteca/scripts/project-create.sh
 
 # Link a target repo to the board so its issues can be added (once per repo).
 #   make project-link-repo                  # current repo
 #   make project-link-repo REPO=owner/name
 project-link-repo:
-	@.memotek/scripts/project-link-repo.sh
+	@.memoteca/scripts/project-link-repo.sh
 
 # Explicitly add an issue to the board. Called by the intake flow after filing.
 #   make project-add-issue ISSUE_URL=https://github.com/o/r/issues/12
 #   make project-add-issue ISSUE_URL=42
 #   make project-add-issue ISSUE_URL=owner/repo#42
 project-add-issue:
-	@.memotek/scripts/project-add-issue.sh
+	@.memoteca/scripts/project-add-issue.sh
 
 # === INTAKE / DISPATCH ===
 # tasks-listen queries the central board for items Status=Todo (oldest first).
 tasks-listen:
-	@.memotek/scripts/tasks-listen.sh
+	@.memoteca/scripts/tasks-listen.sh
 
 process-issue:
-	@.memotek/scripts/process-issue.sh
+	@.memoteca/scripts/process-issue.sh
 
 # === CI: Project Build/Test Targets ===
 install:
@@ -63,36 +63,36 @@ install-playwright:
 test-e2e:
 	npm run test:e2e
 
-# === TESTS (memotek) ===
+# === TESTS (memoteca) ===
 test-preview:
-	@.memotek/scripts/validate-preview.sh
+	@.memoteca/scripts/validate-preview.sh
 
 # === PR ===
 pr-create:
-	@.memotek/scripts/create-pr.sh
+	@.memoteca/scripts/create-pr.sh
 
 pr-merge:
-	@.memotek/scripts/merge-pr.sh
+	@.memoteca/scripts/merge-pr.sh
 
 # === DEPLOY ===
 deploy-preview:
-	@.memotek/scripts/deploy-preview.sh
+	@.memoteca/scripts/deploy-preview.sh
 
 deploy-production:
-	@.memotek/scripts/deploy-production.sh
+	@.memoteca/scripts/deploy-production.sh
 
 # === SECRETS ===
 setup-vercel-secrets:
-	@.memotek/scripts/setup-vercel-secrets.sh
+	@.memoteca/scripts/setup-vercel-secrets.sh
 
 # === SCAFFOLD ===
 scaffold:
-	@.memotek/scripts/scaffold-project.sh
+	@.memoteca/scripts/scaffold-project.sh
 
 # === HOOKS ===
 # Install the commit-msg hook enforcing <type>: <desc> (#<NN>) in the current repo.
 install-hooks:
-	@.memotek/scripts/install-hooks.sh
+	@.memoteca/scripts/install-hooks.sh
 
 # === DEV SHORTCUTS (Assistant Skill) ===
 # gcp        : commit + push  (MESSAGE="feat: ..." or "fix: ...")

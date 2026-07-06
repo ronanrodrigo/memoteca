@@ -182,12 +182,12 @@ determine_target_board_status() {
 
 TARGET_STATUS=$(determine_target_board_status)
 if [ -n "$TARGET_STATUS" ]; then
-  if source "$SCRIPT_DIR/project-common.sh" 2>/dev/null && memotek_load_project 2>/dev/null; then
-    ITEM_PAIR=$(memotek_find_item_by_issue "$ISSUE_FULL_URL")
+  if source "$SCRIPT_DIR/project-common.sh" 2>/dev/null && memoteca_load_project 2>/dev/null; then
+    ITEM_PAIR=$(memoteca_find_item_by_issue "$ISSUE_FULL_URL")
     if [ -n "$ITEM_PAIR" ]; then
       ITEM_ID="${ITEM_PAIR%%|*}"
       ITEM_PROJECT_ID="${ITEM_PAIR##*|}"
-      if memotek_set_item_status "$ITEM_ID" "$ITEM_PROJECT_ID" "$TARGET_STATUS"; then
+      if memoteca_set_item_status "$ITEM_ID" "$ITEM_PROJECT_ID" "$TARGET_STATUS"; then
         echo "🟦 Board Status → \"$TARGET_STATUS\""
       else
         echo "⚠️  Board Status update failed (continuing — issue body is the source of truth)."

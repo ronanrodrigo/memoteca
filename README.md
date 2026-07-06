@@ -7,7 +7,7 @@
 | | **memoteca** (repo-template, this repo) | **repo-project** |
 |---|---|---|
 | What it is | A GitHub template | A repo created from this template via "Use this template" |
-| Ships | `.memotek/`, `Makefile`, issue template, `opencode.json`, `AGENTS.md`, `README.md`, `.env-example` | Everything in memoteca PLUS a scaffolded Next.js app |
+| Ships | `.memoteca/`, `Makefile`, issue template, `opencode.json`, `AGENTS.md`, `README.md`, `.env-example` | Everything in memoteca PLUS a scaffolded Next.js app |
 | Has `package.json` / `src/` | ❌ No | ✅ Yes (after `make scaffold`) |
 | `make install` / `lint` / `build` / `test` work | ❌ No (will fail) | ✅ Yes |
 | Pipeline runs here | ❌ No | ✅ Yes |
@@ -15,7 +15,7 @@
 
 ### What scaffold preserves
 
-`make scaffold PROJECT_NAME="."` runs `create-next-app` **in-place** in the repo-project and adds the Next.js app, while **preserving** these template files: `.memotek`, `.github`, `AGENTS.md`, `Makefile`, `opencode.json`, `.env-example`, `.git`, `.gitignore`.
+`make scaffold PROJECT_NAME="."` runs `create-next-app` **in-place** in the repo-project and adds the Next.js app, while **preserving** these template files: `.memoteca`, `.github`, `AGENTS.md`, `Makefile`, `opencode.json`, `.env-example`, `.git`, `.gitignore`.
 
 ## Quick start
 
@@ -29,14 +29,14 @@
    ```
 
    Requires the `project` scope: `gh auth refresh -s project` (if not set).
-4. Open an issue in the repo-project using the **"Feature Request / Task"** template (auto-labels `memotek`).
+4. Open an issue in the repo-project using the **"Feature Request / Task"** template (auto-labels `memoteca`).
 5. Add the issue to the central board:
 
    ```
    make project-add-issue ISSUE_URL=https://github.com/<owner>/<repo>/issues/<NN>
    ```
 
-   (Optional: configure **Auto-add** in the Projects V2 web UI so `memotek`-labelled issues are added automatically — filter label = `memotek`.)
+   (Optional: configure **Auto-add** in the Projects V2 web UI so `memoteca`-labelled issues are added automatically — filter label = `memoteca`.)
 6. **Dispatch** — the board is the cross-task queue:
 
    ```
@@ -86,7 +86,7 @@ graph TB
     Prod --> Final[Finalize: close issue + board Status=Done]
 ```
 
-Full agent-by-agent detail lives in [`AGENTS.md`](./AGENTS.md) and `.memotek/agents/*.md`.
+Full agent-by-agent detail lives in [`AGENTS.md`](./AGENTS.md) and `.memoteca/agents/*.md`.
 
 ## Stack
 
@@ -104,7 +104,7 @@ Next.js (App Router, TypeScript, Tailwind, `src/` dir, `@/*` alias) · React · 
 |---|---|---|
 | `make project-create` | both (once) | Create the private "Memoteca" GitHub Project + Status/Task Type fields |
 | `make project-link-repo [REPO=o/r]` | both (once per repo) | Link a repo to the board so its issues can be added |
-| `make project-add-issue ISSUE_URL=...` | both | Add a `memotek`-labelled issue to the board (sets Status=Todo + parses Task Type) |
+| `make project-add-issue ISSUE_URL=...` | both | Add a `memoteca`-labelled issue to the board (sets Status=Todo + parses Task Type) |
 | `make tasks-listen` | both | Query the board for items Status=Todo (oldest first) — entry point |
 | `make process-issue ISSUE_URL=...` | both | Fetch an issue (cross-repo) and print next make targets |
 | `make scaffold PROJECT_NAME="."` | repo-project | Adds the Next.js app in-place (preserves template files) |

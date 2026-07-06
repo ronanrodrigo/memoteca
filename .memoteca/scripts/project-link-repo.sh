@@ -7,11 +7,11 @@
 #   make project-link-repo                       # links the current repo
 #   make project-link-repo REPO=<owner>/<name>   # links a specific repo
 #
-# NOTE: GitHub's Web UI offers an optional "Auto-add issues with the `memotek` label"
+# NOTE: GitHub's Web UI offers an optional "Auto-add issues with the `memoteca` label"
 # workflow on the linked project. The GraphQL/CLI does NOT support creating that
 # workflow programmatically. If you want full automation by label, configure it
 # once via the Projects V2 web UI (Project → ⋯ → Workflows → Add issue → filter
-# label = memotek). The template relies on the explicit `make project-add-issue`
+# label = memoteca). The template relies on the explicit `make project-add-issue`
 # call from the intake flow as the default path.
 
 set -euo pipefail
@@ -19,8 +19,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/project-common.sh"
 
-memotek_load_project
-PN="$MEMOTEK_PROJECT_NUMBER"
+memoteca_load_project
+PN="$MEMOTEKA_PROJECT_NUMBER"
 
 REPO="${REPO:-}"
 if [ -z "$REPO" ]; then
@@ -32,14 +32,14 @@ if [ -z "$REPO" ]; then
   fi
 fi
 
-echo "🔗 Linking $REPO to board \"$MEMOTEK_PROJECT_TITLE\" (#$PN)..."
+echo "🔗 Linking $REPO to board \"$MEMOTEKA_PROJECT_TITLE\" (#$PN)..."
 if gh project link "$PN" --owner "@me" --repo "$REPO" 2>&1; then
   echo "✅ $REPO linked."
   echo ""
   echo "💬 Issues from $REPO can now be added to the board via:"
   echo "   make project-add-issue ISSUE_URL=https://github.com/$REPO/issues/<NN>"
   echo ""
-  echo "💡 (Optional) For auto-add on the \`memotek\` label, configure it in the"
+  echo "💡 (Optional) For auto-add on the \`memoteca\` label, configure it in the"
   echo "   GitHub Projects V2 web UI under the project's Workflows settings."
 else
   echo "⚠️  Link may already exist, or linking failed. Sample linking is idempotent — safe to ignore above error."

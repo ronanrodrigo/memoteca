@@ -44,7 +44,7 @@ After filing the issue, add it to the central board so the Orchestrator picks it
 make project-add-issue ISSUE_URL=https://github.com/<owner>/<repo>/issues/<NN>
 ```
 
-The script sets the board's `Status=Todo` and parses the `Task Type` single-select from the issue body. (Optional: configure GitHub's Projects V2 **Auto-add** workflow on the board via the web UI — filter label = `memotek` — to skip this manual step.)
+The script sets the board's `Status=Todo` and parses the `Task Type` single-select from the issue body. (Optional: configure GitHub's Projects V2 **Auto-add** workflow on the board via the web UI — filter label = `memoteca` — to skip this manual step.)
 
 ### 5. Start Pipeline
 Once the issue is on the board with `Status=Todo`, `make tasks-listen` will surface it as the next actionable item (oldest first) for the Orchestrator.
@@ -54,6 +54,6 @@ Once the issue is on the board with `Status=Todo`, `make tasks-listen` will surf
 - `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Intake completed"` — Finalize intake
 
 ## Output
-- Issue created on GitHub in the target repo with the `memotek` label
+- Issue created on GitHub in the target repo with the `memoteca` label
 - Issue added to the central "Memoteca" board with `Status=Todo`
 - Pipeline started by the Orchestrator via `make tasks-listen`

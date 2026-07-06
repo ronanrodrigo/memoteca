@@ -4,8 +4,8 @@
 
 There are **two** kinds of repo that share this `AGENTS.md`:
 
-- **repo-template (memoteca, THIS repo)** — A GitHub template. It ships **ONLY** the orchestration harness: `.memotek/`, `Makefile`, `.github/ISSUE_TEMPLATE/`, `opencode.json`, `.env-example`, `AGENTS.md`, `README.md`. It has **NO** `package.json`, `src/`, lockfile, or Next.js app. `make install/lint/build/test` will **FAIL** here — they require a scaffolded repo-project. The pipeline does NOT run here; memoteca is only the seed.
-- **repo-project** — A repo created from this template via GitHub "Use this template". Initially byte-identical to memoteca. Then `make scaffold PROJECT_NAME="."` runs `create-next-app` **in-place** and adds the Next.js app (`src/`, `package.json`, `tsconfig.json`, `next.config.*`, lockfile, ...). The scaffold **preserves** these template files: `.memotek`, `.github`, `AGENTS.md`, `Makefile`, `opencode.json`, `.env-example`, `.git`, `.gitignore`. The pipeline runs end-to-end in the **repo-project**.
+- **repo-template (memoteca, THIS repo)** — A GitHub template. It ships **ONLY** the orchestration harness: `.memoteca/`, `Makefile`, `.github/ISSUE_TEMPLATE/`, `opencode.json`, `.env-example`, `AGENTS.md`, `README.md`. It has **NO** `package.json`, `src/`, lockfile, or Next.js app. `make install/lint/build/test` will **FAIL** here — they require a scaffolded repo-project. The pipeline does NOT run here; memoteca is only the seed.
+- **repo-project** — A repo created from this template via GitHub "Use this template". Initially byte-identical to memoteca. Then `make scaffold PROJECT_NAME="."` runs `create-next-app` **in-place** and adds the Next.js app (`src/`, `package.json`, `tsconfig.json`, `next.config.*`, lockfile, ...). The scaffold **preserves** these template files: `.memoteca`, `.github`, `AGENTS.md`, `Makefile`, `opencode.json`, `.env-example`, `.git`, `.gitignore`. The pipeline runs end-to-end in the **repo-project**.
 
 ### Placeholders — filled by the AGENT, not the human
 
@@ -17,7 +17,7 @@ A repo-project created from this template contains placeholders (`{PROJECT_NAME}
    - Prohibited: `gh`, `curl`, `jq`, `yq`, `npm run`, `jest`, etc. directly
    - Exception: internal agent commands (read files, write code)
 2. **Mandatory repository** — The user MUST have a project-repo on GitHub (created via "Use this template"). The intake issue is filed in that project-repo (the source of truth). The orchestrator picks the issue up from the central "Memoteca" board — never runs inside the template repo itself.
-3. **Precedence** — What is in AGENTS.md takes precedence over agent/skill definitions, **except for topics covered by the Assistant Skill** (`.memotek/skills/assistente/SKILL.md`), which prevail. See `.memotek/rules/assistente-precedence.md` for the complete hierarchy.
+3. **Precedence** — What is in AGENTS.md takes precedence over agent/skill definitions, **except for topics covered by the Assistant Skill** (`.memoteca/skills/assistente/SKILL.md`), which prevail. See `.memoteca/rules/assistente-precedence.md` for the complete hierarchy.
 
 4. **Assistant Skill active** — GitHub native Mermaid, GitHub issue as source of truth (no plan/memory files in the repo), worktree by feature, `gcp`/`gpr` shortcuts, and Assistant Work Loop are MANDATORY. First response in conversation starts with 💭.
 
@@ -28,12 +28,12 @@ The primary agent is the orchestrator. When you receive a task, perform the step
 **CRITICAL:** After EACH step of the pipeline, ALWAYS run `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<exact checkbox text>"` to check the corresponding checkbox in the issue body. Don't skip this step — the `[ ]` checkboxes must become `[x]` in real time. At the end of the pipeline, run `make memory-finalize ISSUE_NUMBER=<num>` to check all remaining checkboxes and close the issue.
 
 ### Complete pipeline (project creation)
-1. **Research** — Read `.memotek/agents/researcher.md` → run `make search-projects QUERY="<keywords>"` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Research: benchmarking completed"`
-2. **Stack** — Read `.memotek/agents/stack-selector.md` → define the stack → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Stack defined"`
-3. **Implement** — Read `.memotek/agents/implementer.md` → run `make scaffold PROJECT_NAME="."` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Code implemented"`
-4. **Deploy** — Read `.memotek/agents/deploy-agent.md` → run `make gh-actions-setup && make deploy-preview` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Deploy preview functional"`
-5. **CI** — Read `.memotek/agents/ci-agent.md` → validate `make install && make lint && make typecheck && make test && make build` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="CI pipeline configured"`
-6. **PR** — Read `.memotek/agents/pr-validator.md` → run `make pr-create` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="PR created"`
+1. **Research** — Read `.memoteca/agents/researcher.md` → run `make search-projects QUERY="<keywords>"` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Research: benchmarking completed"`
+2. **Stack** — Read `.memoteca/agents/stack-selector.md` → define the stack → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Stack defined"`
+3. **Implement** — Read `.memoteca/agents/implementer.md` → run `make scaffold PROJECT_NAME="."` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Code implemented"`
+4. **Deploy** — Read `.memoteca/agents/deploy-agent.md` → run `make gh-actions-setup && make deploy-preview` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Deploy preview functional"`
+5. **CI** — Read `.memoteca/agents/ci-agent.md` → validate `make install && make lint && make typecheck && make test && make build` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="CI pipeline configured"`
+6. **PR** — Read `.memoteca/agents/pr-validator.md` → run `make pr-create` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="PR created"`
 7. **Validation + Merge** — `make pr-merge PR_NUMBER=<num>` (the script waits for the checks to finish, up to 15 minutes, and merges automatically if green) → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="All checks green"` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="PR merged"` → `make deploy-production` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Production deploy completed"`
 8. **Finalize** — `make memory-finalize ISSUE_NUMBER=<num>` (checks all remaining checkboxes + closes the issue)
    - **Don't ask the user before merging** — if the checks are green, the merge is automatic
@@ -41,12 +41,12 @@ The primary agent is the orchestrator. When you receive a task, perform the step
    - The CHECKBOX texts must correspond EXACTLY to the labels in the `feature_request.yml` template
 
 ### Partial cycle (addition/correction)
-1. Read the corresponding agent in `.memotek/agents/`
+1. Read the corresponding agent in `.memoteca/agents/`
 2. Run the appropriate make target
 3. Update the issue with `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<step>"`
 
 ### Golden rule
-- Before each step, read the corresponding agent in `.memotek/agents/`
+- Before each step, read the corresponding agent in `.memoteca/agents/`
 - Each step must be completed before moving on to the next
 - If a step fails, report it in the issue and wait for the user's decision
 
@@ -65,7 +65,7 @@ repo-project/
 ├── .gitignore
 ├── .env-example
 ├── AGENTS.md
-├── .memotek/               ← agents and scripts
+├── .memoteca/               ← agents and scripts
 │   ├── agents/
 │   ├── skills/
 │   ├── scripts/
@@ -103,7 +103,7 @@ graph TB
     User([USER])
     User -->|Manual Prompt| Intake[Intake Skill]
     User -->|/issues| Polling["/issues → make tasks-listen"]
-    Intake --> Issue["Issue in target repo<br/>(memotek label)"]
+    Intake --> Issue["Issue in target repo<br/>(memoteca label)"]
     Polling --> Board[(Memoteca board<br/>Status=Todo, oldest)]
     Intake -->|"make project-add-issue"| Board
     Issue -.->|"linked"| Board
@@ -147,7 +147,7 @@ graph TB
 
 ## Makefile Targets
 
-### Pipeline (memotek)
+### Pipeline (memoteca)
 | Target | Description |
 |--------|-----------|
 | `make scaffold` | Creates/configures Next.js project |
@@ -165,7 +165,7 @@ graph TB
 | `make setup-vercel-secrets` | Configures Vercel secrets in GitHub Actions |
 | `make project-create` | Creates the private "Memoteca" board + Status/Task Type fields (idempotent) |
 | `make project-link-repo [REPO=o/r]` | Links a repo to the board so its issues can be added (once per repo) |
-| `make project-add-issue ISSUE_URL=...` | Adds a `memotek`-labelled issue to the board, sets Status=Todo + parses Task Type |
+| `make project-add-issue ISSUE_URL=...` | Adds a `memoteca`-labelled issue to the board, sets Status=Todo + parses Task Type |
 | `make install-hooks` | Installs the commit-msg hook enforcing `<type>: <desc> (#<NN>)` |
 
 ### CI/CD (repo-project)
@@ -182,7 +182,7 @@ graph TB
 
 ## Worktree & git shortcuts
 
-The Orchestrator runs from a fixed workspace dir (default `~/Developer/memotek-workspaces/`, overridable via `MEMOTEK_WORKSPACE_DIR`). For each Todo item on the board:
+The Orchestrator runs from a fixed workspace dir (default `~/Developer/memoteca-workspaces/`, overridable via `MEMOTEKA_WORKSPACE_DIR`). For each Todo item on the board:
 
 1. Locate or `gh repo clone` the target repo into the workspace dir.
 2. Create a worktree off the target repo's main branch named **`feature/<NN>-<short>`** where `<NN>` is the issue number and `<short>` is 3-5 descriptive chars.

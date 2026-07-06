@@ -3,12 +3,12 @@
   "model": "opencode/mimo-v2.5-free",
   "instructions": [
     "AGENTS.md",
-    ".memotek/agents/*.md",
-    ".memotek/rules/*.md"
+    ".memoteca/agents/*.md",
+    ".memoteca/rules/*.md"
   ],
   "skills": {
     "paths": [
-      ".memotek/skills"
+      ".memoteca/skills"
     ]
   },
   "command": {

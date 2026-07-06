@@ -8,11 +8,11 @@
 
 2. **Mandatory repo** — The user MUST have a project-repo on GitHub (created via "Use this template"). The intake issue is filed there. The orchestrator picks it up from the central board — never runs inside the template repo.
 
-3. **Central board** — A private GitHub Projects V2 board titled "Memoteca" lives on the user's personal account, cross-repo by design. Tasks can target any repo the user has access to. Setup once with `make project-create && make project-link-repo`. The board identity (owner + number + Projects V2 node ID) is resolved at runtime by `.memotek/scripts/project-common.sh` — no `.env` entries required. Auto-add-by-label is web-UI-only (the GraphQL API exposes `deleteProjectV2Workflow` but not its `create` counterpart), so the templates rely on `make project-add-issue` from the intake flow.
+3. **Central board** — A private GitHub Projects V2 board titled "Memoteca" lives on the user's personal account, cross-repo by design. Tasks can target any repo the user has access to. Setup once with `make project-create && make project-link-repo`. The board identity (owner + number + Projects V2 node ID) is resolved at runtime by `.memoteca/scripts/project-common.sh` — no `.env` entries required. Auto-add-by-label is web-UI-only (the GraphQL API exposes `deleteProjectV2Workflow` but not its `create` counterpart), so the templates rely on `make project-add-issue` from the intake flow.
 
-4. **Precedence** — What is in AGENTS.md takes precedence over agent/skill definitions, **except for topics covered by the Assistant Skill** (`.memotek/skills/assistente/SKILL.md`), which prevail. See `.memotek/rules/assistente-precedence.md` for the complete hierarchy.
+4. **Precedence** — What is in AGENTS.md takes precedence over agent/skill definitions, **except for topics covered by the Assistant Skill** (`.memoteca/skills/assistente/SKILL.md`), which prevail. See `.memoteca/rules/assistente-precedence.md` for the complete hierarchy.
 
-5. **Versioning** — Each implementation is versioned with the model code: `memotek-<model>`
+5. **Versioning** — Each implementation is versioned with the model code: `memoteca-<model>`
 
 6. **Assistant Skill active** — GitHub native Mermaid, GitHub issue as source of truth (no plan/memory files in the repo), worktree by feature, `gcp`/`gpr` shortcuts, and Assistant Work Loop are MANDATORY. First response in conversation starts with 💭.
 
