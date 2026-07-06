@@ -1,73 +1,73 @@
-# Arquitetura do Memotek
+# Memotek Architecture
 
-## Visão Geral
+## Overview
 
-O Memotek é um sistema de agentes autônomos para desenvolvimento de software, construído como um template repository.
+Memotek is a system of autonomous agents for software development, built as a template repository.
 
-## Componentes
+## Components
 
-### Agentes
-Cada agente é um subagente especializado que executa uma etapa específica do pipeline:
+### Agents
+Each agent is a specialized sub-agent that executes a specific pipeline step:
 
-1. **Orchestrator** — Coordena todo o pipeline
-2. **Researcher** — Busca projetos para benchmarking
-3. **Stack Selector** — Define stack tecnológica
-4. **Implementer** — Gera e implementa código
-5. **Deploy Agent** — Configura deploy na Vercel
-6. **CI Agent** — Configura CI/CD
-7. **PR Validator** — Monitora e valida PRs
-8. **Memory Agent** — Atualiza issue com progresso
+1. **Orchestrator** — Coordinates the entire pipeline
+2. **Researcher** — Searches for projects for benchmarking
+3. **Stack Selector** — Defines the technology stack
+4. **Implementer** — Generates and implements code
+5. **Deploy Agent** — Configures deployment on Vercel
+6. **CI Agent** — Configures CI/CD
+7. **PR Validator** — Monitors and validates PRs
+8. **Memory Agent** — Updates issue with progress
 
 ### Skills
-Skills são conjuntos de instruções para tarefas específicas:
-- **Intake** — Coleta input do usuário e cria issue
+Skills are instruction sets for specific tasks:
+- **Intake** — Collects user input and creates issues
 
 ### Scripts
-Scripts shell que encapsulam comandos complexos:
-- `update-memory.sh` — Atualizar issue
-- `search-projects.sh` — Buscar projetos
-- `setup-gh-actions.sh` — Configurar CI/CD
-- `listen-issues.sh` — Polling de issues
-- `run-tests.sh` — Rodar testes
-- `validate-preview.sh` — Testar preview
-- `create-pr.sh` — Criar PR
+Shell scripts that encapsulate complex commands:
+- `update-memory.sh` — Update issue
+- `search-projects.sh` — Search projects
+- `setup-gh-actions.sh` — Configure CI/CD
+- `listen-issues.sh` — Polling of issues
+- `run-tests.sh` — Run tests
+- `validate-preview.sh` — Test preview
+- `create-pr.sh` — Create PR
 - `merge-pr.sh` — Merge PR
 - `deploy-preview.sh` — Deploy preview
-- `deploy-production.sh` — Deploy produção
-- `scaffold-project.sh` — Criar projeto
+- `deploy-production.sh` — Deploy production
+- `scaffold-project.sh` — Create project
 
-## Fluxo de Dados
+## Data Flow
 
 ```
-Usuário → Intake → Issue GitHub → Orchestrator → Pipeline → Deploy → Issue Atualizada
+User → Intake → GitHub Issue → Orchestrator → Pipeline → Deploy → Updated Issue
 ```
 
-## Estrutura de Diretórios
+## Directory Structure
 
 ```
 memotek/
-├── AGENTS.md              # Regras para agentes
-├── Makefile               # Targets para scripts
-├── opencode.json          # Configuração do opencode
-├── .env-example           # Variáveis de ambiente
+├── AGENTS.md              # Rules for agents
+├── Makefile               # Targets for scripts
+├── opencode.json          # opencode configuration
+├── .env-example           # Environment variables
 ├── .github/
 │   └── ISSUE_TEMPLATE/
 │       └── feature_request.yml
 ├── .memotek/
-│   ├── agents/            # Definições dos agentes
-│   ├── skills/            # Skills disponíveis
-│   ├── scripts/           # Scripts shell
-│   ├── templates/         # Templates GitHub Actions
-│   ├── tasks/             # Templates de tasks
-│   ├── rules/             # Regras do projeto
-│   └── wiki/              # Documentação
-└── .opencode/             # Configuração padrão
+│   ├── agents/            # Agent definitions
+│   ├── skills/            # Available skills
+│   ├── scripts/           # Shell scripts
+│   ├── templates/         # GitHub Actions templates
+│   ├── tasks/             # Task templates
+│   ├── rules/             # Project rules
+│   └── wiki/              # Documentation
+└── .opencode/             # Default configuration
 ```
 
-## Decisões de Design
+## Design Decisions
 
-1. **Issue como memória** — A issue criada pelo intake é a mesma que serve de memória
-2. **Scripts via Make** — Todos os comandos são executados via `make <target>`
-3. **Stack predefinida** — Next.js + React + Vercel + Supabase + Chakra UI
-4. **Templates de issue** — Um único template para 3 tipos de task
-5. **Execução manual** — Usuário digita `/issues` para verificar issues
+1. **Issue as memory** — The issue created by intake serves as the memory
+2. **Scripts via Make** — All commands are executed via `make <target>`
+3. **Predefined stack** — Next.js + React + Vercel + Supabase + Chakra UI
+4. **Issue templates** — A single template for 3 task types
+5. **Manual execution** — User types `/issues` to check issues

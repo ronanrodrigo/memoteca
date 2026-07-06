@@ -1,85 +1,85 @@
-# Workflow do Memotek
+# Memotek Workflow
 
-## Fluxo Principal
+## Main Flow
 
-### 1. Input do Usuário
-O usuário pode fornecer input de duas formas:
-- **Prompt manual** — Usuário descreve o que precisa
-- **/issues** — Verifica e processa issues abertas
+### 1. User Input
+The user can provide input in two ways:
+- **Manual prompt** — User describes what they need
+- **/issues** — Checks and processes open issues
 
 ### 2. Intake
-A skill Intake coleta informações e cria issue no GitHub:
-- Pergunta tipo de task (criação, adição, bug fix)
-- Coleta detalhes específicos
-- Cria issue com template `feature_request.yml`
+The Intake skill collects information and creates a GitHub issue:
+- Asks task type (creation, addition, bug fix)
+- Collects specific details
+- Creates issue with `feature_request.yml` template
 
 ### 3. Research
-O Researcher busca projetos similares no GitHub:
-- Usa `github_search_repositories`
-- Analisa top 3 por stars
-- Documenta referências na issue
+The Researcher searches for similar projects on GitHub:
+- Uses `github_search_repositories`
+- Analyzes top 3 by stars
+- Documents references in the issue
 
 ### 4. Stack Selection
-O Stack Selector define a stack:
-- Analisa resultados da pesquisa
-- Seleciona da lista predefinida
-- Justifica escolhas
+The Stack Selector defines the stack:
+- Analyzes research results
+- Selects from the predefined list
+- Justifies choices
 
 ### 5. Implementation
-O Implementer cria o projeto:
-- Executa `make scaffold`
-- Instala dependências
-- Implementa features
+The Implementer creates the project:
+- Runs `make scaffold`
+- Installs dependencies
+- Implements features
 
 ### 6. Deploy
-O Deploy Agent configura deploy:
-- Configura GitHub Actions
-- Executa `make deploy-preview`
-- Documenta URL na issue
+The Deploy Agent configures deployment:
+- Configures GitHub Actions
+- Runs `make deploy-preview`
+- Documents URL in the issue
 
 ### 7. CI
-O CI Agent configura pipeline:
-- Cria workflows de teste
-- Configura lint, typecheck, test, build
+The CI Agent configures the pipeline:
+- Creates test workflows
+- Configures lint, typecheck, test, build
 
 ### 8. Validation
-O PR Validator monitora e valida:
-- Verifica checks CI
-- Testa preview URL
-- Executa merge quando válido
-- Executa deploy produção após merge
+The PR Validator monitors and validates:
+- Checks CI checks
+- Tests preview URL
+- Runs merge when valid
+- Runs production deploy after merge
 
 ### 9. Memory
-O Memory Agent atualiza a issue:
-- Marca checkboxes
-- Adiciona comentários
-- Inclui diagramas Mermaid
+The Memory Agent updates the issue:
+- Checks checkboxes
+- Adds comments
+- Includes Mermaid diagrams
 
-## Execução Manual
+## Manual Execution
 
-### Verificar Issues
-O usuário digita `/issues` no opencode para verificar e processar issues abertas:
+### Check Issues
+The user types `/issues` in opencode to check and process open issues:
 ```
 /issues
 ```
 
-- `make listen-issues` — execução única do script que verifica issues
+- `make listen-issues` — single run of the script that checks issues
 
 ### PR Validator
-O PR Validator é acionado automaticamente quando um PR é criado via `make pr-create`.
+The PR Validator is automatically triggered when a PR is created via `make pr-create`.
 
-## Comandos Disponíveis
+## Available Commands
 
-| Comando | Descrição |
+| Command | Description |
 |---------|-----------|
-| `make memory-update` | Atualizar issue |
-| `make search-projects` | Buscar projetos |
-| `make gh-actions-setup` | Configurar CI/CD |
-| `make listen-issues` | Polling de issues |
-| `make test` | Rodar testes |
-| `make test-preview` | Testar preview |
-| `make pr-create` | Criar PR |
+| `make memory-update` | Update issue |
+| `make search-projects` | Search projects |
+| `make gh-actions-setup` | Configure CI/CD |
+| `make listen-issues` | Polling of issues |
+| `make test` | Run tests |
+| `make test-preview` | Test preview |
+| `make pr-create` | Create PR |
 | `make pr-merge` | Merge PR |
 | `make deploy-preview` | Deploy preview |
-| `make deploy-production` | Deploy produção |
-| `make scaffold` | Criar projeto |
+| `make deploy-production` | Deploy production |
+| `make scaffold` | Create project |

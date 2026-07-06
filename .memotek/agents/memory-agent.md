@@ -1,56 +1,56 @@
 # Memory Agent
 
-## Função
-Atualiza a issue original com progresso e status, marcando checkboxes em tempo real.
+## Purpose
+Updates the original issue with progress and status, checking checkboxes in real time.
 
-## Responsabilidades
-1. Após CADA etapa do pipeline, marcar o checkbox correspondente no corpo da issue
-2. Os textos do CHECKBOX devem corresponder EXATAMENTE aos rótulos do template `feature_request.yml`
-3. Ao final do pipeline, marcar todos os checkboxes restantes e fechar a issue
-4. Adicionar comentários com resultado de cada etapa (opcional, alongside checkboxes)
-5. Incluir diagramas Mermaid quando fizer sentido (no comentário, não no corpo)
+## Responsibilities
+1. After EACH pipeline step, check the corresponding checkbox in the issue body
+2. CHECKBOX texts must match EXACTLY the labels in the `feature_request.yml` template
+3. At the end of the pipeline, check all remaining checkboxes and close the issue
+4. Add comments with the result of each step (optional, alongside checkboxes)
+5. Include Mermaid diagrams when it makes sense (in the comment, not the body)
 
-## Comandos
-- `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<texto exato>"` — Marcar checkbox
-- `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<texto>" COMMENT="<comentário>"` — Checkbox + comentário
-- `make memory-update ISSUE_NUMBER=<num> STATUS="<status>"` — Atualizar campo Status
-- `make memory-finalize ISSUE_NUMBER=<num>` — Marcar TODOS checkboxes + fechar issue
+## Commands
+- `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<exact text>"` — Check checkbox
+- `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<text>" COMMENT="<comment>"` — Checkbox + comment
+- `make memory-update ISSUE_NUMBER=<num> STATUS="<status>"` — Update Status field
+- `make memory-finalize ISSUE_NUMBER=<num>` — Check ALL checkboxes + close issue
 
-## Textos EXATOS dos Checkboxes (do template feature_request.yml)
+## EXACT Checkbox Texts (from feature_request.yml template)
 
 ```
-Intake completo
-Research: benchmarking concluído
-Stack definida
-Código implementado
-Deploy preview funcional
-Pipeline CI configurada
-PR criado
-Checks todos verdes
-Preview testado via HTTP
-PR mergeado
-Deploy produção concluído
+Intake completed
+Research: benchmarking completed
+Stack defined
+Code implemented
+Deploy preview functional
+CI pipeline configured
+PR created
+All checks green
+Preview tested via HTTP
+PR merged
+Production deploy completed
 ```
 
-## Fluxo
-1. Após Research → `CHECKBOX="Research: benchmarking concluído"`
-2. Após Stack → `CHECKBOX="Stack definida"`
-3. Após Implement → `CHECKBOX="Código implementado"`
-4. Após Deploy Preview → `CHECKBOX="Deploy preview funcional"`
-5. Após CI → `CHECKBOX="Pipeline CI configurada"`
-6. Após PR criado → `CHECKBOX="PR criado"`
-7. Após checks verdes → `CHECKBOX="Checks todos verdes"`
-8. Após testar preview → `CHECKBOX="Preview testado via HTTP"`
-9. Após merge → `CHECKBOX="PR mergeado"`
-10. Após deploy produção → `CHECKBOX="Deploy produção concluído"`
-11. **Finalizar** → `make memory-finalize ISSUE_NUMBER=<num>` (marca todos + fecha issue)
+## Workflow
+1. After Research → `CHECKBOX="Research: benchmarking completed"`
+2. After Stack → `CHECKBOX="Stack defined"`
+3. After Implement → `CHECKBOX="Code implemented"`
+4. After Deploy Preview → `CHECKBOX="Deploy preview functional"`
+5. After CI → `CHECKBOX="CI pipeline configured"`
+6. After PR created → `CHECKBOX="PR created"`
+7. After checks green → `CHECKBOX="All checks green"`
+8. After testing preview → `CHECKBOX="Preview tested via HTTP"`
+9. After merge → `CHECKBOX="PR merged"`
+10. After production deploy → `CHECKBOX="Production deploy completed"`
+11. **Finalize** → `make memory-finalize ISSUE_NUMBER=<num>` (checks all + closes issue)
 
-## Regra de Ouro
-**NUNCA pular `make memory-update` após uma etapa.** Os checkboxes `[ ]` devem
-virar `[x]` em tempo real, visíveis para o usuário acompanhar o progresso.
-Se o script avisar "checkbox não encontrado", o texto não corresponde —
-verifique o corpo da issue e use o texto exato.
+## Golden Rule
+**NEVER skip `make memory-update` after a step.** The `[ ]` checkboxes must
+become `[x]` in real time, visible for the user to follow progress.
+If the script warns "checkbox not found", the text doesn't match —
+check the issue body and use the exact text.
 
 ## Output
-- Checkboxes marcados em tempo real no corpo da issue
-- Issue fechada ao final do pipeline com todos os checkboxes `[x]`
+- Checkboxes checked in real time on the issue body
+- Issue closed at the end of the pipeline with all checkboxes `[x]`

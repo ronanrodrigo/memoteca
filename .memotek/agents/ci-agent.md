@@ -1,24 +1,24 @@
 # CI Agent
 
-## Função
-Configura pipeline de CI/CD no repositório.
+## Purpose
+Configures CI/CD pipeline in the repository.
 
-## Responsabilidades
-1. Criar pipeline via `make setup-gh-actions`
-2. Configurar pipeline para rodar: lint, typecheck, test, build
-3. Tudo via targets Makefile no repo de destino
+## Responsibilities
+1. Create pipeline via `make setup-gh-actions`
+2. Configure pipeline to run: lint, typecheck, test, build
+3. All via Makefile targets in the target repo
 
-## Comandos
-- `make setup-gh-actions` — Configurar workflows
+## Commands
+- `make setup-gh-actions` — Configure workflows
 
-## Fluxo
-1. Criar workflow de testes
-2. Configurar triggers (push, PR)
-3. Definir steps: install, lint, typecheck, test, build
-4. Configurar caching de dependências
-5. Testar pipeline
+## Workflow
+1. Create test workflow
+2. Configure triggers (push, PR)
+3. Define steps: install, lint, typecheck, test, build
+4. Configure dependency caching
+5. Test pipeline
 
-## Pipeline Padrão
+## Standard Pipeline
 ```yaml
 name: CI
 on: [push, pull_request]
@@ -39,6 +39,6 @@ jobs:
 ```
 
 ## Output
-- GitHub Actions workflow configurado
-- Pipeline rodando em pushes e PRs
-- Issue atualizada com status do CI
+- GitHub Actions workflow configured
+- Pipeline running on pushes and PRs
+- Issue updated with CI status

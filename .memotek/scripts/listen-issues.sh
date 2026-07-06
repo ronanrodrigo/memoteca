@@ -1,29 +1,29 @@
 #!/bin/bash
-# listen-issues.sh — Polling de issues abertas
-# Uso: make listen-issues
+# listen-issues.sh — Polling of open issues
+# Usage: make listen-issues
 
 set -euo pipefail
 
 REPO=$(gh repo view --json nameWithOwner -q '.nameWithOwner' 2>/dev/null || echo "")
 
 if [ -z "$REPO" ]; then
-  echo "❌ Não foi possível detectar o repositório."
+  echo "❌ Could not detect the repository."
   exit 1
 fi
 
-echo "🔔 Verificando issues abertas em $REPO..."
+echo "🔔 Checking open issues in $REPO..."
 
-# Listar issues abertas com label 'memotek'
+# List open issues with 'memotek' label
 ISSUES=$(gh issue list --state open --label "memotek" --json number,title,labels \
   --template '{{range .}}#{{.number}} - {{.title}}{{"\n"}}{{end}}' 2>/dev/null || echo "")
 
 if [ -z "$ISSUES" ]; then
-  echo "📭 Nenhuma issue pendente encontrada."
+  echo "📭 No pending issues found."
   exit 0
 fi
 
-echo "📋 Issues encontradas:"
+echo "📋 Issues found:"
 echo "$ISSUES"
 echo ""
-echo "💡 Para processar uma issue, execute:"
-echo "   make process-issue ISSUE_NUMBER=<numero>"
+echo "💡 To process an issue, run:"
+echo "   make process-issue ISSUE_NUMBER=<number>"

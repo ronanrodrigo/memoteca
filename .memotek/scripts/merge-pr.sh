@@ -1,24 +1,24 @@
 #!/bin/bash
-# merge-pr.sh — Merge Pull Request (após aguardar checks verdes)
-# Uso: make pr-merge PR_NUMBER=<num>
+# merge-pr.sh — Merge Pull Request (after waiting for green checks)
+# Usage: make pr-merge PR_NUMBER=<num>
 #
-# Aguarda até que todos os checks do PR estejam concluídos (não-pending)
-# e só então verifica se nenhum falhou antes de mergear.
+# Waits until all PR checks are completed (not-pending)
+# and only then verifies none failed before merging.
 
 set -euo pipefail
 
 PR_NUMBER="${PR_NUMBER:-}"
 
 if [ -z "$PR_NUMBER" ]; then
-  echo "❌ PR_NUMBER é obrigatório"
-  echo "Uso: make pr-merge PR_NUMBER=1"
+  echo "❌ PR_NUMBER is required"
+  echo "Usage: make pr-merge PR_NUMBER=1"
   exit 1
 fi
 
-echo "🔀 Preparando merge do PR #$PR_NUMBER..."
+echo "🔀 Preparing to merge PR #$PR_NUMBER..."
 
-# ── Aguardar checks concluírem (até 15 min) ────────────────────────────────
-MAX_WAIT=900  # 15 minutos em segundos
+# ── Wait for checks to complete (up to 15 min) ────────────────────────────
+MAX_WAIT=900  # 15 minutes in seconds
 POLL_INTERVAL=15
 WAITED=0
 
@@ -27,31 +27,31 @@ while [ "$WAITED" -lt "$MAX_WAIT" ]; do
   PENDING=$(echo "$CHECKS" | jq '[.[] | select(.status != "COMPLETED")] | length' 2>/dev/null || echo "1")
 
   if [ "$PENDING" = "0" ]; then
-    echo "✓ Todos os checks concluídos."
+    echo "✓ All checks completed."
     break
   fi
 
-  echo "⏳ $PENDING check(s) ainda rodando... (aguardado ${WAITED}s)"
+  echo "⏳ $PENDING check(s) still running... (waited ${WAITED}s)"
   sleep "$POLL_INTERVAL"
   WAITED=$((WAITED + POLL_INTERVAL))
 done
 
 if [ "$PENDING" != "0" ]; then
-  echo "❌ Timeout aguardando checks (>15min). Tente novamente: make pr-merge PR_NUMBER=$PR_NUMBER"
+  echo "❌ Timeout waiting for checks (>15min). Try again: make pr-merge PR_NUMBER=$PR_NUMBER"
   exit 1
 fi
 
-# ── Verificar conclusões ──────────────────────────────────────────────────
-# "skipping" e "neutral" não contam como falha (jobs condicionais que não rodam)
+# ── Verify conclusions ──────────────────────────────────────────────────
+# "skipping" and "neutral" don't count as failure (conditional jobs that don't run)
 FAILURES=$(gh pr checks "$PR_NUMBER" --json conclusion -q '[.[] | select(.conclusion == "FAILURE" or .conclusion == "TIMED_OUT" or .conclusion == "CANCELLED" or .conclusion == "ACTION_REQUIRED")] | length' 2>/dev/null || echo "0")
 
 if [ "$FAILURES" != "0" ]; then
-  echo "❌ $FAILURES check(s) falhando. Não é seguro mergear."
-  echo "   Verifique: gh pr checks $PR_NUMBER --repo \$(gh repo view --json nameWithOwner -q .nameWithOwner)"
+  echo "❌ $FAILURES check(s) failing. It is not safe to merge."
+  echo "   Check: gh pr checks $PR_NUMBER --repo \$(gh repo view --json nameWithOwner -q .nameWithOwner)"
   exit 1
 fi
 
-# ── Merge ─────────────────────────────────────────────────────────────────
+# ── Merge ─────────────────────────────────────────────────────────────
 gh pr merge "$PR_NUMBER" --merge --delete-branch 2>/dev/null || gh pr merge "$PR_NUMBER" --merge
 
-echo "🎉 PR #$PR_NUMBER mergeado com sucesso!"
+echo "🎉 PR #$PR_NUMBER merged successfully!"

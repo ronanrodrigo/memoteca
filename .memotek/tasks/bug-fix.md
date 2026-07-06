@@ -1,23 +1,23 @@
-# Template: Correção de Bug
+# Template: Bug Fix
 
 ## Checklist
-- [ ] Intake completo
-- [ ] Bug diagnosticado
-- [ ] Fix implementado
-- [ ] Testes passando
-- [ ] PR criado
-- [ ] Checks todos verdes
-- [ ] PR mergeado
+- [ ] Intake completed
+- [ ] Bug diagnosed
+- [ ] Fix implemented
+- [ ] Tests passing
+- [ ] PR created
+- [ ] All checks green
+- [ ] PR merged
 
-## Informações Necessárias
-- O que está errado
-- Passos para reproduzir
-- Comportamento esperado vs atual
+## Required Information
+- What's wrong
+- Steps to reproduce
+- Expected vs actual behavior
 
-## Fluxo de Fix
-1. Intake — Coletar informações do bug
-2. Diagnóstico — Identificar causa raiz
-3. Fix — Implementar correção
-4. Testes — Validar que o bug foi corrigido
-5. PR — Criar e mergear correção
-6. Memory — Atualizar issue
+## Fix Flow
+1. Intake — Collect bug information
+2. Diagnosis — Identify root cause
+3. Fix — Implement correction
+4. Tests — Validate that the bug is fixed
+5. PR — Create and merge fix
+6. Memory — Update issue

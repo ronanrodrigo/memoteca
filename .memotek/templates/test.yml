@@ -1,10 +1,10 @@
 # CI Tests
 #
-# Requer que o repo-projeto tenha targets no Makefile:
+# Requires the project repo to have targets in the Makefile:
 #   make install, make lint, make typecheck, make test, make build,
 #   make install-playwright, make test-e2e
 #
-# Esses targets são criados automaticamente pelo scaffold.
+# These targets are automatically created by the scaffold.
 
 name: CI Tests
 on:

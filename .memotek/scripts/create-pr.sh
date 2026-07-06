@@ -1,6 +1,6 @@
 #!/bin/bash
-# create-pr.sh — Cria Pull Request
-# Uso: make pr-create TITLE="<titulo>" BODY="<corpo>" HEAD="<branch>" BASE="<branch>"
+# create-pr.sh — Create Pull Request
+# Usage: make pr-create TITLE="<title>" BODY="<body>" HEAD="<branch>" BASE="<branch>"
 
 set -euo pipefail
 
@@ -10,14 +10,14 @@ HEAD="${HEAD:-$(git branch --show-current)}"
 BASE="${BASE:-main}"
 
 if [ -z "$TITLE" ]; then
-  echo "❌ TITLE é obrigatório"
-  echo "Uso: make pr-create TITLE='feat: adicionar campo de cor' HEAD='feature/cor' BASE='main'"
+  echo "❌ TITLE is required"
+  echo "Usage: make pr-create TITLE='feat: add color field' HEAD='feature/color' BASE='main'"
   exit 1
 fi
 
-echo "📦 Criando Pull Request..."
+echo "📦 Creating Pull Request..."
 echo "   Branch: $HEAD → $BASE"
-echo "   Título: $TITLE"
+echo "   Title: $TITLE"
 
 gh pr create \
   --title "$TITLE" \
@@ -25,4 +25,4 @@ gh pr create \
   --head "$HEAD" \
   --base "$BASE"
 
-echo "🎉 Pull Request criado com sucesso!"
+echo "🎉 Pull Request created successfully!"

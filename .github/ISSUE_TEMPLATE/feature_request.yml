@@ -1,74 +1,74 @@
 name: "Feature Request / Task"
-description: "Template para tasks do memotek (criação, adição, bug fix)"
+description: "Template for memotek tasks (creation, addition, bug fix)"
 labels: ["memotek"]
 body:
   - type: markdown
     attributes:
       value: |
-        # Nova Task Memotek
-        Preencha as informações abaixo para iniciar o pipeline.
+        # New Memotek Task
+        Fill in the information below to start the pipeline.
 
   - type: dropdown
     id: task-type
     attributes:
-      label: "Tipo de Task"
-      description: "Selecione o tipo de task"
+      label: "Task Type"
+      description: "Select the task type"
       options:
-        - "Criação de Projeto"
-        - "Adição ao Sistema"
-        - "Correção de Bug"
+        - "Project Creation"
+        - "System Addition"
+        - "Bug Fix"
     validations:
       required: true
 
   - type: textarea
     id: description
     attributes:
-      label: "Descrição"
-      description: "Descreva o que precisa ser feito"
-      placeholder: "Ex: Criar um sistema para cadastro de componentes químicos"
+      label: "Description"
+      description: "Describe what needs to be done"
+      placeholder: "Ex: Create a system for registering chemical components"
     validations:
       required: true
 
   - type: textarea
     id: details
     attributes:
-      label: "Detalhes Adicionais"
-      description: "Informações extras, referências, etc."
-      placeholder: "Ex: Precisa de autenticação, dashboard com gráficos..."
+      label: "Additional Details"
+      description: "Extra information, references, etc."
+      placeholder: "Ex: Needs authentication, dashboard with charts..."
 
   - type: dropdown
     id: persistence
     attributes:
-      label: "Persistência de Dados"
-      description: "Precisa salvar dados?"
+      label: "Data Persistence"
+      description: "Need to save data?"
       options:
-        - "Sim (Supabase)"
-        - "Não"
+        - "Yes (Supabase)"
+        - "No"
     validations:
       required: false
 
   - type: textarea
     id: references
     attributes:
-      label: "Referências"
-      description: "Links de inspiração ou projetos similares"
-      placeholder: "https://exemplo.com"
+      label: "References"
+      description: "Inspiration links or similar projects"
+      placeholder: "https://example.com"
 
   - type: textarea
     id: reproduction
     attributes:
-      label: "Passos para Reproduzir (Bug Fix)"
-      description: "Apenas para bugs: como reproduzir o problema"
-      placeholder: "1. Acessar /cadastro\n2. Preencher campo\n3. Clicar em salvar"
+      label: "Steps to Reproduce (Bug Fix)"
+      description: "Only for bugs: how to reproduce the issue"
+      placeholder: "1. Access /register\n2. Fill in field\n3. Click save"
     validations:
       required: false
 
   - type: textarea
     id: expected
     attributes:
-      label: "Comportamento Esperado vs Atual (Bug Fix)"
-      description: "Apenas para bugs: o que deveria acontecer vs o que acontece"
-      placeholder: "Esperado: Salvar com maiúsculas\nAtual: Converte para minúsculas"
+      label: "Expected vs Actual Behavior (Bug Fix)"
+      description: "Only for bugs: what should happen vs what happens"
+      placeholder: "Expected: Save with uppercase\nActual: Converts to lowercase"
     validations:
       required: false
 
@@ -77,41 +77,41 @@ body:
     attributes:
       label: "Pipeline"
       options:
-        - label: "Intake completo"
+        - label: "Intake completed"
           required: false
-        - label: "Research: benchmarking concluído"
+        - label: "Research: benchmarking completed"
           required: false
-        - label: "Stack definida"
+        - label: "Stack defined"
           required: false
-        - label: "Código implementado"
+        - label: "Code implemented"
           required: false
-        - label: "Deploy preview funcional"
+        - label: "Deploy preview functional"
           required: false
-        - label: "Pipeline CI configurada"
+        - label: "CI pipeline configured"
           required: false
-        - label: "PR criado"
+        - label: "PR created"
           required: false
-        - label: "Checks todos verdes"
+        - label: "All checks green"
           required: false
-        - label: "Preview testado via HTTP"
+        - label: "Preview tested via HTTP"
           required: false
-        - label: "PR mergeado"
+        - label: "PR merged"
           required: false
-        - label: "Deploy produção concluído"
+        - label: "Production deploy completed"
           required: false
 
   - type: markdown
     attributes:
       value: |
-        ## Stack Selecionada
-        *Preenchido pelo Stack Selector Agent*
+        ## Selected Stack
+        *Filled by the Stack Selector Agent*
 
-        ## Referências (Research)
-        *Preenchido pelo Researcher Agent*
+        ## References (Research)
+        *Filled by the Researcher Agent*
 
         ## Deploy
-        - Preview: *Pendente*
-        - Produção: *Pendente*
+        - Preview: *Pending*
+        - Production: *Pending*
 
-        ## Progresso
-        <!-- Atualizado a cada etapa -->
+        ## Progress
+        <!-- Updated at each step -->

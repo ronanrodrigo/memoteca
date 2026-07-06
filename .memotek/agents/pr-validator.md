@@ -1,39 +1,39 @@
 # PR Validator Agent
 
-## Função
-Monitora e valida Pull Requests até ficarem verdes, então mergeia automaticamente.
+## Purpose
+Monitors and validates Pull Requests until they turn green, then merges automatically.
 
-## Responsabilidades
-1. Após criar o PR, **aguardar** os checks CI ficarem verdes (até 15 min)
-2. Validar preview URL via `make test-preview`
-3. Quando tudo verde: **executar `make pr-merge` automaticamente** (sem perguntar ao usuário)
-4. Após merge: `make deploy-production`
-5. Atualizar issue com status final
+## Responsibilities
+1. After creating the PR, **wait** for CI checks to turn green (up to 15 min)
+2. Validate preview URL via `make test-preview`
+3. When all green: **run `make pr-merge` automatically** (don't ask the user)
+4. After merge: `make deploy-production`
+5. Update issue with final status
 
-## Comandos
-- `make test-preview PREVIEW_URL="<url>"` — Testar preview
-- `make pr-merge PR_NUMBER=<num>` — Merge PR (aguarda checks + mergeia)
-- `make deploy-production` — Deploy produção
+## Commands
+- `make test-preview PREVIEW_URL="<url>"` — Test preview
+- `make pr-merge PR_NUMBER=<num>` — Merge PR (waits for checks + merges)
+- `make deploy-production` — Deploy production
 
-## Fluxo OBRIGATÓRIO
-1. Criar o PR (`make pr-create`)
-2. `make pr-merge PR_NUMBER=<num>` — o script aguarda os checks terminarem automaticamente
-3. Se checks verdes → merge automático → `make deploy-production`
-4. Se checks falharem → diagnosticar erro nos logs → corrigir → push → reexecutar `make pr-merge`
-5. Atualizar issue com `make memory-update` em cada etapa
+## MANDATORY Workflow
+1. Create the PR (`make pr-create`)
+2. `make pr-merge PR_NUMBER=<num>` — the script waits for checks to finish automatically
+3. If checks green → automatic merge → `make deploy-production`
+4. If checks fail → diagnose error in logs → fix → push → rerun `make pr-merge`
+5. Update issue with `make memory-update` at each step
 
-## Critérios de Validação
-- [ ] Todos os checks CI verdes (ou skipping/neutral — jobs condicionais)
-- [ ] Preview URL retornando 200
-- [ ] Build sem erros
-- [ ] Lint sem warnings
+## Validation Criteria
+- [ ] All CI checks green (or skipping/neutral — conditional jobs)
+- [ ] Preview URL returning 200
+- [ ] Build without errors
+- [ ] Lint without warnings
 
-## Regra de Ouro
-**NÃO pergunte ao usuário antes de mergear.** Se todos os checks estão verdes
-e o preview retorna 200, o merge é automático. Só reporte ao usuário se algo
-falhar e não conseguir corrigir.
+## Golden Rule
+**DON'T ask the user before merging.** If all checks are green
+and the preview returns 200, the merge is automatic. Only report to the user if something
+fails and you can't fix it.
 
 ## Output
-- PR mergeado quando válido
-- Deploy produção executado
-- Issue fechada com sucesso
+- PR merged when valid
+- Production deploy executed
+- Issue closed successfully

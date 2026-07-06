@@ -1,9 +1,9 @@
 #!/bin/bash
-# scaffold-project.sh — Cria ou configura projeto Next.js para CI
-# Uso:
-#   make scaffold PROJECT_NAME="meu-projeto"         # cria subdiretório
-#   make scaffold PROJECT_NAME="."                    # in-place (repo já clonado)
-#   SUPABASE=1 make scaffold PROJECT_NAME="."         # com Supabase
+# scaffold-project.sh — Create or configure Next.js project for CI
+# Usage:
+#   make scaffold PROJECT_NAME="my-project"         # create subdirectory
+#   make scaffold PROJECT_NAME="."                  # in-place (repo already cloned)
+#   SUPABASE=1 make scaffold PROJECT_NAME="."       # with Supabase
 
 set -euo pipefail
 
@@ -11,8 +11,8 @@ PROJECT_NAME="${PROJECT_NAME:-}"
 SUPABASE="${SUPABASE:-0}"
 
 if [ -z "$PROJECT_NAME" ]; then
-  echo "❌ PROJECT_NAME é obrigatório"
-  echo "Uso: make scaffold PROJECT_NAME='meu-projeto'"
+  echo "❌ PROJECT_NAME is required"
+  echo "Usage: make scaffold PROJECT_NAME='my-project'"
   echo "     make scaffold PROJECT_NAME='.'  (in-place)"
   exit 1
 fi
@@ -21,16 +21,16 @@ IS_INPLACE="no"
 if [ "$PROJECT_NAME" = "." ]; then
   IS_INPLACE="yes"
   PROJECT_NAME="$(basename "$(pwd)")"
-  echo "🏗️ Configurando projeto in-place: $PROJECT_NAME"
+  echo "🏗️ Configuring project in-place: $PROJECT_NAME"
 else
-  echo "🏗️ Criando projeto Next.js: $PROJECT_NAME"
+  echo "🏗️ Creating Next.js project: $PROJECT_NAME"
 fi
 
-# === Fase 1: Criar projeto com create-next-app ===
+# === Phase 1: Create project with create-next-app ===
 
 if [ "$IS_INPLACE" = "yes" ]; then
-  # In-place: create-next-app em diretório não-vazio cria em subpasta temporária
-  # e movemos os arquivos pra cá, preservando .memotek, Makefile, AGENTS.md, etc.
+  # In-place: create-next-app in non-empty directory creates in a temp subfolder
+  # and we move the files here, preserving .memotek, Makefile, AGENTS.md, etc.
   TEMP_DIR="memotek-scaffold-tmp"
   rm -rf "$TEMP_DIR"
   npx create-next-app@latest "$TEMP_DIR" \
@@ -43,7 +43,7 @@ if [ "$IS_INPLACE" = "yes" ]; then
     --use-npm \
     --no-git
 
-  # Mover arquivos do scaffold pra raiz, preservando arquivos existentes do template
+  # Move scaffold files to root, preserving existing template files
   PRESERVE_LIST=".memotek .github AGENTS.md Makefile opencode.json .env-example .git .gitignore"
 
   for item in "$TEMP_DIR"/*; do
@@ -60,7 +60,7 @@ if [ "$IS_INPLACE" = "yes" ]; then
     fi
   done
 
-  # Copiar dotfiles (escondidos) exceto .git
+  # Copy hidden dotfiles except .git
   for item in "$TEMP_DIR"/.*; do
     basename_item="$(basename "$item")"
     if [ "$basename_item" = "." ] || [ "$basename_item" = ".." ] || [ "$basename_item" = ".git" ]; then
@@ -92,9 +92,9 @@ else
   cd "$PROJECT_NAME"
 fi
 
-# === Fase 2: Garantir scripts no package.json ===
+# === Phase 2: Ensure scripts in package.json ===
 
-echo "📝 Configurando package.json..."
+echo "📝 Configuring package.json..."
 
 node -e "
 const fs = require('fs');
@@ -110,33 +110,33 @@ pkg.scripts.test = 'jest';
 pkg.scripts['test:e2e'] = 'playwright test';
 
 fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
-console.log('✅ Scripts configurados no package.json');
+console.log('✅ Scripts configured in package.json');
 "
 
-# === Fase 3: Instalar dependências ===
+# === Phase 3: Install dependencies ===
 
-echo "📦 Instalando dependências..."
+echo "📦 Installing dependencies..."
 
-# DevDeps para testes
+# DevDeps for tests
 npm install -D jest ts-jest jest-environment-jsdom @types/jest \
   @testing-library/jest-dom @testing-library/react \
   @playwright/test serve
 
-# Supabase opcional
+# Optional Supabase
 if [ "$SUPABASE" = "1" ]; then
-  echo "📦 Instalando Supabase..."
+  echo "📦 Installing Supabase..."
   npm install @supabase/supabase-js @supabase/ssr
 fi
 
-# === Fase 4: Criar configs de teste ===
+# === Phase 4: Create test configs ===
 
-echo "📝 Criando configs de teste..."
+echo "📝 Creating test configs..."
 
 cat > jest.config.js << 'JEST'
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   testEnvironment: 'jsdom',
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  setupFilesAfterSetup: ['<rootDir>/jest.setup.ts'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
@@ -183,16 +183,16 @@ PW
 
 mkdir -p e2e
 
-# === Fase 5: Atualizar next.config.ts para output: export ===
+# === Phase 5: Update next.config.ts for output: export ===
 
-echo "📝 Configurando next.config.ts para export estático..."
+echo "📝 Configuring next.config.ts for static export..."
 
 if [ -f next.config.ts ]; then
   node -e "
 const fs = require('fs');
 let content = fs.readFileSync('next.config.ts', 'utf8');
 
-// Adicionar output: 'export' se não existir
+// Add output: 'export' if it doesn't exist
 if (!content.includes('output')) {
   content = content.replace(
     /const\s+nextConfig\s*[:=]\s*\{/,
@@ -200,16 +200,16 @@ if (!content.includes('output')) {
   output: 'export',\`
   );
   fs.writeFileSync('next.config.ts', content);
-  console.log('✅ output: export adicionado ao next.config.ts');
+  console.log('✅ output: export added to next.config.ts');
 } else {
-  console.log('⏭️ output já configurado no next.config.ts');
+  console.log('⏭️ output already configured in next.config.ts');
 }
 "
 fi
 
-# === Fase 6: Criar .gitignore ===
+# === Phase 6: Create .gitignore ===
 
-echo "📝 Criando .gitignore..."
+echo "📝 Creating .gitignore..."
 
 cat > .gitignore << 'GITIGNORE'
 # dependencies
@@ -247,15 +247,15 @@ build/
 next-env.d.ts
 GITIGNORE
 
-# === Fase 7: Criar estrutura de diretórios ===
+# === Phase 7: Create directory structure ===
 
 mkdir -p src/app src/components src/lib src/__tests__ e2e
 
-# === Fase 7.5: Copiar workflow de worktree (referência operacional) ===
+# === Phase 7.5: Copy worktree workflow (operational reference) ===
 
-# A Skill Assistente NÃO cria arquivos de plano/MEMORY no repo — esses vivem na
-# issue do GitHub. Os atalhos gcp/gpr já vivem no Makefile principal. Aqui só
-# copiamos o workflow de worktree como referência operacional em docs/.
+# The Assistant Skill does NOT create plan/MEMORY files in the repo — those live in the
+# GitHub issue. The gcp/gpr shortcuts already live in the main Makefile. Here we only
+# copy the worktree workflow as an operational reference in docs/.
 
 MEMOTEK_ROOT=""
 for candidate in "$PWD" "$PWD/.." "$PWD/../.."; do
@@ -268,13 +268,13 @@ done
 if [ -n "$MEMOTEK_ROOT" ]; then
   mkdir -p docs
   cp "$MEMOTEK_ROOT/.memotek/templates/worktree-workflow.md" docs/worktree-workflow.md 2>/dev/null || true
-  echo "✅ docs/worktree-workflow.md copiado (referência operacional)"
-  echo "   Plano e memória NÃO são arquivos — vivem na issue do GitHub."
+  echo "✅ docs/worktree-workflow.md copied (operational reference)"
+  echo "   Plan and memory are NOT files — they live in the GitHub issue."
 else
-  echo "⚠️  worktree-workflow.md não encontrado — pulando cópia."
+  echo "⚠️  worktree-workflow.md not found — skipping copy."
 fi
 
-# === Fase 8: Criar arquivo de teste exemplo ===
+# === Phase 8: Create example test file ===
 
 if [ ! -f src/app/page.tsx ]; then
   cat > src/app/page.tsx << 'PAGE'
@@ -308,16 +308,16 @@ test('renders heading', () => {
 UNITTEST
 
 echo ""
-echo "✅ Projeto configurado com sucesso!"
-echo "📁 Diretório: $(pwd)"
+echo "✅ Project configured successfully!"
+echo "📁 Directory: $(pwd)"
 echo ""
-echo "📋 O projeto está pronto para CI. Todos os targets Make funcionam:"
-echo "   make install          — instala dependências"
-echo "   make lint             — roda linter"
-echo "   make typecheck        — verifica tipos"
-echo "   make build            — builda o projeto"
-echo "   make test             — roda testes unitários (Jest)"
-echo "   make test-e2e         — roda testes E2E (Playwright)"
-echo "   make deploy-preview   — deploy preview na Vercel"
-echo "   make deploy-production — deploy produção na Vercel"
-echo "   make setup-vercel-secrets — configura secrets Vercel no GitHub Actions"
+echo "📋 The project is ready for CI. All Make targets work:"
+echo "   make install          — install dependencies"
+echo "   make lint             — run linter"
+echo "   make typecheck        — check types"
+echo "   make build            — build the project"
+echo "   make test             — run unit tests (Jest)"
+echo "   make test-e2e         — run E2E tests (Playwright)"
+echo "   make deploy-preview   — deploy preview on Vercel"
+echo "   make deploy-production — deploy production on Vercel"
+echo "   make setup-vercel-secrets — configure Vercel secrets in GitHub Actions"

@@ -1,51 +1,51 @@
-# AGENTS.md — Regras para Agentes
+# AGENTS.md — Rules for Agents
 
-## Regras Gerais
+## General Rules
 
-1. **NUNCA executar comandos diretamente** — SEMPRE via `make <target>`
-   - Proibido: `gh`, `curl`, `jq`, `yq`, `npm run`, `jest`, etc. diretamente
-   - Exceção: comandos internos do agente (ler arquivos, escrever código)
-2. **Repositório obrigatório** — O usuário DEVE ter um repo no GitHub (criado via "Use this template")
-3. **Precedência** — O que está no AGENTS.md tem precedência sobre definições de agentes/skills, **exceto nos temas cobertos pela Skill Assistente** (`.memotek/skills/assistente/SKILL.md`), que prevalecem. Ver `.memotek/rules/assistente-precedence.md` para a hierarquia completa.
+1. **NEVER execute commands directly** — ALWAYS via `make <target>`
+   - Prohibited: `gh`, `curl`, `jq`, `yq`, `npm run`, `jest`, etc. directly
+   - Exception: internal agent commands (read files, write code)
+2. **Mandatory repository** — The user MUST have a repo on GitHub (created via "Use this template")
+3. **Precedence** — What is in AGENTS.md takes precedence over agent/skill definitions, **except for topics covered by the Assistant Skill** (`.memotek/skills/assistente/SKILL.md`), which prevail. See `.memotek/rules/assistente-precedence.md` for the complete hierarchy.
 
-4. **Skill Assistente ativa** — Mermaid nativo do GitHub, issue do GitHub como fonte da verdade (sem arquivos de plano/memória no repo), worktree por feature, atalhos `gcp`/`gpr` e Loop de Trabalho Assistente são OBRIGATÓRIOS. Primeira resposta em conversa começa com 💭.
+4. **Assistant Skill active** — GitHub native Mermaid, GitHub issue as source of truth (no plan/memory files in the repo), worktree by feature, `gcp`/`gpr` shortcuts, and Assistant Work Loop are MANDATORY. First response in conversation starts with 💭.
 
-## Orquestração
+## Orchestration
 
-O agente primário é o orquestrador. Ao receber uma task, execute as etapas na ordem:
+The primary agent is the orchestrator. When you receive a task, perform the steps in order:
 
-**CRÍTICO:** Após CADA etapa do pipeline, SEMPRE execute `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<texto exato do checkbox>"` para marcar o checkbox correspondente no corpo da issue. Não pule essa etapa — os checkboxes `[ ]` devem virar `[x]` em tempo real. Ao final do pipeline, execute `make memory-finalize ISSUE_NUMBER=<num>` para marcar todos os checkboxes restantes e fechar a issue.
+**CRITICAL:** After EACH step of the pipeline, ALWAYS run `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<exact checkbox text>"` to check the corresponding checkbox in the issue body. Don't skip this step — the `[ ]` checkboxes must become `[x]` in real time. At the end of the pipeline, run `make memory-finalize ISSUE_NUMBER=<num>` to check all remaining checkboxes and close the issue.
 
-### Pipeline completo (criação de projeto)
-1. **Research** — Leia `.memotetek/agents/researcher.md` → execute `make search-projects QUERY="<palavras-chave>"` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Research: benchmarking concluído"`
-2. **Stack** — Leia `.memotek/agents/stack-selector.md` → defina a stack → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Stack definida"`
-3. **Implement** — Leia `.memotek/agents/implementer.md` → execute `make scaffold PROJECT_NAME="."` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Código implementado"`
-4. **Deploy** — Leia `.memotek/agents/deploy-agent.md` → execute `make gh-actions-setup && make deploy-preview` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Deploy preview funcional"`
-5. **CI** — Leia `.memotek/agents/ci-agent.md` → valide `make install && make lint && make typecheck && make test && make build` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Pipeline CI configurada"`
-6. **PR** — Leia `.memotek/agents/pr-validator.md` → execute `make pr-create` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="PR criado"`
-7. **Validação + Merge** — `make pr-merge PR_NUMBER=<num>` (o script aguarda os checks terminarem, até 15min, e mergeia automaticamente se verdes) → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Checks todos verdes"` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="PR mergeado"` → `make deploy-production` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Deploy produção concluído"`
-8. **Finalizar** — `make memory-finalize ISSUE_NUMBER=<num>` (marca todos os checkboxes restantes + fecha a issue)
-   - **Não pergunte ao usuário antes de mergear** — se os checks estão verdes, merge é automático
-   - Se checks falharem, diagnosticar via `gh pr checks`, corrigir, push, e reexecutar `make pr-merge`
-   - Os textos do CHECKBOX devem corresponder EXATAMENTE aos rótulos do template `feature_request.yml`
+### Complete pipeline (project creation)
+1. **Research** — Read `.memotetek/agents/researcher.md` → run `make search-projects QUERY="<keywords>"` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Research: benchmarking completed"`
+2. **Stack** — Read `.memotek/agents/stack-selector.md` → define the stack → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Stack defined"`
+3. **Implement** — Read `.memotek/agents/implementer.md` → run `make scaffold PROJECT_NAME="."` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Code implemented"`
+4. **Deploy** — Read `.memotek/agents/deploy-agent.md` → run `make gh-actions-setup && make deploy-preview` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Deploy preview functional"`
+5. **CI** — Read `.memotek/agents/ci-agent.md` → validate `make install && make lint && make typecheck && make test && make build` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="CI pipeline configured"`
+6. **PR** — Read `.memotek/agents/pr-validator.md` → run `make pr-create` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="PR created"`
+7. **Validation + Merge** — `make pr-merge PR_NUMBER=<num>` (the script waits for the checks to finish, up to 15 minutes, and merges automatically if green) → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="All checks green"` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="PR merged"` → `make deploy-production` → `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Production deploy completed"`
+8. **Finalize** — `make memory-finalize ISSUE_NUMBER=<num>` (checks all remaining checkboxes + closes the issue)
+   - **Don't ask the user before merging** — if the checks are green, the merge is automatic
+   - If checks fail, diagnose via `gh pr checks`, fix, push, and rerun `make pr-merge`
+   - The CHECKBOX texts must correspond EXACTLY to the labels in the `feature_request.yml` template
 
-### Ciclo parcial (adição/correção)
-1. Leia o agente correspondente em `.memotek/agents/`
-2. Execute o make target apropriado
-3. Atualize a issue com `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<etapa>"`
+### Partial cycle (addition/correction)
+1. Read the corresponding agent in `.memotek/agents/`
+2. Run the appropriate make target
+3. Update the issue with `make memory-update ISSUE_NUMBER=<num> CHECKBOX="<step>"`
 
-### Regra de ouro
-- Antes de cada etapa, leia o agente correspondente em `.memotek/agents/`
-- Cada etapa deve ser concluída antes de passar para a próxima
-- Se uma etapa falhar, reporte na issue e aguarde decisão do usuário
+### Golden rule
+- Before each step, read the corresponding agent in `.memotek/agents/`
+- Each step must be completed before moving on to the next
+- If a step fails, report it in the issue and wait for the user's decision
 
-## Estrutura do Repo-Projeto
+## Repo-Project Structure
 
-Ao clonar via "Use this template", o repo-projeto já contém tudo necessário. Após `make scaffold PROJECT_NAME="."`, a estrutura é:
+When cloning via "Use this template", the project-repo already contains everything you need. After `make scaffold PROJECT_NAME="."`, the structure is:
 
 ```
-repo-projeto/
-├── src/                    ← código do projeto
+repo-project/
+├── src/                    ← project code
 ├── package.json
 ├── Makefile
 ├── jest.config.js
@@ -54,7 +54,7 @@ repo-projeto/
 ├── .gitignore
 ├── .env-example
 ├── AGENTS.md
-├── .memotek/               ← agentes e scripts
+├── .memotek/               ← agents and scripts
 │   ├── agents/
 │   ├── skills/
 │   ├── scripts/
@@ -63,16 +63,16 @@ repo-projeto/
 └── .github/workflows/      ← CI/CD
 ```
 
-## Pipeline de Implementação
+## Implementation Pipeline
 
 ```
-USUÁRIO (input)
-├── Prompt manual → Intake faz perguntas → Cria issue no GitHub
-└── /issues → Verifica e processa issues abertas
+USER (input)
+├── Manual prompt → Intake asks questions → Creates issue on GitHub
+└── /issues → Checks and processes open issues
          │
          ▼
     ┌─────────────────────────────────────┐
-    │  ISSUE CRIADA (feature_request.yml) │
+    │  ISSUE CREATED (feature_request.yml) │
     └──────────────┬──────────────────────┘
                    │
                    ▼
@@ -84,15 +84,15 @@ USUÁRIO (input)
     Research   Stack     Implement   Deploy      CI       PR
     Searcher  Selector                Agent     Agent   Validator
 
-    Todos executam via: make <target>
+    All run via: make <target>
 ```
 
 ```mermaid
 graph TB
-    User([USUÁRIO])
-    User -->|Prompt Manual| Intake[Intake Skill]
+    User([USER])
+    User -->|Manual Prompt| Intake[Intake Skill]
     User -->|/issues| Polling[Polling Issues]
-    Intake --> Issue[Issue Criada]
+    Intake --> Issue[Issue Created]
     Polling --> Issue
     Issue --> Orch[ORCHESTRATOR]
     Orch --> Research[Researcher]
@@ -100,86 +100,86 @@ graph TB
     Orch --> Impl[Implementer]
     Orch --> Dep[Deploy Agent]
     Orch --> CI[CI Agent]
-    Orch --> PR[PR Validator]
+    Orch --> PR [PR Validator]
     Research --> StackSel --> Impl --> Dep --> CI --> PR
-    PR -->|Checks verdes| Merge[Merge PR]
-    PR -->|Checks vermelhos| Retry[Retry]
+    PR -->|Green checks| Merge[Merge PR]
+    PR -->|Red checks| Retry[Retry]
     Retry --> PR
-    Merge --> Prod[Deploy Produção]
-    Memory[Memory Agent] -.->|atualiza| Issue
+    Merge --> Prod[Deploy Production]
+    Memory[Memory Agent] -.->|update| Issue
 ```
 
-## Etapas do Pipeline
+## Pipeline Steps
 
-| # | Etapa | Agente | Ação | Make Target |
+| # | Step | Agent | Action | Make Target |
 |---|-------|--------|------|-------------|
-| 1 | Input | - | Usuário clona template via "Use this template" | - |
-| 2 | Intake | Intake (skill) | Cria issue GitHub com template de perguntas | `make memory-update` |
-| 2.1 | Polling | - | Usuário digita `/issues` para verificar issues | `make listen-issues` |
-| 3 | Research | Researcher | Busca projetos open source no GitHub | `make search-projects` |
-| 3.1 | Benchmarking | Researcher | Analisa top 3 por stars | (interno) |
-| 3.2 | Fallback | Researcher | Se nada encontrado, pergunta ao usuário | (interação) |
-| 4 | Stack | Stack Selector | Seleciona da lista predefinida | (interno) |
-| 5 | Implement | Implementer | Configura projeto Next.js via scaffold | `make scaffold PROJECT_NAME="."` |
-| 6 | Deploy | Deploy Agent | Configura preview na Vercel | `make gh-actions-setup` + `make deploy-preview` |
-| 7 | CI | CI Agent | Configura pipeline de testes | `make gh-actions-setup` |
-| 8 | Validate | PR Validator | Monitora checks, testa preview URL | `make test-preview` |
-| 8.1 | Merge | PR Validator | Merge PR quando tudo verde | `make pr-merge` |
-| 8.2 | Prod | PR Validator | Deploy produção | `make deploy-production` |
-| 9 | Memory | Memory Agent | Atualiza issue com progresso + Mermaid | `make memory-update` |
+| 1 | Input | - | User clones template via "Use this template" | - |
+| 2 | Intake | Intake (skill) | Creates GitHub issue with question template | `make memory-update` |
+| 2.1 | Polling | - | User types `/issues` to check issues | `make listen-issues` |
+| 3 | Research | Researcher | Searches for open source projects on GitHub | `make search-projects` |
+| 3.1 | Benchmarking | Researcher | Analyzes top 3 by stars | (internal) |
+| 3.2 | Fallback | Researcher | If nothing is found, asks the user | (interaction) |
+| 4 | Stack | Stack Selector | Selects from the predefined list | (internal) |
+| 5 | Implement | Implementer | Configures Next.js project via scaffold | `make scaffold PROJECT_NAME="."` |
+| 6 | Deploy | Deploy Agent | Configures preview on Vercel | `make gh-actions-setup` + `make deploy-preview` |
+| 7 | CI | CI Agent | Configures test pipeline | `make gh-actions-setup` |
+| 8 | Validate | PR Validator | Monitors checks, tests preview URL | `make test-preview` |
+| 8.1 | Merge | PR Validator | Merge PR when all is green | `make pr-merge` |
+| 8.2 | Prod | PR Validator | Deploy production | `make deploy-production` |
+| 9 | Memory | Memory Agent | Update issue with progress + Mermaid | `make memory-update` |
 
-## Targets do Makefile
+## Makefile Targets
 
 ### Pipeline (memotek)
-| Target | Descrição |
+| Target | Description |
 |--------|-----------|
-| `make scaffold` | Cria/configura projeto Next.js |
-| `make gh-actions-setup` | Copia workflows para .github/workflows/ |
-| `make memory-update` | Marca checkbox no corpo da issue |
-| `make memory-finalize` | Marca TODOS checkboxes + fecha a issue |
-| `make search-projects` | Busca projetos similares no GitHub |
-| `make listen-issues` | Polling de issues abertas |
-| `make test-preview` | Testa preview URL via HTTP |
-| `make pr-create` | Cria Pull Request |
-| `make pr-merge` | Merge Pull Request |
-| `make deploy-preview` | Deploy preview na Vercel |
-| `make deploy-production` | Deploy produção na Vercel |
-| `make setup-vercel-secrets` | Configura secrets Vercel no GitHub Actions |
+| `make scaffold` | Creates/configures Next.js project |
+| `make gh-actions-setup` | Copies workflows to .github/workflows/ |
+| `make memory-update` | Checks the checkbox in the issue body |
+| `make memory-finalize` | Checks ALL checkboxes + closes the issue |
+| `make search-projects` | Searches for similar projects on GitHub |
+| `make listen-issues` | Polling of open issues |
+| `make test-preview` | Tests preview URL via HTTP |
+| `make pr-create` | Creates Pull Request |
+| `make pr-merge` | Merges Pull Request |
+| `make deploy-preview` | Deploy preview on Vercel |
+| `make deploy-production` | Deploy production on Vercel |
+| `make setup-vercel-secrets` | Configures Vercel secrets in GitHub Actions |
 
-### CI/CD (repo-projeto)
-| Target | Descrição |
+### CI/CD (repo-project)
+| Target | Description |
 |--------|-----------|
-| `make install` | Instala dependências (npm ci ou npm install) |
-| `make lint` | Roda linter |
-| `make typecheck` | Verifica tipos (tsc --noEmit) |
-| `make build` | Builda o projeto |
-| `make test` | Roda testes unitários (Jest) |
-| `make install-playwright` | Instala Playwright + Chromium |
-| `make test-e2e` | Roda testes E2E (Playwright) |
+| `make install` | Installs dependencies (npm ci or npm install) |
+| `make lint` | Runs linter |
+| `make typecheck` | Checks types (tsc --noEmit) |
+| `make build` | Builds the project |
+| `make test` | Runs unit tests (Jest) |
+| `make install-playwright` | Installs Playwright + Chromium |
+| `make test-e2e` | Runs E2E tests (Playwright) |
 
-## Três Tipos de Input
+## Three Types of Input
 
-### 1. Criação Inicial de Projeto
-Exemplo: "Criar um sistema para cadastro de componentes químicos"
-- Issue com campos: tipo de projeto, persistência, stack desejada, referências
-- Aciona pipeline completo: intake → research → stack → implement → deploy → CI
+### 1. Initial Project Creation
+Example: "Create a system for registering chemical components"
+- Issue with fields: project type, persistence, desired stack, references
+- Triggers full pipeline: intake → research → stack → implement → deploy → CI
 
-### 2. Adição ao Sistema
-Exemplo: "Adicionar campo de cor para cada componente químico no formulário"
-- Issue com campos: afeta quais arquivos/components, dependências
-- Aciona ciclo parcial: intake → implement → deploy preview → test → merge
+### 2. Addition to the System
+Example: "Add color field for each chemical component in the form"
+- Issue with fields: affects which files/components, dependencies
+- Triggers partial cycle: intake → implement → deploy preview → test → merge
 
-### 3. Correção de Bug
-Exemplo: "O campo abreviação não está salvando letras maiúsculas"
-- Issue com campos: passos para reproduzir, comportamento esperado vs atual
-- Aciona ciclo de fix: intake → diagnose → fix → test → merge
+### 3. Bug Fix
+Example: "The abbreviation field is not saving capital letters"
+- Issue with fields: steps to reproduce, expected vs. current behavior
+- Triggers fix cycle: intake → diagnose → fix → test → merge
 
-## Stack Predefinida
+## Predefined Stack
 
 - **Next.js** — Framework
 - **React** — UI
 - **Vercel** — Deploy
-- **Supabase** — Backend/Database (opcional via `SUPABASE=1`)
+- **Supabase** — Backend/Database (optional via `SUPABASE=1`)
 - **Playwright** — E2E tests
 - **TypeScript** — Language
 - **Jest** — Unit tests
