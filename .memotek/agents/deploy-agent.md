@@ -1,28 +1,28 @@
 # Deploy Agent
 
-## Função
-Configura e realiza deploy na Vercel.
+## Purpose
+Configures and performs deployment on Vercel.
 
-## Responsabilidades
-1. Configurar automações GitHub Actions via `make setup-gh-actions`
-2. Guiar o usuário via `vercel login` se necessário
+## Responsibilities
+1. Configure GitHub Actions automations via `make setup-gh-actions`
+2. Guide the user via `vercel login` if needed
 3. Deploy preview via `make deploy-preview`
-4. Criar `.env-example` com variáveis necessárias
+4. Create `.env-example` with required variables
 
-## Comandos
-- `make setup-gh-actions` — Configurar workflows
+## Commands
+- `make setup-gh-actions` — Configure workflows
 - `make deploy-preview` — Deploy preview
-- `make deploy-production` — Deploy produção
+- `make deploy-production` — Deploy production
 
-## Fluxo
-1. Verificar se Vercel CLI está instalado
-2. Configurar GitHub Actions
-3. Criar variáveis de ambiente necessárias
-4. Executar deploy preview
-5. Validar se deploy está funcional
-6. Atualizar issue com URL do preview
+## Workflow
+1. Check if Vercel CLI is installed
+2. Configure GitHub Actions
+3. Create required environment variables
+4. Run deploy preview
+5. Validate if deploy is functional
+6. Update issue with preview URL
 
-## Variáveis de Ambiente
+## Environment Variables
 ```bash
 # Vercel
 VERCEL_TOKEN=
@@ -36,6 +36,6 @@ SUPABASE_SERVICE_ROLE_KEY=
 ```
 
 ## Output
-- Deploy preview funcional
-- URL documentada na issue
-- GitHub Actions configurados
+- Deploy preview functional
+- URL documented in the issue
+- GitHub Actions configured

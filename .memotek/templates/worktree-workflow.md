@@ -1,49 +1,49 @@
-# Workflow de worktree (skill Assistente)
+# Worktree Workflow (Assistant Skill)
 
-## Princípio
+## Principle
 
-Cada feature/tarefa é trabalhada em uma worktree git isolada a partir da branch principal do repo. Isso mantém o working directory principal limpo e permite trabalhar múltiplas features em paralelo sem conflitos.
+Each feature/task is worked on in an isolated git worktree from the repo's main branch. This keeps the main working directory clean and allows working on multiple features in parallel without conflicts.
 
-## Passos padrão
+## Standard Steps
 
-### 1. Criar a worktree
+### 1. Create the worktree
 
 ```bash
-# a partir da raiz do repo principal
+# from the main repo root
 git worktree add -b feature/<proj>-<short-id> ../<proj>-wt main
 cd ../<proj>-wt
 ```
 
-- `<proj>` = identificador descritivo da feature/issue (ex: `ota-hermes`, `feature-x`)
-- `<short-id>` = 3-5 chars descritivos (ex: `signin`, `otsignup`, `fixnav`)
-- `main` pode ser `master` se for a branch principal configurada
+- `<proj>` = descriptive identifier for the feature/issue (e.g., `ota-hermes`, `feature-x`)
+- `<short-id>` = 3-5 descriptive chars (e.g., `signin`, `otsignup`, `fixnav`)
+- `main` can be `master` if that's the configured main branch
 
-### 2. Trabalhar na worktree
+### 2. Work in the worktree
 
-- Todas as alterações, commits, testes e pushes ocorrem na worktree.
-- O plano, a memória e o board de tarefas NÃO são arquivos no repo — vivem na issue do GitHub (corpo + comentários sequenciais via `make memory-update ... COMMENT="..."`).
+- All changes, commits, tests, and pushes happen in the worktree.
+- The plan, memory, and task board are NOT files in the repo — they live in the GitHub issue (body + sequential comments via `make memory-update ... COMMENT="..."`).
 
-### 3. Sincronizar com o remote
+### 3. Sync with remote
 
 ```bash
 git push -u origin feature/<proj>-<short-id>
 ```
 
-### 4. Abrir o PR a partir da worktree
+### 4. Open the PR from the worktree
 
-`make pr-create` ou `gpr` (no repo scaffolded) operam normalmente a partir da worktree.
+`make pr-create` or `gpr` (in the scaffolded repo) work normally from the worktree.
 
-### 5. Após merge da PR
+### 5. After PR merge
 
 ```bash
-cd <repo-principal>
+cd <main-repo>
 git worktree remove ../<proj>-wt
 git branch -d feature/<proj>-<short-id>
 ```
 
-## Anti-padrões
+## Anti-patterns
 
-- ❌ Commitar na branch principal direto sem worktree.
-- ❌ Deixar a worktree sem limpeza após merge.
-- ❌ Reaproveitar worktree entre features distintas — crie uma nova por tarefa.
-- ❌ Criar arquivos de plano/MEMORY/TODO no working tree — use a issue do GitHub.
+- ❌ Committing directly to the main branch without a worktree.
+- ❌ Leaving the worktree uncleaned after merge.
+- ❌ Reusing worktrees between different features — create a new one per task.
+- ❌ Creating plan/MEMORY/TODO files in the working tree — use the GitHub issue.

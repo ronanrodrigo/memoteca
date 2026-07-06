@@ -1,24 +1,24 @@
 #!/bin/bash
-# run-tests.sh — Roda testes no repo de destino
-# Uso: make test
+# run-tests.sh — Run tests in the target repo
+# Usage: make test
 
 set -euo pipefail
 
-echo "🧪 Executando testes..."
+echo "🧪 Running tests..."
 
 if [ -f "package.json" ]; then
-  # Verificar se tem scripts de teste
+  # Check if there are test scripts
   if grep -q '"test"' package.json; then
     npm test
   else
-    echo "⚠️ Nenhum script de teste encontrado em package.json"
+    echo "⚠️ No test script found in package.json"
   fi
 elif [ -f "Makefile" ]; then
-  # Tentar rodar make test no repo-alvo
+  # Try running make test in the target repo
   make test
 else
-  echo "❌ Nenhum teste configurado. Adicione package.json ou Makefile com target de teste."
+  echo "❌ No tests configured. Add package.json or Makefile with a test target."
   exit 1
 fi
 
-echo "✅ Testes concluídos!"
+echo "✅ Tests completed!"

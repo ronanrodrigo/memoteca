@@ -1,31 +1,31 @@
-# Template: Criação Inicial de Projeto
+# Template: Initial Project Creation
 
 ## Checklist
-- [ ] Intake completo
-- [ ] Research: benchmarking concluído
-- [ ] Stack definida
-- [ ] Código implementado
-- [ ] Deploy preview funcional
-- [ ] Pipeline CI configurada
-- [ ] PR criado
-- [ ] Checks todos verdes
-- [ ] Preview testado via HTTP
-- [ ] PR mergeado
-- [ ] Deploy produção concluído
+- [ ] Intake completed
+- [ ] Research: benchmarking completed
+- [ ] Stack defined
+- [ ] Code implemented
+- [ ] Deploy preview functional
+- [ ] CI pipeline configured
+- [ ] PR created
+- [ ] All checks green
+- [ ] Preview tested via HTTP
+- [ ] PR merged
+- [ ] Production deploy completed
 
-## Informações Necessárias
-- Nome do projeto
-- Descrição do que precisa
-- Tipo de projeto (dashboard, CRUD, landing page, etc.)
-- Persistência necessária? (sim/não)
-- Referências ou inspirações
+## Required Information
+- Project name
+- Description of what's needed
+- Project type (dashboard, CRUD, landing page, etc.)
+- Persistence required? (yes/no)
+- References or inspirations
 
-## Fluxo Completo
-1. Intake — Coletar informações do usuário
-2. Research — Buscar projetos similares no GitHub
-3. Stack Selector — Definir stack tecnológica
-4. Implementer — Criar projeto Next.js completo
-5. Deploy Agent — Configurar preview na Vercel
-6. CI Agent — Configurar pipeline de testes
-7. PR Validator — Monitorar e validar PR
-8. Memory Agent — Atualizar issue com progresso
+## Complete Flow
+1. Intake — Collect user information
+2. Research — Search for similar projects on GitHub
+3. Stack Selector — Define technology stack
+4. Implementer — Create complete Next.js project
+5. Deploy Agent — Configure preview on Vercel
+6. CI Agent — Configure test pipeline
+7. PR Validator — Monitor and validate PR
+8. Memory Agent — Update issue with progress

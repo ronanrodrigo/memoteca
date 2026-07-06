@@ -1,58 +1,58 @@
-# Regras do Projeto
+# Project Rules
 
-## Regras Gerais
+## General Rules
 
-1. **NUNCA executar comandos diretamente** — SEMPRE via `make <target>`
-   - Proibido: `gh`, `curl`, `jq`, `yq`, `npm run`, `jest`, etc. diretamente
-   - Exceção: comandos internos do agente (ler arquivos, escrever código)
+1. **NEVER execute commands directly** — ALWAYS via `make <target>`
+   - Prohibited: `gh`, `curl`, `jq`, `yq`, `npm run`, `jest`, etc. directly
+   - Exception: internal agent commands (read files, write code)
 
-2. **Repositório obrigatório** — O usuário DEVE ter um repo no GitHub (criado via "Use this template")
+2. **Mandatory repository** — The user MUST have a repo on GitHub (created via "Use this template")
 
-3. **Projetos dentro do memotek** — NÃO criar projetos dentro do memotek que não sejam o próprio memotek
+3. **Projects within memotek** — Do NOT create projects within memotek that are not memotek itself
 
-4. **Precedência** — O que está no AGENTS.md tem precedência sobre definições de agentes/skills, **exceto nos temas cobertos pela Skill Assistente** (`.memotek/skills/assistente/SKILL.md`), que prevalecem. Ver `.memotek/rules/assistente-precedence.md` para a hierarquia completa.
+4. **Precedence** — What is in AGENTS.md takes precedence over agent/skill definitions, **except for topics covered by the Assistant Skill** (`.memotek/skills/assistente/SKILL.md`), which prevail. See `.memotek/rules/assistente-precedence.md` for the complete hierarchy.
 
-5. **Versionamento** — Cada implementação é versionada com código do modelo: `memotek-<modelo>`
+5. **Versioning** — Each implementation is versioned with the model code: `memotek-<model>`
 
-6. **Skill Assistente ativa** — Mermaid nativo do GitHub, issue do GitHub como fonte da verdade (sem arquivos de plano/memória no repo), worktree por feature, atalhos `gcp`/`gpr` e Loop de Trabalho Assistente são OBRIGATÓRIOS. Primeira resposta em conversa começa com 💭.
+6. **Assistant Skill active** — GitHub native Mermaid, GitHub issue as source of truth (no plan/memory files in the repo), worktree by feature, `gcp`/`gpr` shortcuts, and Assistant Work Loop are MANDATORY. First response in conversation starts with 💭.
 
-7. **Memória = issue do GitHub** — NUNCA manter arquivos de plano/memória/TODO commitados ou ignorados no repositório. Todo o contexto, plano, decisões e estado vivem como comentários sequenciais na própria issue do GitHub.
+7. **Memory = GitHub issue** — NEVER maintain plan/memory/TODO files committed or ignored in the repository. All context, plan, decisions, and state live as sequential comments in the GitHub issue itself.
 
-## Convenções de Código
+## Code Conventions
 
-- Usar TypeScript para todos os projetos
-- Seguir padrões Next.js App Router
-- Usar Chakra UI para componentes
-- Implementar testes para features principais
-- Documentar APIs e componentes
+- Use TypeScript for all projects
+- Follow Next.js App Router patterns
+- Use Chakra UI for components
+- Implement tests for main features
+- Document APIs and components
 
-## Convenções da Skill Assistente (prevalecem nestes temas)
+## Assistant Skill Conventions (prevail on these topics)
 
-- **Mermaid**: nativo do GitHub (bloco ```mermaid) — NÃO usar link externo para viewer; o GitHub renderiza mermaid nativamente em issues, PRs e comentários.
-- **Memória/Plano**: vivem SEMPRE na issue do GitHub (corpo + comentários), via `make memory-update ISSUE_NUMBER=<num> CHECKBOX="..." COMMENT="..."`. NUNCA criar `docs/agent-plans/<proj>/MEMORY.md`, `TODO.md`, `plan-<proj>.md` ou equivalentes no repo.
-- **Gate humano**: antes de implementar, postar o plano como comentário na issue e aguardar "ok". Quando o "ok" for dado, executar `make memory-update ISSUE_NUMBER=<num> STATUS="Plano aprovado" COMMENT="Plano aprovado — iniciando implementação."`.
-- **Worktree**: cada feature em `git worktree` isolada a partir da branch principal.
-- **Sub-agentes**: usar `task` para paralelismo e `invoke` para expertise.
-- **Atalhos**: `gcp` (commit+push), `gpr` (PR), `gcp & gpr` (commit+push+PR).
-- **Emoji**: primeira resposta em cada nova conversa começa com 💭.
+- **Mermaid**: GitHub native (```mermaid block) — Do NOT use external viewer links; GitHub renders Mermaid natively in issues, PRs, and comments.
+- **Memory/Plan**: ALWAYS live in the GitHub issue (body + comments), via `make memory-update ISSUE_NUMBER=<num> CHECKBOX="..." COMMENT="..."`. NEVER create `docs/agent-plans/<proj>/MEMORY.md`, `TODO.md`, `plan-<proj>.md` or equivalents in the repo.
+- **Human gate**: Before implementing, post the plan as a comment on the issue and wait for "ok". When "ok" is given, run `make memory-update ISSUE_NUMBER=<num> STATUS="Plan approved" COMMENT="Plan approved — starting implementation."`.
+- **Worktree**: Each feature in an isolated `git worktree` from the main branch.
+- **Sub-agents**: Use `task` for parallelism and `invoke` for expertise.
+- **Shortcuts**: `gcp` (commit+push), `gpr` (PR), `gcp & gpr` (commit+push+PR).
+- **Emoji**: First response in each new conversation starts with 💭.
 
-## Segurança
+## Security
 
-- NUNCA expor chaves de API em código
-- Usar variáveis de ambiente para configuração
-- Criar `.env-example` com variáveis documentadas
-- NUNCA committar `.env` no repositório
+- NEVER expose API keys in code
+- Use environment variables for configuration
+- Create `.env-example` with documented variables
+- NEVER commit `.env` to the repository
 
 ## Deploy
 
-- Deploy preview automático para PRs
-- Deploy produção automático para merge na main
-- Validar preview antes de merge
-- Monitorar status do deploy
+- Automatic deploy preview for PRs
+- Automatic production deploy for merge to main
+- Validate preview before merge
+- Monitor deploy status
 
-## Testes
+## Testing
 
-- Rodar testes antes de merge
-- Cobrir features principais com testes
-- Usar Playwright para testes E2E
-- Usar Jest para testes unitários
+- Run tests before merge
+- Cover main features with tests
+- Use Playwright for E2E tests
+- Use Jest for unit tests

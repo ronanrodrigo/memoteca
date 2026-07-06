@@ -1,23 +1,23 @@
 #!/bin/bash
-# search-projects.sh — Busca projetos similares no GitHub
-# Uso: make search-projects QUERY="<palavras-chave>"
+# search-projects.sh — Search for similar projects on GitHub
+# Usage: make search-projects QUERY="<keywords>"
 
 set -euo pipefail
 
 QUERY="${QUERY:-}"
 
 if [ -z "$QUERY" ]; then
-  echo "❌ QUERY é obrigatório"
-  echo "Uso: make search-projects QUERY='sistema de cadastro químico'"
+  echo "❌ QUERY is required"
+  echo "Usage: make search-projects QUERY='chemical registration system'"
   exit 1
 fi
 
-echo "🔍 Buscando projetos similares para: $QUERY"
+echo "🔍 Searching for similar projects: $QUERY"
 echo "---"
 
-# Usar gh search repos
+# Use gh search repos
 gh search repos "$QUERY" --limit 10 --sort stars --json fullName,stargazersCount,description,url \
   --template '{{range .}}{{.fullName}} | ⭐ {{.stargazersCount}} | {{.description}} | {{.url}}{{"\n"}}{{end}}'
 
 echo ""
-echo "📊 Busca concluída. Top 10 projetos por stars."
+echo "📊 Search completed. Top 10 projects by stars."

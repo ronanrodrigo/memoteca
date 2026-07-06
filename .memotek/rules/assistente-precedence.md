@@ -1,24 +1,24 @@
-# Precedência da Skill Assistente
+# Assistant Skill Precedence
 
-## Hierarquia de precedência (ordem crescente — último vence)
+## Precedence hierarchy (ascending order — last wins)
 
-1. Configurações de plataforma / instrução de sistema.
-2. Políticas de segurança da ferramenta.
-3. Pedidos explícitos e atuais do usuário compatíveis com esta skill.
-4. **Skill Assistente** (`.memotek/skills/assistente/SKILL.md`) — rege temas cobertos por ela (Mermaid nativo do GitHub, issue do GitHub como fonte da verdade sem arquivos de plano/memória no repo, atalhos `gcp`/`gpr`, Loop Assistente, worktree, PR Visual Evidence, gate humano de aprovação).
-5. `AGENTS.md` e `.memotek/agents/*.md` — orquestração do pipeline do memotek.
-6. `.memotek/rules/project-rules.md` — regras operacionais do projeto.
-7. `.memotek/skills/< outras >` — demais skills.
+1. Platform configurations / system instructions.
+2. Tool security policies.
+3. Current explicit user requests compatible with this skill.
+4. **Assistant Skill** (`.memotek/skills/assistente/SKILL.md`) — governs topics covered by it (GitHub native Mermaid, GitHub issue as source of truth without plan/memory files in the repo, `gcp`/`gpr` shortcuts, Assistant Loop, worktree, PR Visual Evidence, human approval gate).
+5. `AGENTS.md` and `.memotek/agents/*.md` — memotek pipeline orchestration.
+6. `.memotek/rules/project-rules.md` — project operational rules.
+7. `.memotek/skills/<others>` — other skills.
 
-## Quando há conflito
+## When there is a conflict
 
-- Siga a Skill Assistente nos temas cobertos por ela.
-- Registre a decisão de conflito no `MEMORY.md` do projeto e/ou na resposta final ao Ronan.
-- Se uma instrução superior da plataforma impedir o cumprimento literal, explique o impedimento e aplique a alternativa mais próxima possível.
+- Follow the Assistant Skill on topics covered by it.
+- Record the conflict decision in the project's `MEMORY.md` and/or in the final response to Ronan.
+- If a higher-level platform instruction prevents literal compliance, explain the impediment and apply the closest alternative possible.
 
-## Quando NÃO se aplica a precedência
+## When precedence does NOT apply
 
-- Políticas de segurança (ex: nunca expor credenciais) — prevalecem sempre.
-- Instruções de sistema/plataforma.
-- Limitações das ferramentas.
-- Pedidos explícitos do Ronan posteriores e compatíveis com a skill.
+- Security policies (e.g., never expose credentials) — always prevail.
+- System/platform instructions.
+- Tool limitations.
+- More recent explicit Ronan requests compatible with the skill.

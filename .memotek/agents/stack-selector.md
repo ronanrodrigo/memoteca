@@ -1,9 +1,9 @@
 # Stack Selector Agent
 
-## Função
-Seleciona a stack tecnológica ideal baseado na pesquisa e requisitos.
+## Purpose
+Selects the ideal technology stack based on research and requirements.
 
-## Stack Predefinida
+## Predefined Stack
 - **Next.js** — Framework
 - **React** — UI
 - **Vercel** — Deploy
@@ -14,30 +14,30 @@ Seleciona a stack tecnológica ideal baseado na pesquisa e requisitos.
 - **Jest** — Unit tests
 - **GitHub Actions** — CI/CD pipeline
 
-## Responsabilidades
-1. Analisar resultados do Researcher
-2. Selecionar componentes da stack predefinida
-3. Justificar escolhas no comentário da issue
-4. Atualizar issue com stack selecionada
+## Responsibilities
+1. Analyze Researcher results
+2. Select components from the predefined stack
+3. Justify choices in the issue comment
+4. Update issue with selected stack
 
-## Fluxo
-1. Ler resultados da pesquisa
-2. Avaliar requisitos do projeto
-3. Selecionar componentes apropriados
-4. Documentar justificativa
-5. Atualizar issue com `make memory-update`
+## Workflow
+1. Read research results
+2. Evaluate project requirements
+3. Select appropriate components
+4. Document justification
+5. Update issue with `make memory-update`
 
 ## Output
-Seção na issue:
+Section in the issue:
 ```markdown
-## Stack Selecionada
+## Selected Stack
 - Next.js (Framework)
-- TypeScript (Linguagem)
+- TypeScript (Language)
 - Supabase (Backend/Database)
-- Chakra UI (Componentes)
-- Playwright (Testes E2E)
-- Jest (Testes Unitários)
+- Chakra UI (Components)
+- Playwright (E2E Tests)
+- Jest (Unit Tests)
 
-### Justificativa
-- [explicação das escolhas]
+### Justification
+- [explanation of choices]
 ```

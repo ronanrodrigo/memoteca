@@ -1,16 +1,16 @@
 #!/bin/bash
-# setup-vercel-secrets.sh — Configura secrets da Vercel no GitHub Actions.
-# Uso: make setup-vercel-secrets
+# setup-vercel-secrets.sh — Configure Vercel secrets in GitHub Actions.
+# Usage: make setup-vercel-secrets
 #
-# Detecta automaticamente VERCEL_ORG_ID e VERCEL_PROJECT_ID a partir de
-# .vercel/project.json (criado por `vercel link` / `vercel --yes`).
-# Pede apenas o VERCEL_TOKEN (gerado em https://vercel.com/account/tokens).
+# Automatically detects VERCEL_ORG_ID and VERCEL_PROJECT_ID from
+# .vercel/project.json (created by `vercel link` / `vercel --yes`).
+# Only asks for VERCEL_TOKEN (generated at https://vercel.com/account/tokens).
 #
-# Requer:
-#   - Vercel CLI autenticado (`vercel login`) para que .vercel/project.json exista
-#   - GitHub CLI autenticado (`gh auth login`) para gravar os secrets no repo
+# Requires:
+#   - Vercel CLI authenticated (`vercel login`) so .vercel/project.json exists
+#   - GitHub CLI authenticated (`gh auth login`) to write secrets to the repo
 #
-# Modo não-interativo: passe VERCEL_TOKEN por env var (útil para automação):
+# Non-interactive mode: pass VERCEL_TOKEN via env var (useful for automation):
 #   VERCEL_TOKEN=vercel_xxx make setup-vercel-secrets
 
 set -euo pipefail
@@ -44,7 +44,7 @@ open_url() {
   } >/dev/null 2>&1 || true
 }
 
-# ─── pré-checks ────────────────────────────────────────────────────────────
+# ─── pre-checks ──────────────────────────────────────────────────────────
 REPO_SLUG="${REPO_SLUG:-}"
 if [ -z "$REPO_SLUG" ]; then
   if command -v gh >/dev/null 2>&1; then
@@ -52,17 +52,17 @@ if [ -z "$REPO_SLUG" ]; then
   fi
 fi
 if [ -z "$REPO_SLUG" ]; then
-  err "Não consegui detectar o repo (gh CLI ausente ou não autenticado)."
-  err "Rode 'gh auth login' ou defina REPO_SLUG=owner/repo make setup-vercel-secrets"
+  err "Could not detect repo (gh CLI missing or not authenticated)."
+  err "Run 'gh auth login' or set REPO_SLUG=owner/repo make setup-vercel-secrets"
   exit 1
 fi
 
 if ! command -v gh >/dev/null 2>&1 || ! gh auth status >/dev/null 2>&1; then
-  err "GitHub CLI não autenticado. Rode: gh auth login"
+  err "GitHub CLI not authenticated. Run: gh auth login"
   exit 1
 fi
 
-# ─── detectar Org/Project ID ────────────────────────────────────────────────
+# ─── detect Org/Project ID ────────────────────────────────────────────────
 VERCEL_ORG_ID="${VERCEL_ORG_ID:-}"
 VERCEL_PROJECT_ID="${VERCEL_PROJECT_ID:-}"
 PROJECT_FILE=".vercel/project.json"
@@ -82,34 +82,34 @@ VERCEL_TOKEN="${VERCEL_TOKEN:-}"
 
 if [ -z "$VERCEL_TOKEN" ]; then
   if [ ! -t 0 ]; then
-    err "VERCEL_TOKEN não fornecido e stdin não é TTY."
-    err "Modo não-interativo: VERCEL_TOKEN=vercel_xxx make setup-vercel-secrets"
+    err "VERCEL_TOKEN not provided and stdin is not a TTY."
+    err "Non-interactive mode: VERCEL_TOKEN=vercel_xxx make setup-vercel-secrets"
     exit 1
   fi
   printf '\n%s%s  Vercel → GitHub Actions secrets%s\n' "$BOLD" "$BLUE" "$RESET"
   printf '%s  Repo: %s%s\n\n' "$DIM" "$REPO_SLUG" "$RESET"
-  say "Gere um token em https://vercel.com/account/tokens"
+  say "Generate a token at https://vercel.com/account/tokens"
   open_url "https://vercel.com/account/tokens"
-  step "Clique em 'Create Token'"
-  step "Name: shows-ci-deploy (ou outro)"
+  step "Click 'Create Token'"
+  step "Name: shows-ci-deploy (or other)"
   step "Scope: Full account  →  Create"
-  step "Copie o token gerado (começa com vercel_)"
-  ask_secret VERCEL_TOKEN "Cole o token aqui:"
+  step "Copy the generated token (starts with vercel_)"
+  ask_secret VERCEL_TOKEN "Paste the token here:"
   if [ -z "$VERCEL_TOKEN" ]; then
-    err "Token vazio. Abortando."
+    err "Empty token. Aborting."
     exit 1
   fi
 fi
 
-# ─── validar IDs ────────────────────────────────────────────────────────────
+# ─── validate IDs ────────────────────────────────────────────────────────
 if [ -z "$VERCEL_ORG_ID" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
-  err "Não detectei VERCEL_ORG_ID / VERCEL_PROJECT_ID em .vercel/project.json."
-  err "Rode 'vercel link' primeiro ou passe via env:"
+  err "Could not detect VERCEL_ORG_ID / VERCEL_PROJECT_ID in .vercel/project.json."
+  err "Run 'vercel link' first or pass via env:"
   err "  VERCEL_ORG_ID=team_xxx VERCEL_PROJECT_ID=prj_xxx make setup-vercel-secrets"
   exit 1
 fi
 
-# ─── gravar .env local ─────────────────────────────────────────────────────
+# ─── write local .env ─────────────────────────────────────────────────────
 ENV_FILE="${ENV_FILE:-.env}"
 upsert_env() {
   local key="$1" val="$2" tmp
@@ -122,12 +122,12 @@ upsert_env() {
 upsert_env VERCEL_TOKEN "$VERCEL_TOKEN"
 upsert_env VERCEL_ORG_ID "$VERCEL_ORG_ID"
 upsert_env VERCEL_PROJECT_ID "$VERCEL_PROJECT_ID"
-ok "gravou .env (VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID)"
+ok "wrote .env (VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID)"
 
-# ─── gravar secrets no GitHub Actions ──────────────────────────────────────
-if [ -t 0 ]; then printf '\n%s%s  Enviando secrets ao GitHub Actions (%s)...%s\n\n' "$BOLD" "$BLUE" "$REPO_SLUG" "$RESET"; fi
+# ─── write secrets to GitHub Actions ──────────────────────────────────────
+if [ -t 0 ]; then printf '\n%s%s  Sending secrets to GitHub Actions (%s)...%s\n\n' "$BOLD" "$BLUE" "$REPO_SLUG" "$RESET"; fi
 printf '%s' "$VERCEL_TOKEN"      | gh secret set VERCEL_TOKEN      --repo "$REPO_SLUG" && ok "VERCEL_TOKEN"
 printf '%s' "$VERCEL_ORG_ID"     | gh secret set VERCEL_ORG_ID     --repo "$REPO_SLUG" && ok "VERCEL_ORG_ID"
 printf '%s' "$VERCEL_PROJECT_ID" | gh secret set VERCEL_PROJECT_ID --repo "$REPO_SLUG" && ok "VERCEL_PROJECT_ID"
 
-printf '\n%s%s  ✓ Pronto.%s  Deploy automático via GitHub Actions habilitado para %s\n' "$BOLD" "$GREEN" "$RESET" "$REPO_SLUG"
+printf '\n%s%s  ✓ Ready.%s  Automatic deploy via GitHub Actions enabled for %s\n' "$BOLD" "$GREEN" "$RESET" "$REPO_SLUG"

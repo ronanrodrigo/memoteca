@@ -13,8 +13,8 @@
   },
   "command": {
     "start": {
-      "template": "Execute make listen-issues para verificar issues abertas com label memotek. Se encontrar issues pendentes, processe cada uma seguindo o pipeline: research → stack → implement → deploy → ci → pr → memory.",
-      "description": "Verifica e processa issues abertas com label memotek"
+      "template": "Run make listen-issues to check for open issues with the memotek label. If you find pending issues, process each one following the pipeline: research → stack → implement → deploy → ci → pr → memory.",
+      "description": "Check and process open issues with the memotek label"
     }
   }
 }

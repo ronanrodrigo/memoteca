@@ -1,11 +1,11 @@
 # Deploy Preview/Production
 #
-# Requer secrets no repo-projeto (Settings -> Secrets and variables -> Actions):
-#   VERCEL_TOKEN      — Token de acesso Vercel
-#   VERCEL_ORG_ID     — ID da organizacao Vercel
-#   VERCEL_PROJECT_ID — ID do projeto Vercel
+# Requires secrets in the project repo (Settings -> Secrets and variables -> Actions):
+#   VERCEL_TOKEN      — Vercel access token
+#   VERCEL_ORG_ID     — Vercel organization ID
+#   VERCEL_PROJECT_ID — Vercel project ID
 #
-# Configurar secrets via: make setup-vercel-secrets
+# Configure secrets via: make setup-vercel-secrets
 
 name: Deploy Preview/Production
 on:

@@ -1,49 +1,49 @@
 # Skill: Intake
 
-## Função
-Coleta input do usuário e cria issue no GitHub com template apropriado.
+## Purpose
+Collects user input and creates a GitHub issue with the appropriate template.
 
 ## Trigger
-- Usuário fornece prompt manual descrevendo o que precisa
-- schedule_job detecta nova issue aberta via `make listen-issues`
+- User provides a manual prompt describing what they need
+- schedule_job detects a new open issue via `make listen-issues`
 
-## Fluxo
+## Workflow
 
-### 1. Identificar Tipo de Input
-Perguntar ao usuário:
-- **Criação**: Criar algo do zero
-- **Adição**: Adicionar feature a algo existente
-- **Bug Fix**: Corrigir algo que não funciona
+### 1. Identify Input Type
+Ask the user:
+- **Creation**: Create something from scratch
+- **Addition**: Add a feature to something existing
+- **Bug Fix**: Fix something that isn't working
 
-### 2. Coletar Informações
+### 2. Collect Information
 
-#### Para Criação:
-- Nome do projeto
-- Descrição do que precisa
-- Tipo de projeto (dashboard, CRUD, landing page, etc.)
-- Persistência necessária? (sim/não)
-- Referências ou inspirações
+#### For Creation:
+- Project name
+- Description of what's needed
+- Project type (dashboard, CRUD, landing page, etc.)
+- Persistence required? (yes/no)
+- References or inspirations
 
-#### Para Adição:
-- O que adicionar
-- Onde adicionar (que arquivos/components)
-- Dependências
+#### For Addition:
+- What to add
+- Where to add it (which files/components)
+- Dependencies
 
-#### Para Bug Fix:
-- O que está errado
-- Passos para reproduzir
-- Comportamento esperado vs atual
+#### For Bug Fix:
+- What's wrong
+- Steps to reproduce
+- Expected vs actual behavior
 
-### 3. Criar Issue
-Usar template `feature_request.yml` com as respostas coletadas.
+### 3. Create Issue
+Use the `feature_request.yml` template with the collected answers.
 
-### 4. Iniciar Pipeline
-Após criar issue, o Orchestrator assume o controle.
+### 4. Start Pipeline
+After creating the issue, the Orchestrator takes over.
 
-## Comandos
-- `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Intake completo"` — Finalizar intake
+## Commands
+- `make memory-update ISSUE_NUMBER=<num> CHECKBOX="Intake completed"` — Finalize intake
 
 ## Output
-- Issue criada no GitHub com template preenchido
-- Label `memotek` aplicada
-- Pipeline iniciado pelo Orchestrator
+- Issue created on GitHub with filled template
+- `memotek` label applied
+- Pipeline started by the Orchestrator

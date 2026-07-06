@@ -1,25 +1,25 @@
 #!/bin/bash
-# deploy-preview.sh — Deploy preview na Vercel
-# Uso: make deploy-preview
+# deploy-preview.sh — Deploy preview on Vercel
+# Usage: make deploy-preview
 #
-# Nota: A primeira execução vincula o projeto ao Vercel.
-# Requer Vercel CLI >= 54. O flag --pre foi removido;
-# o deploy padrão já é preview para branches não-main.
+# Note: The first run links the project to Vercel.
+# Requires Vercel CLI >= 54. The --pre flag was removed;
+# default deploy is already preview for non-main branches.
 
 set -euo pipefail
 
-echo "🚀 Fazendo deploy preview na Vercel..."
+echo "🚀 Deploying preview on Vercel..."
 
 if ! command -v vercel &> /dev/null; then
-  echo "❌ Vercel CLI não encontrado. Instale com: npm i -g vercel"
+  echo "❌ Vercel CLI not found. Install with: npm i -g vercel"
   exit 1
 fi
 
-# Verificar versão mínima
+# Check minimum version
 VERCEL_VERSION=$(vercel --version 2>/dev/null | head -1 || echo "0.0.0")
 echo "📌 Vercel CLI: $VERCEL_VERSION"
 
 vercel --yes
 
-echo "🎉 Deploy preview concluído!"
-echo "💡 Acesse o link acima para visualizar o preview."
+echo "🎉 Deploy preview completed!"
+echo "💡 Visit the link above to view the preview."

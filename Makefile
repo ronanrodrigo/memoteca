@@ -44,7 +44,7 @@ install-playwright:
 test-e2e:
 	npm run test:e2e
 
-# === TESTES (memotek) ===
+# === TESTS (memotek) ===
 test-preview:
 	@.memotek/scripts/validate-preview.sh
 
@@ -70,24 +70,24 @@ setup-vercel-secrets:
 scaffold:
 	@.memotek/scripts/scaffold-project.sh
 
-# === DEV SHORTCUTS (Skill Assistente) ===
-# Atalhos operados pelo agente quando o Ronan digita "gcp", "gpr" ou "gcp & gpr".
-# gcp        : commit + push  (MESSAGE="feat: ..." ou "fix: ...")
-# gpr        : abrir PR       (TITLE="feat: ..." BODY="...")
-# gcp-and-gpr: commit + push + PR (nesta ordem, para na primeira falha)
+# === DEV SHORTCUTS (Assistant Skill) ===
+# Shortcuts operated by the agent when Ronan types "gcp", "gpr" or "gcp & gpr".
+# gcp        : commit + push  (MESSAGE="feat: ..." or "fix: ...")
+# gpr        : open PR        (TITLE="feat: ..." BODY="...")
+# gcp-and-gpr: commit + push + PR (in this order, stops on first failure)
 gcp:
-	@if [ -z "$(MESSAGE)" ]; then echo "❌ Uso: make gcp MESSAGE='feat: ...' ou 'fix: ...'"; exit 1; fi
+	@if [ -z "$(MESSAGE)" ]; then echo "❌ Usage: make gcp MESSAGE='feat: ...' or 'fix: ...'"; exit 1; fi
 	@git add -A
 	@git commit -m "$(MESSAGE)"
 	@git push
 
 gpr:
-	@if [ -z "$(TITLE)" ]; then echo "❌ Uso: make gpr TITLE='feat: ...' BODY='...' (BODY opcional)"; exit 1; fi
+	@if [ -z "$(TITLE)" ]; then echo "❌ Usage: make gpr TITLE='feat: ...' BODY='...' (BODY optional)"; exit 1; fi
 	@if [ -n "$(BODY)" ]; then gh pr create --title "$(TITLE)" --body "$(BODY)" --base main; \
 	else gh pr create --title "$(TITLE)" --body "" --base main; fi
 
 gcp-and-gpr:
-	@if [ -z "$(MESSAGE)" ] || [ -z "$(TITLE)" ]; then echo "❌ Uso: make gcp-and-gpr MESSAGE='feat: ...' TITLE='feat: ...' [BODY='...']"; exit 1; fi
+	@if [ -z "$(MESSAGE)" ] || [ -z "$(TITLE)" ]; then echo "❌ Usage: make gcp-and-gpr MESSAGE='feat: ...' TITLE='feat: ...' [BODY='...']"; exit 1; fi
 	@git add -A
 	@git commit -m "$(MESSAGE)"
 	@git push
