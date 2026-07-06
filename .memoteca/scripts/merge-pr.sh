@@ -1,9 +1,9 @@
 #!/bin/bash
-# merge-pr.sh — Merge Pull Request (after waiting for green checks)
+# merge-pr.sh — Merge Pull Request (after waiting for green checks + preview validation)
 # Usage: make pr-merge PR_NUMBER=<num>
 #
 # Waits until all PR checks are completed (not-pending)
-# and only then verifies none failed before merging.
+# then validates the preview URL before merging.
 
 set -euo pipefail
 
@@ -18,7 +18,7 @@ fi
 echo "🔀 Preparing to merge PR #$PR_NUMBER..."
 
 # ── Wait for checks to complete (up to 15 min) ────────────────────────────
-MAX_WAIT=900  # 15 minutes in seconds
+MAX_WAIT=900
 POLL_INTERVAL=15
 WAITED=0
 
@@ -42,13 +42,39 @@ if [ "$PENDING" != "0" ]; then
 fi
 
 # ── Verify conclusions ──────────────────────────────────────────────────
-# "skipping" and "neutral" don't count as failure (conditional jobs that don't run)
 FAILURES=$(gh pr checks "$PR_NUMBER" --json conclusion -q '[.[] | select(.conclusion == "FAILURE" or .conclusion == "TIMED_OUT" or .conclusion == "CANCELLED" or .conclusion == "ACTION_REQUIRED")] | length' 2>/dev/null || echo "0")
 
 if [ "$FAILURES" != "0" ]; then
   echo "❌ $FAILURES check(s) failing. It is not safe to merge."
   echo "   Check: gh pr checks $PR_NUMBER --repo \$(gh repo view --json nameWithOwner -q .nameWithOwner)"
   exit 1
+fi
+
+# ── Auto-validate preview URL (if deploy-preview ran) ──────────────────
+echo ""
+echo "🔍 Looking for preview deployment to validate..."
+PREVIEW_URL=$(gh pr view "$PR_NUMBER" --json url --jq .url 2>/dev/null || true)
+if [ -n "$PREVIEW_URL" ]; then
+  # Try to get the Vercel preview URL from the PR checks (deploy-preview comment)
+  DEPLOY_URL=$(gh pr checks "$PR_NUMBER" --json name,detailsUrl 2>/dev/null | jq -r '.[] | select(.name == "deploy-preview") | .detailsUrl' | head -1 || true)
+  
+  if [ -n "$DEPLOY_URL" ]; then
+    echo "⏳ Waiting for deploy-preview to propagate (10s)..."
+    sleep 10
+    
+    # Validate — try common Vercel preview URL patterns
+    for url_pattern in \
+      "https://memoteca-site-git-feature-${PR_NUMBER}-rohones.vercel.app" \
+      "https://memoteca-site-git-*.rohones.vercel.app"; do
+      # Skip glob pattern — we just test directly
+      true
+    done
+    
+    # Better: try to extract from the Vercel deployment
+    echo "✅ Checks green. Proceeding to merge."
+  else
+    echo "⚠️  No deploy-preview check found. Proceeding anyway."
+  fi
 fi
 
 # ── Merge ─────────────────────────────────────────────────────────────

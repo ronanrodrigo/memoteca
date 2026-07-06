@@ -1,5 +1,5 @@
 #!/bin/bash
-# deploy-production.sh — Deploy production on Vercel
+# deploy-production.sh — Deploy production on Vercel + auto-validate
 # Usage: make deploy-production
 #
 # Requires Vercel CLI >= 54. Requires the project to be
@@ -9,16 +9,42 @@ set -euo pipefail
 
 echo "🚀 Deploying production on Vercel..."
 
-if ! command -v vercel &> /dev/null; then
+if ! command -v vercel &>/dev/null; then
   echo "❌ Vercel CLI not found. Install with: npm i -g vercel"
   exit 1
 fi
 
-# Check minimum version
 VERCEL_VERSION=$(vercel --version 2>/dev/null | head -1 || echo "0.0.0")
 echo "📌 Vercel CLI: $VERCEL_VERSION"
 
-vercel --prod --yes
+DEPLOY_CWD="."
+if [ -d "site" ]; then
+  DEPLOY_CWD="site"
+fi
 
-echo "🎉 Deploy production completed!"
-echo "💡 The site is now live in production."
+OUTPUT=$(vercel --cwd "$DEPLOY_CWD" --prod --yes 2>&1)
+echo "$OUTPUT"
+
+# Extract production URL from Vercel output
+PROD_URL=$(echo "$OUTPUT" | grep -oE 'https://[a-zA-Z0-9.-]+\.vercel\.app' | head -1)
+
+if [ -z "$PROD_URL" ]; then
+  echo "❌ Could not extract production URL from Vercel output"
+  exit 1
+fi
+
+echo ""
+echo "🔍 Validating production URL: $PROD_URL"
+for i in $(seq 1 12); do
+  HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROD_URL" 2>/dev/null || echo "000")
+  if [ "$HTTP_STATUS" = "200" ]; then
+    echo "✅ Production functional! Status: $HTTP_STATUS"
+    echo "🌐 Production URL: $PROD_URL"
+    exit 0
+  fi
+  echo "⏳ Attempt $i/12 — Status: $HTTP_STATUS (waiting 5s...)"
+  sleep 5
+done
+
+echo "❌ Production not healthy after 60s. Last status: $HTTP_STATUS"
+exit 1
