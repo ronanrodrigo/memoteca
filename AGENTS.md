@@ -6,7 +6,9 @@
    - Proibido: `gh`, `curl`, `jq`, `yq`, `npm run`, `jest`, etc. diretamente
    - Exceção: comandos internos do agente (ler arquivos, escrever código)
 2. **Repositório obrigatório** — O usuário DEVE ter um repo no GitHub (criado via "Use this template")
-3. **Precedência** — O que está no AGENTS.md tem precedência sobre definições de agentes/skills
+3. **Precedência** — O que está no AGENTS.md tem precedência sobre definições de agentes/skills, **exceto nos temas cobertos pela Skill Assistente** (`.memotek/skills/assistente/SKILL.md`), que prevalecem. Ver `.memotek/rules/assistente-precedence.md` para a hierarquia completa.
+
+4. **Skill Assistente ativa** — Mermaid nativo do GitHub, issue do GitHub como fonte da verdade (sem arquivos de plano/memória no repo), worktree por feature, atalhos `gcp`/`gpr` e Loop de Trabalho Assistente são OBRIGATÓRIOS. Primeira resposta em conversa começa com 💭.
 
 ## Orquestração
 
@@ -66,7 +68,7 @@ repo-projeto/
 ```
 USUÁRIO (input)
 ├── Prompt manual → Intake faz perguntas → Cria issue no GitHub
-└── /start → Verifica e processa issues abertas
+└── /issues → Verifica e processa issues abertas
          │
          ▼
     ┌─────────────────────────────────────┐
@@ -89,7 +91,7 @@ USUÁRIO (input)
 graph TB
     User([USUÁRIO])
     User -->|Prompt Manual| Intake[Intake Skill]
-    User -->|/start| Polling[Polling Issues]
+    User -->|/issues| Polling[Polling Issues]
     Intake --> Issue[Issue Criada]
     Polling --> Issue
     Issue --> Orch[ORCHESTRATOR]
@@ -113,7 +115,7 @@ graph TB
 |---|-------|--------|------|-------------|
 | 1 | Input | - | Usuário clona template via "Use this template" | - |
 | 2 | Intake | Intake (skill) | Cria issue GitHub com template de perguntas | `make memory-update` |
-| 2.1 | Polling | - | Usuário digita `/start` para verificar issues | `make listen-issues` |
+| 2.1 | Polling | - | Usuário digita `/issues` para verificar issues | `make listen-issues` |
 | 3 | Research | Researcher | Busca projetos open source no GitHub | `make search-projects` |
 | 3.1 | Benchmarking | Researcher | Analisa top 3 por stars | (interno) |
 | 3.2 | Fallback | Researcher | Se nada encontrado, pergunta ao usuário | (interação) |

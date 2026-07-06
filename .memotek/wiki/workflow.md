@@ -5,7 +5,7 @@
 ### 1. Input do Usuário
 O usuário pode fornecer input de duas formas:
 - **Prompt manual** — Usuário descreve o que precisa
-- **/start** — Verifica e processa issues abertas
+- **/issues** — Verifica e processa issues abertas
 
 ### 2. Intake
 A skill Intake coleta informações e cria issue no GitHub:
@@ -58,9 +58,9 @@ O Memory Agent atualiza a issue:
 ## Execução Manual
 
 ### Verificar Issues
-O usuário digita `/start` no opencode para verificar e processar issues abertas:
+O usuário digita `/issues` no opencode para verificar e processar issues abertas:
 ```
-/start
+/issues
 ```
 
 - `make listen-issues` — execução única do script que verifica issues

@@ -70,4 +70,4 @@ memotek/
 2. **Scripts via Make** — Todos os comandos são executados via `make <target>`
 3. **Stack predefinida** — Next.js + React + Vercel + Supabase + Chakra UI
 4. **Templates de issue** — Um único template para 3 tipos de task
-5. **Execução manual** — Usuário digita `/start` para verificar issues
+5. **Execução manual** — Usuário digita `/issues` para verificar issues

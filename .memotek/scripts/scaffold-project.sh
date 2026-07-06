@@ -251,6 +251,29 @@ GITIGNORE
 
 mkdir -p src/app src/components src/lib src/__tests__ e2e
 
+# === Fase 7.5: Copiar workflow de worktree (referência operacional) ===
+
+# A Skill Assistente NÃO cria arquivos de plano/MEMORY no repo — esses vivem na
+# issue do GitHub. Os atalhos gcp/gpr já vivem no Makefile principal. Aqui só
+# copiamos o workflow de worktree como referência operacional em docs/.
+
+MEMOTEK_ROOT=""
+for candidate in "$PWD" "$PWD/.." "$PWD/../.."; do
+  if [ -f "$candidate/.memotek/templates/worktree-workflow.md" ]; then
+    MEMOTEK_ROOT="$candidate"
+    break
+  fi
+done
+
+if [ -n "$MEMOTEK_ROOT" ]; then
+  mkdir -p docs
+  cp "$MEMOTEK_ROOT/.memotek/templates/worktree-workflow.md" docs/worktree-workflow.md 2>/dev/null || true
+  echo "✅ docs/worktree-workflow.md copiado (referência operacional)"
+  echo "   Plano e memória NÃO são arquivos — vivem na issue do GitHub."
+else
+  echo "⚠️  worktree-workflow.md não encontrado — pulando cópia."
+fi
+
 # === Fase 8: Criar arquivo de teste exemplo ===
 
 if [ ! -f src/app/page.tsx ]; then
