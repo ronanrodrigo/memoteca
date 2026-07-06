@@ -2,9 +2,9 @@
 
 **memoteca** is a GitHub **template repository** that ships an agent orchestration pipeline (the "harness") for scaffolding and shipping Next.js projects end-to-end. memoteca itself is **not** an app — it has no `package.json`, no `src/`, no Next.js project. It is the orchestration layer only.
 
-## repo-template vs repo-projeto
+## repo-template vs repo-project
 
-| | **memoteca** (repo-template, this repo) | **repo-projeto** |
+| | **memoteca** (repo-template, this repo) | **repo-project** |
 |---|---|---|
 | What it is | A GitHub template | A repo created from this template via "Use this template" |
 | Ships | `.memotek/`, `Makefile`, issue template, `opencode.json`, `AGENTS.md`, `README.md`, `.env-example` | Everything in memoteca PLUS a scaffolded Next.js app |
@@ -15,11 +15,11 @@
 
 ### What scaffold preserves
 
-`make scaffold PROJECT_NAME="."` runs `create-next-app` **in-place** in the repo-projeto and adds the Next.js app, while **preserving** these template files: `.memotek`, `.github`, `AGENTS.md`, `Makefile`, `opencode.json`, `.env-example`, `.git`, `.gitignore`.
+`make scaffold PROJECT_NAME="."` runs `create-next-app` **in-place** in the repo-project and adds the Next.js app, while **preserving** these template files: `.memotek`, `.github`, `AGENTS.md`, `Makefile`, `opencode.json`, `.env-example`, `.git`, `.gitignore`.
 
 ## Quick start
 
-1. On GitHub, click **"Use this template"** → name your new repo (the **repo-projeto**).
+1. On GitHub, click **"Use this template"** → name your new repo (the **repo-project**).
 2. Clone it locally.
 3. **One-time central board setup** (private, cross-repo, personal account):
 
@@ -29,7 +29,7 @@
    ```
 
    Requires the `project` scope: `gh auth refresh -s project` (if not set).
-4. Open an issue in the repo-projeto using the **"Feature Request / Task"** template (auto-labels `memotek`).
+4. Open an issue in the repo-project using the **"Feature Request / Task"** template (auto-labels `memotek`).
 5. Add the issue to the central board:
 
    ```
@@ -54,7 +54,7 @@
 
 ## Placeholders — filled by the AGENT, not the human
 
-A repo-projeto created from this template contains these placeholders in its `README.md` and in the repo-projeto sections of its `AGENTS.md`. They are filled **automatically by the Implementer agent** during the pipeline — Ronan does **not** edit them by hand:
+A repo-project created from this template contains these placeholders in its `README.md` and in the repo-project sections of its `AGENTS.md`. They are filled **automatically by the Implementer agent** during the pipeline — Ronan does **not** edit them by hand:
 
 - `{PROJECT_NAME}` — repo / project name (filled at scaffold step)
 - `{PROJECT_DESCRIPTION}` — one-line description (filled at scaffold step)
@@ -107,13 +107,13 @@ Next.js (App Router, TypeScript, Tailwind, `src/` dir, `@/*` alias) · React · 
 | `make project-add-issue ISSUE_URL=...` | both | Add a `memotek`-labelled issue to the board (sets Status=Todo + parses Task Type) |
 | `make tasks-listen` | both | Query the board for items Status=Todo (oldest first) — entry point |
 | `make process-issue ISSUE_URL=...` | both | Fetch an issue (cross-repo) and print next make targets |
-| `make scaffold PROJECT_NAME="."` | repo-projeto | Adds the Next.js app in-place (preserves template files) |
+| `make scaffold PROJECT_NAME="."` | repo-project | Adds the Next.js app in-place (preserves template files) |
 | `make memory-update ...` | both | Check a checkbox + post comment on the issue AND mirror Status to the board |
 | `make memory-finalize ...` | both | Check all remaining + close issue + set board Status=Done |
-| `make install` / `lint` / `typecheck` / `build` / `test` / `test-e2e` | repo-projeto only | Standard JS dev verification |
-| `make install-hooks` | repo-projeto | Install the commit-msg hook enforcing `<type>: <desc> (#<NN>)` |
-| `make deploy-preview` / `deploy-production` | repo-projeto | Vercel deploys |
-| `make pr-create` / `pr-merge` | repo-projeto | PR open + wait-for-checks merge |
-| `make gcp` / `gpr` / `gcp-and-gpr` | repo-projeto | commit+push / PR / both — `gcp` auto-injects `(#NN)` from the `feature/<NN>-<short>` branch |
+| `make install` / `lint` / `typecheck` / `build` / `test` / `test-e2e` | repo-project only | Standard JS dev verification |
+| `make install-hooks` | repo-project | Install the commit-msg hook enforcing `<type>: <desc> (#<NN>)` |
+| `make deploy-preview` / `deploy-production` | repo-project | Vercel deploys |
+| `make pr-create` / `pr-merge` | repo-project | PR open + wait-for-checks merge |
+| `make gcp` / `gpr` / `gcp-and-gpr` | repo-project | commit+push / PR / both — `gcp` auto-injects `(#NN)` from the `feature/<NN>-<short>` branch |
 
 All CLIs MUST be invoked via `make <target>`, never directly (`gh`, `npm run`, `jest`, ...). See `AGENTS.md` for the why.

@@ -1,15 +1,15 @@
 # AGENTS.md — Rules for Agents
 
-## repo-template vs repo-projeto (read this first)
+## repo-template vs repo-project (read this first)
 
 There are **two** kinds of repo that share this `AGENTS.md`:
 
-- **repo-template (memoteca, THIS repo)** — A GitHub template. It ships **ONLY** the orchestration harness: `.memotek/`, `Makefile`, `.github/ISSUE_TEMPLATE/`, `opencode.json`, `.env-example`, `AGENTS.md`, `README.md`. It has **NO** `package.json`, `src/`, lockfile, or Next.js app. `make install/lint/build/test` will **FAIL** here — they require a scaffolded repo-projeto. The pipeline does NOT run here; memoteca is only the seed.
-- **repo-projeto** — A repo created from this template via GitHub "Use this template". Initially byte-identical to memoteca. Then `make scaffold PROJECT_NAME="."` runs `create-next-app` **in-place** and adds the Next.js app (`src/`, `package.json`, `tsconfig.json`, `next.config.*`, lockfile, ...). The scaffold **preserves** these template files: `.memotek`, `.github`, `AGENTS.md`, `Makefile`, `opencode.json`, `.env-example`, `.git`, `.gitignore`. The pipeline runs end-to-end in the **repo-projeto**.
+- **repo-template (memoteca, THIS repo)** — A GitHub template. It ships **ONLY** the orchestration harness: `.memotek/`, `Makefile`, `.github/ISSUE_TEMPLATE/`, `opencode.json`, `.env-example`, `AGENTS.md`, `README.md`. It has **NO** `package.json`, `src/`, lockfile, or Next.js app. `make install/lint/build/test` will **FAIL** here — they require a scaffolded repo-project. The pipeline does NOT run here; memoteca is only the seed.
+- **repo-project** — A repo created from this template via GitHub "Use this template". Initially byte-identical to memoteca. Then `make scaffold PROJECT_NAME="."` runs `create-next-app` **in-place** and adds the Next.js app (`src/`, `package.json`, `tsconfig.json`, `next.config.*`, lockfile, ...). The scaffold **preserves** these template files: `.memotek`, `.github`, `AGENTS.md`, `Makefile`, `opencode.json`, `.env-example`, `.git`, `.gitignore`. The pipeline runs end-to-end in the **repo-project**.
 
 ### Placeholders — filled by the AGENT, not the human
 
-A repo-projeto created from this template contains placeholders (`{PROJECT_NAME}`, `{PROJECT_DESCRIPTION}`, `{REPO_URL}`, `{PREVIEW_URL}`, `{PRODUCTION_URL}`) in its `README.md` and "repo-projeto" sections. These are filled by the **Implementer agent** during the pipeline (the scaffold step fills name/description/url; the deploy steps fill preview/production URLs) — **not** by Ronan manually. Do not ask the human to edit them by hand.
+A repo-project created from this template contains placeholders (`{PROJECT_NAME}`, `{PROJECT_DESCRIPTION}`, `{REPO_URL}`, `{PREVIEW_URL}`, `{PRODUCTION_URL}`) in its `README.md` and "repo-project" sections. These are filled by the **Implementer agent** during the pipeline (the scaffold step fills name/description/url; the deploy steps fill preview/production URLs) — **not** by Ronan manually. Do not ask the human to edit them by hand.
 
 ## General Rules
 
@@ -50,12 +50,12 @@ The primary agent is the orchestrator. When you receive a task, perform the step
 - Each step must be completed before moving on to the next
 - If a step fails, report it in the issue and wait for the user's decision
 
-## Repo-Project Structure (repo-projeto, after scaffold)
+## Repo-Project Structure (repo-project, after scaffold)
 
-When cloning via "Use this template", the repo-projeto already contains everything you need. After `make scaffold PROJECT_NAME="."`, the structure is:
+When cloning via "Use this template", the repo-project already contains everything you need. After `make scaffold PROJECT_NAME="."`, the structure is:
 
 ```
-repo-projeto/
+repo-project/
 ├── src/                    ← project code
 ├── package.json
 ├── Makefile
