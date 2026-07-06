@@ -24,10 +24,16 @@ Skills are instruction sets for specific tasks:
 
 ### Scripts
 Shell scripts that encapsulate complex commands:
-- `update-memory.sh` — Update issue
+- `project-common.sh` — Resolves the central "Memoteca" board (sourced helper)
+- `project-create.sh` — Create the private board + fields
+- `project-link-repo.sh` — Link a repo to the board
+- `project-add-issue.sh` — Add a `memotek`-labelled issue to the board
+- `tasks-listen.sh` — Query the board for items Status=Todo (oldest first) — entry point
+- `process-issue.sh` — Fetch an issue (cross-repo) and print next make targets
+- `update-memory.sh` — Check an issue checkbox, post comment, AND mirror Status to the board
+- `install-hooks.sh` — Install the commit-msg hook enforcing `(#NN)`
 - `search-projects.sh` — Search projects
 - `setup-gh-actions.sh` — Configure CI/CD
-- `listen-issues.sh` — Polling of issues
 - `run-tests.sh` — Run tests
 - `validate-preview.sh` — Test preview
 - `create-pr.sh` — Create PR
@@ -39,7 +45,8 @@ Shell scripts that encapsulate complex commands:
 ## Data Flow
 
 ```
-User → Intake → GitHub Issue → Orchestrator → Pipeline → Deploy → Updated Issue
+User → Intake → Issue in target repo → make project-add-issue → Memoteca board → make tasks-listen
+       → Orchestrator (worktree in fixed workspace dir) → Pipeline → Deploy → Updated Issue + board Status
 ```
 
 ## Directory Structure
@@ -66,8 +73,12 @@ memotek/
 
 ## Design Decisions
 
-1. **Issue as memory** — The issue created by intake serves as the memory
-2. **Scripts via Make** — All commands are executed via `make <target>`
-3. **Predefined stack** — Next.js + React + Vercel + Supabase + Chakra UI
-4. **Issue templates** — A single template for 3 task types
-5. **Manual execution** — User types `/issues` to check issues
+1. **Issue = source of truth; board = mirror** — The GitHub issue (filed in the target repo) holds the per-task timeline; the private "Memoteca" GitHub Project board mirrors the pipeline `Status` (cross-task queue).
+2. **Central board** — Private, owned by the user's personal account, cross-repo. Identity is resolved at runtime by listing user projects and matching the title "Memoteca" — no `.env` entry required.
+3. **Auto-add by label isn't API-creatable** — `deleteProjectV2Workflow` exists in GraphQL but `createProjectV2Workflow` does not. Auto-add is therefore web-UI-only; the templates' default path is explicit `make project-add-issue`.
+4. **Scripts via Make** — All commands are executed via `make <target>`
+5. **Predefined stack** — Next.js + React + Vercel + Supabase + Chakra UI
+6. **Issue templates** — A single template for 3 task types
+7. **Manual execution** — User types `/issues` to `make tasks-listen`
+8. **Fixed workspace dir** — Orchestrator runs from `~/Developer/memotek-workspaces/`, cloning target repos on demand and creating a worktree `feature/<NN>-<short>` per task
+9. **Commit format** — `<type>: <description> (#<NN>)` enforced by `make install-hooks`

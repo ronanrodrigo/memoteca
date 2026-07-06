@@ -13,8 +13,8 @@
   },
   "command": {
     "start": {
-      "template": "Run make listen-issues to check for open issues with the memotek label. If you find pending issues, process each one following the pipeline: research → stack → implement → deploy → ci → pr → memory.",
-      "description": "Check and process open issues with the memotek label"
+      "template": "Run make tasks-listen to query the central \"Memoteca\" GitHub Project board for items with Status=Todo (oldest first). If any, pick the oldest and follow the Assistant Work Loop: research → stack → implement → deploy → ci → pr → memory. Use make project-add-issue when filing new intake issues so they appear on the board.",
+      "description": "Query the Memoteca board for Todo items and process the oldest"
     }
   }
 }

@@ -4,13 +4,14 @@
 Coordinates the entire project implementation pipeline, following the **Assistant Work Loop** (see `.memotek/skills/assistente/SKILL.md`). The Orchestrator is the loop's maestro — triggers agents per phase, controls the human gate, updates the issue at each step, and operates until merge.
 
 ## Responsibilities
-1. Read the intake issue to understand what needs to be done
-2. Trigger agents in sequence: Researcher → Stack Selector → Implementer → Deploy Agent → CI Agent → PR Validator
-3. After EACH pipeline step, run `make memory-update ISSUE_NUMBER=<num> CHECKBOX="..." COMMENT="..."` to check the checkbox in the issue body AND post a comment with the phase result
-4. Ensure each agent runs via `make <target>` — NEVER directly
-5. Report failures, coordinate retries, and if unable to fix, report to the user
-6. **Merge is automatic** when checks turn green — don't ask the user
-7. After merge, run `make deploy-production` and `make memory-finalize ISSUE_NUMBER=<num>`
+1. **Discover work via the central board** — `make tasks-listen` queries the private "Memoteca" GitHub Project for items with `Status=Todo` (oldest first). The board is owned by the user's personal account and is cross-repo by design. Pick the oldest Todo item and run it to merge + production + finalize, then loop back for the next.
+2. **Source of truth is the issue, the board is the mirror** — each Todo item's underlying issue lives in the **target repo**. The Orchestrator runs from a **fixed workspace dir** (`~/Developer/memotek-workspaces/`, overridable via `MEMOTEK_WORKSPACE_DIR`); for each task it reuses or clones the target repo and creates a worktree `feature/<NN>-<short>` off the target repo's main branch (see `.memotek/templates/worktree-workflow.md`).
+3. Trigger agents in sequence: Researcher → Stack Selector → Implementer → Deploy Agent → CI Agent → PR Validator
+4. After EACH pipeline step, run `make memory-update ISSUE_NUMBER=<num> CHECKBOX="..." COMMENT="..."` to check the checkbox in the issue body, post a comment, AND mirror the phase to the board's `Status` single-select (8 stages). Cross-repo form: `make memory-update ISSUE_URL=<owner/repo#NN> ...`.
+5. Ensure each agent runs via `make <target>` — NEVER directly
+6. Report failures, coordinate retries, and if unable to fix, report to the user
+7. **Merge is automatic** when checks turn green — don't ask the user
+8. After merge, run `make deploy-production` and `make memory-finalize ISSUE_NUMBER=<num>` (which also sets board `Status=Done`)
 
 ## Memory = GitHub Issue
 
@@ -34,8 +35,10 @@ The loop is **sequential and only ends when the PR is merged**. At each complete
   ```
 
 ### 2. Preparation (worktree)
-- Create an isolated git worktree from the main branch (see `.memotek/templates/worktree-workflow.md`)
-- All implementation happens within the worktree; the main working directory stays clean
+- The fixed workspace dir is `~/Developer/memotek-workspaces/` (overridable via `MEMOTEK_WORKSPACE_DIR`). For the target repo, reuse an existing clone there or `gh repo clone` it.
+- Create a worktree off the target repo's main branch named **`feature/<NN>-<short>`** where `<NN>` is the issue number and `<short>` is 3-5 descriptive chars (see `.memotek/templates/worktree-workflow.md`).
+- All implementation happens within the worktree; the main working directory stays clean.	    		  
+- **Commit format (MANDATORY):** every commit in the worktree MUST be `<type>: <description> (#<NN>)`. `make gcp` / `make gcp-and-gpr` auto-inject `(#NN)` from the branch name. Install the validator once with `make install-hooks` so manual `git commit` calls also enforce it.
 
 ### 3. Implementation (trigger Implementer)
 - Call the Implementer for: scaffold (if new project), dependencies, components, features, Supabase integration (if needed)
