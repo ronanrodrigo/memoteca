@@ -1,0 +1,53 @@
+#!/bin/bash
+# Memotek commit-msg hook — enforces the project house style on every commit:
+#   <type>: <description> (#<issue-number>)
+# where:
+#   type      ∈ {feat, fix, docs, chore, refactor, test}
+#   #NN       is the GitHub issue / board item ID for the work in flight
+#
+# A commit message WITHOUT (#NN) is REJECTED unless it starts with one of the
+# bypass prefixes (Merge, Revert, chore: release) or the message is a merge
+# commit (starts with a SHA + "merge").
+#
+# Installed via: make install-hooks
+
+set -euo pipefail
+
+MSG_FILE="$1"
+FULL_MSG=$(cat "$MSG_FILE")
+FIRST_LINE=$(printf '%s\n' "$FULL_MSG" | sed -n '1p')
+
+# Bypass: merges and reverts produced by git itself.
+case "$FIRST_LINE" in
+  "Merge "*|"Revert "*|" Automated merge"*)
+    exit 0
+    ;;
+esac
+
+# Bypass: chore commits in template-only flow (no board item yet)
+case "$FIRST_LINE" in
+  "chore: release"*|"docs: "*"(template)"*)
+    exit 0
+    ;;
+esac
+
+# Pattern: <type>: <subject> (#NN)
+if printf '%s' "$FIRST_LINE" | grep -Eq '^(feat|fix|docs|chore|refactor|test)(\([^)]+\))?: .+ \(#[0-9]+\)$'; then
+  exit 0
+fi
+
+# Pattern: <type>: <subject>  — missing (#NN)
+if printf '%s' "$FIRST_LINE" | grep -Eq '^(feat|fix|docs|chore|refactor|test)(\([^)]+\))?: .+'; then
+  echo "❌ Commit rejected — missing GitHub issue / project item ID (#NN)." >&2
+  echo "    First line: $FIRST_LINE" >&2
+  echo "    Expected:  <type>: <description> (#<NN>)  e.g. \"feat: add login page (#12)\"" >&2
+  echo "    Fix:" >&2
+  echo "      git commit --amend -m \"$(printf '%s' "$FIRST_LINE" | sed -E 's/$/ (#<NN>/')\"" >&2
+  exit 1
+fi
+
+echo "❌ Commit message does not follow memotek format." >&2
+echo "    First line: $FIRST_LINE" >&2
+echo "    Expected:    <type>: <description> (#<NN>)" >&2
+echo "    <type> ∈ {feat, fix, docs, chore, refactor, test}" >&2
+exit 1

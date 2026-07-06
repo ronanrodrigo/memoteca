@@ -1,6 +1,6 @@
-.PHONY: memory-update memory-finalize search-projects gh-actions-setup listen-issues process-issue test test-preview pr-create pr-merge deploy-preview deploy-production setup-vercel-secrets scaffold install lint typecheck build install-playwright test-e2e gcp gpr gcp-and-gpr
+.PHONY: memory-update memory-finalize search-projects gh-actions-setup tasks-listen process-issue test test-preview pr-create pr-merge deploy-preview deploy-production setup-vercel-secrets scaffold install lint typecheck build install-playwright test-e2e gcp gpr gcp-and-gpr project-create project-link-repo project-add-issue install-hooks
 
-# === MEMORY ===
+# === MEMORY (issue body = source of truth; board Status mirrors pipeline phase) ===
 memory-update:
 	@.memotek/scripts/update-memory.sh
 
@@ -15,9 +15,28 @@ search-projects:
 gh-actions-setup:
 	@.memotek/scripts/setup-gh-actions.sh
 
-# === INTAKE ===
-listen-issues:
-	@.memotek/scripts/listen-issues.sh
+# === BOARD INTAKE — the central "Memoteca" project (private, cross-repo) ===
+# First-time setup: create the private board + standard Status/Task Type fields.
+project-create:
+	@.memotek/scripts/project-create.sh
+
+# Link a target repo to the board so its issues can be added (once per repo).
+#   make project-link-repo                  # current repo
+#   make project-link-repo REPO=owner/name
+project-link-repo:
+	@.memotek/scripts/project-link-repo.sh
+
+# Explicitly add an issue to the board. Called by the intake flow after filing.
+#   make project-add-issue ISSUE_URL=https://github.com/o/r/issues/12
+#   make project-add-issue ISSUE_URL=42
+#   make project-add-issue ISSUE_URL=owner/repo#42
+project-add-issue:
+	@.memotek/scripts/project-add-issue.sh
+
+# === INTAKE / DISPATCH ===
+# tasks-listen queries the central board for items Status=Todo (oldest first).
+tasks-listen:
+	@.memotek/scripts/tasks-listen.sh
 
 process-issue:
 	@.memotek/scripts/process-issue.sh
@@ -70,16 +89,28 @@ setup-vercel-secrets:
 scaffold:
 	@.memotek/scripts/scaffold-project.sh
 
+# === HOOKS ===
+# Install the commit-msg hook enforcing <type>: <desc> (#<NN>) in the current repo.
+install-hooks:
+	@.memotek/scripts/install-hooks.sh
+
 # === DEV SHORTCUTS (Assistant Skill) ===
-# Shortcuts operated by the agent when Ronan types "gcp", "gpr" or "gcp & gpr".
 # gcp        : commit + push  (MESSAGE="feat: ..." or "fix: ...")
+#              The branch name `feature/<NN>-<short>` supplies the issue/board ID;
+#              ` (#NN)` is auto-appended to the commit message if not already present.
 # gpr        : open PR        (TITLE="feat: ..." BODY="...")
 # gcp-and-gpr: commit + push + PR (in this order, stops on first failure)
 gcp:
 	@if [ -z "$(MESSAGE)" ]; then echo "❌ Usage: make gcp MESSAGE='feat: ...' or 'fix: ...'"; exit 1; fi
-	@git add -A
-	@git commit -m "$(MESSAGE)"
-	@git push
+	@BRANCH=$$(git rev-parse --abbrev-ref HEAD); \
+	NN=$$(printf '%s' "$$BRANCH" | sed -nE 's#^feature/([0-9]+).*$$#\1#p'); \
+	MSG="$(MESSAGE)"; \
+	if [ -n "$$NN" ] && ! printf '%s' "$$MSG" | grep -qE '\(#[0-9]+\) *$$'; then \
+	  MSG="$$MSG (#$$NN)"; \
+	fi; \
+	git add -A; \
+	git commit -m "$$MSG"; \
+	git push
 
 gpr:
 	@if [ -z "$(TITLE)" ]; then echo "❌ Usage: make gpr TITLE='feat: ...' BODY='...' (BODY optional)"; exit 1; fi
@@ -88,8 +119,14 @@ gpr:
 
 gcp-and-gpr:
 	@if [ -z "$(MESSAGE)" ] || [ -z "$(TITLE)" ]; then echo "❌ Usage: make gcp-and-gpr MESSAGE='feat: ...' TITLE='feat: ...' [BODY='...']"; exit 1; fi
-	@git add -A
-	@git commit -m "$(MESSAGE)"
-	@git push
+	@BRANCH=$$(git rev-parse --abbrev-ref HEAD); \
+	NN=$$(printf '%s' "$$BRANCH" | sed -nE 's#^feature/([0-9]+).*$$#\1#p'); \
+	MSG="$(MESSAGE)"; \
+	if [ -n "$$NN" ] && ! printf '%s' "$$MSG" | grep -qE '\(#[0-9]+\) *$$'; then \
+	  MSG="$$MSG (#$$NN)"; \
+	fi; \
+	git add -A; \
+	git commit -m "$$MSG"; \
+	git push
 	@if [ -n "$(BODY)" ]; then gh pr create --title "$(TITLE)" --body "$(BODY)" --base main; \
 	else gh pr create --title "$(TITLE)" --body "" --base main; fi

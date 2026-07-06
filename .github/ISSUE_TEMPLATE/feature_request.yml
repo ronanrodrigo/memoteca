@@ -8,6 +8,12 @@ body:
         # New Memotek Task
         Fill in the information below to start the pipeline.
 
+        > After filing, **add this issue to the central board** so the orchestrator picks it up:
+        > ```
+        > make project-add-issue ISSUE_URL=https://github.com/<owner>/<repo>/issues/<NN>
+        > ```
+        > (Or skip this step if the Projects V2 "Auto-add" workflow for the `memotek` label is configured on the board.)
+
   - type: dropdown
     id: task-type
     attributes:

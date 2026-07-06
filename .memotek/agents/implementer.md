@@ -39,6 +39,8 @@ The Implementer does **not** orchestrate the Work Loop, does **not** control the
 - The issue is the source of truth — DON'T create plan/memory files in the repo
 - First response in conversation starts with 💭
 - Sub-agents: `task` (parallel) and `invoke` (specialist)
+- Worktree branch is `feature/<NN>-<short>` where `<NN>` is the issue number
+- **Commit format (MANDATORY):** `<type>: <description> (#<NN>)` — `make gcp` / `make gcp-and-gpr` auto-inject `(#NN)` from the branch name; `make install-hooks` enforces it for manual `git commit` calls too
 
 ## Output
 - Code implemented in the repository (inside the worktree created by the Orchestrator)

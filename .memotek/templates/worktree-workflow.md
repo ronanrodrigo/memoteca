@@ -9,13 +9,14 @@ Each feature/task is worked on in an isolated git worktree from the repo's main 
 ### 1. Create the worktree
 
 ```bash
-# from the main repo root
-git worktree add -b feature/<proj>-<short-id> ../<proj>-wt main
-cd ../<proj>-wt
+# from the main repo root (or from the fixed workspace dir, after gh repo clone)
+git worktree add -b feature/<NN>-<short> ../<repo>-wt main
+cd ../<repo>-wt
+make install-hooks    # installs the commit-msg validator (#NN enforcement)
 ```
 
-- `<proj>` = descriptive identifier for the feature/issue (e.g., `ota-hermes`, `feature-x`)
-- `<short-id>` = 3-5 descriptive chars (e.g., `signin`, `otsignup`, `fixnav`)
+- `<NN>` = GitHub issue / board item ID (numeric)
+- `<short>` = 3-5 descriptive chars (e.g., `signin`, `otsignup`, `fixnav`)
 - `main` can be `master` if that's the configured main branch
 
 ### 2. Work in the worktree
@@ -37,8 +38,8 @@ git push -u origin feature/<proj>-<short-id>
 
 ```bash
 cd <main-repo>
-git worktree remove ../<proj>-wt
-git branch -d feature/<proj>-<short-id>
+git worktree remove ../<repo>-wt
+git branch -d feature/<NN>-<short>
 ```
 
 ## Anti-patterns
