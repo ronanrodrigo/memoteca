@@ -1,3 +1,16 @@
+---
+name: memoteca-pr-visual-evidence
+description: "Use when visual evidence (screenshots, screen recordings, simulator videos) is requested for a PR in a memoteca repo-project. Captures media via Maestro CLI and hosts it on GitHub user-attachments — never committed to the repo."
+version: 1.0.0
+author: memoteca
+license: MIT
+platforms: [linux, macos, windows]
+metadata:
+  hermes:
+    tags: [memoteca, pr, visual-evidence, maestro, screenshots]
+    related_skills: [memoteca-assistente]
+---
+
 # Skill: PR Visual Evidence
 
 > Companion to the **Assistant** skill. Defines the workflow for capturing visual evidence (screenshots, screen recordings, videos) attached to Pull Requests.

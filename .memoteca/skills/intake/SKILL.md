@@ -1,3 +1,16 @@
+---
+name: memoteca-intake
+description: "Use when a user provides a manual prompt describing a new project, system addition, or bug fix inside a memoteca repo-project. Collects input, files a GitHub issue from the feature_request.yml template, and adds it to the central Memoteca board so the Orchestrator discovers it."
+version: 1.0.0
+author: memoteca
+license: MIT
+platforms: [linux, macos, windows]
+metadata:
+  hermes:
+    tags: [memoteca, intake, github-issues, onboarding]
+    related_skills: [memoteca-assistente]
+---
+
 # Skill: Intake
 
 ## Purpose

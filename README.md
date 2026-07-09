@@ -52,6 +52,33 @@
 
    Progress is tracked as checkboxes on the issue body AND mirrored to the board's `Status` single-select (Backlog / Todo / Research / Implementation / Review / PR/Merge / Deploy / Done).
 
+## Agent Runtime Support (Hermes Agent, OpenCode)
+
+This template is agent-runtime-agnostic. The pipeline targets **Hermes Agent** and **OpenCode** as first-class runtimes.
+
+| Concept | Hermes Agent | OpenCode |
+|---|---|---|
+| Project context | `.hermes.md` (walks parents to git root, auto-loaded) | `opencode.json` `instructions` |
+| Skills | YAML-frontmatter `SKILL.md` under `.memoteca/skills/`, installed via `make hermes-setup` | `opencode.json` `skills.paths` |
+| Sub-agents | `delegate_task(goal=...)` (single) or `delegate_task(tasks=[...])` (batch, up to 3) | `task` / `invoke` |
+| Persistent memory | `memory` tool (user + memory stores) | N/A |
+
+### Hermes Agent setup
+
+After scaffolding the repo-project, install the 3 memoteca skills into your Hermes profile:
+
+```
+make hermes-setup
+```
+
+This symlinks (POSIX) or copies (Windows) the skills from `.memoteca/skills/` into `~/.hermes/skills/` (or `$HERMES_HOME/skills/`). Then start a new Hermes session (`/reset` or `hermes`) and load the main skill:
+
+```
+hermes -s memoteca-assistente
+```
+
+The `.hermes.md` file at the repo root is auto-loaded by Hermes when working in this repo and provides the full Hermes project context.
+
 ## Placeholders — filled by the AGENT, not the human
 
 A repo-project created from this template contains these placeholders in its `README.md` and in the repo-project sections of its `AGENTS.md`. They are filled **automatically by the Implementer agent** during the pipeline — Ronan does **not** edit them by hand:
@@ -112,6 +139,7 @@ Next.js (App Router, TypeScript, Tailwind, `src/` dir, `@/*` alias) · React · 
 | `make memory-finalize ...` | both | Check all remaining + close issue + set board Status=Done |
 | `make install` / `lint` / `typecheck` / `build` / `test` / `test-e2e` | repo-project only | Standard JS dev verification |
 | `make install-hooks` | repo-project | Install the commit-msg hook enforcing `<type>: <desc> (#<NN>)` |
+| `make hermes-setup` | both | Install the 3 memoteca skills into the active Hermes profile skill tree (~/.hermes/skills/) — symlinks on POSIX, copies on Windows |
 | `make deploy-preview` / `deploy-production` | repo-project | Vercel deploys |
 | `make pr-create` / `pr-merge` | repo-project | PR open + wait-for-checks merge |
 | `make gcp` / `gpr` / `gcp-and-gpr` | repo-project | commit+push / PR / both — `gcp` auto-injects `(#NN)` from the `feature/<NN>-<short>` branch |

@@ -11,6 +11,27 @@ There are **two** kinds of repo that share this `AGENTS.md`:
 
 A repo-project created from this template contains placeholders (`{PROJECT_NAME}`, `{PROJECT_DESCRIPTION}`, `{REPO_URL}`, `{PREVIEW_URL}`, `{PRODUCTION_URL}`) in its `README.md` and "repo-project" sections. These are filled by the **Implementer agent** during the pipeline (the scaffold step fills name/description/url; the deploy steps fill preview/production URLs) — **not** by Ronan manually. Do not ask the human to edit them by hand.
 
+## Agent Runtime Support (Hermes Agent, OpenCode)
+
+This template is agent-runtime-agnostic. The pipeline targets **Hermes Agent** and **OpenCode** as first-class runtimes.
+
+| Concept | Hermes Agent | OpenCode |
+|---|---|---|
+| Project context | `.hermes.md` (walks parents to git root, auto-loaded) | `opencode.json` `instructions` |
+| Skills | YAML-frontmatter `SKILL.md` under `.memoteca/skills/`, installed via `make hermes-setup` | `opencode.json` `skills.paths` |
+| Sub-agents | `delegate_task(goal=...)` (single) or `delegate_task(tasks=[...])` (batch, up to 3) | `task` / `invoke` |
+| Memory | `memory` tool (user + memory stores) | N/A |
+
+**Hermes Agent setup** (one-time, in the repo-project after scaffold):
+
+```
+make hermes-setup
+```
+
+This installs the 3 memoteca skills (`memoteca-assistente`, `memoteca-intake`, `memoteca-pr-visual-evidence`) into the active Hermes profile skill tree (`~/.hermes/skills/`). They are discovered on next session (`/reset` or a new `hermes` invocation). See `.hermes.md` for the full Hermes project context.
+
+When running inside Hermes, prefer `delegate_task` for sub-agent work. When running inside OpenCode, use `task`/`invoke`. The agent docs under `.memoteca/agents/*.md` reference both.
+
 ## General Rules
 
 1. **NEVER execute commands directly** — ALWAYS via `make <target>`
@@ -167,6 +188,7 @@ graph TB
 | `make project-link-repo [REPO=o/r]` | Links a repo to the board so its issues can be added (once per repo) |
 | `make project-add-issue ISSUE_URL=...` | Adds a `memoteca`-labelled issue to the board, sets Status=Todo + parses Task Type |
 | `make install-hooks` | Installs the commit-msg hook enforcing `<type>: <desc> (#<NN>)` |
+| `make hermes-setup` | Installs the 3 memoteca skills into the active Hermes profile skill tree (~/.hermes/skills/) — symlinks on POSIX, copies on Windows |
 
 ### CI/CD (repo-project)
 | Target | Description |
