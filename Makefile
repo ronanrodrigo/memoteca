@@ -1,4 +1,4 @@
-.PHONY: memory-update memory-finalize search-projects gh-actions-setup tasks-listen process-issue test test-preview pr-create pr-merge deploy-preview deploy-production setup-vercel-secrets scaffold install lint typecheck build install-playwright test-e2e gcp gpr gcp-and-gpr project-create project-link-repo project-add-issue install-hooks
+.PHONY: memory-update memory-finalize search-projects gh-actions-setup tasks-listen process-issue test test-preview pr-create pr-merge deploy-preview deploy-production setup-vercel-secrets scaffold install lint typecheck build install-playwright test-e2e gcp gpr gcp-and-gpr project-create project-link-repo project-add-issue install-hooks run-orchestrator
 
 # === MEMORY (issue body = source of truth; board Status mirrors pipeline phase) ===
 memory-update:
@@ -130,3 +130,20 @@ gcp-and-gpr:
 	git push
 	@if [ -n "$(BODY)" ]; then gh pr create --title "$(TITLE)" --body "$(BODY)" --base main; \
 	else gh pr create --title "$(TITLE)" --body "" --base main; fi
+
+# === FSM ORCHESTRATOR ===
+# Drive the full pipeline programmatically (phases run in order, retries,
+# trajectory JSON). Optional flags pass through to orchestrator.py.
+#   make run-orchestrator ISSUE_NUMBER=12
+#   make run-orchestrator ISSUE_NUMBER=12 AUTO=1 DRY_RUN=1
+#   make run-orchestrator ISSUE_NUMBER=12 START_PHASE=implement
+#   make run-orchestrator RESUME=.memoteca/trajectories/issue-12-*.json
+run-orchestrator:
+	@if [ -z "$(ISSUE_NUMBER)" ] && [ -z "$(RESUME)" ]; then echo "Usage: make run-orchestrator ISSUE_NUMBER=<nn> [AUTO=1] [DRY_RUN=1] [START_PHASE=phase] [RESUME=path]"; exit 1; fi
+	@FLAGS="--workdir ."; \
+	if [ -n "$(ISSUE_NUMBER)" ]; then FLAGS="$$FLAGS --issue $(ISSUE_NUMBER)"; fi; \
+	if [ -n "$(AUTO)" ]; then FLAGS="$$FLAGS --auto"; fi; \
+	if [ -n "$(DRY_RUN)" ]; then FLAGS="$$FLAGS --dry-run"; fi; \
+	if [ -n "$(START_PHASE)" ]; then FLAGS="$$FLAGS --start-phase $(START_PHASE)"; fi; \
+	if [ -n "$(RESUME)" ]; then FLAGS="$$FLAGS --resume $(RESUME)"; fi; \
+	python .memoteca/orchestrator/orchestrator.py $$FLAGS

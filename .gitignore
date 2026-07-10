@@ -1,0 +1,7 @@
+# FSM orchestrator trajectories are observability artifacts, not repo state.
+# The GitHub issue remains the source of truth per the Assistente skill.
+.memoteca/trajectories/
+
+# Python bytecode
+__pycache__/
+*.pyc

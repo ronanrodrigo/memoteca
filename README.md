@@ -115,5 +115,6 @@ Next.js (App Router, TypeScript, Tailwind, `src/` dir, `@/*` alias) · React · 
 | `make deploy-preview` / `deploy-production` | repo-project | Vercel deploys |
 | `make pr-create` / `pr-merge` | repo-project | PR open + wait-for-checks merge |
 | `make gcp` / `gpr` / `gcp-and-gpr` | repo-project | commit+push / PR / both — `gcp` auto-injects `(#NN)` from the `feature/<NN>-<short>` branch |
+| `make run-orchestrator ISSUE_NUMBER=<nn>` | both | Drive the full pipeline as a finite-state machine — retries, trajectory JSON, resume. See [`.memoteca/orchestrator/README.md`](.memoteca/orchestrator/README.md) |
 
 All CLIs MUST be invoked via `make <target>`, never directly (`gh`, `npm run`, `jest`, ...). See `AGENTS.md` for the why.
