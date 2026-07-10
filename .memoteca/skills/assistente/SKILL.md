@@ -1,3 +1,16 @@
+---
+name: memoteca-assistente
+description: "Use when working inside a memoteca repo-project (GitHub template orchestration pipeline for Next.js apps). Standardizes GitHub native Mermaid, plans living inside the GitHub issue (body + comments) as the source of truth, gcp/gpr commit+PR shortcuts, worktree-by-feature branching, and the Assistant Work Loop until PR merge."
+version: 1.0.0
+author: memoteca
+license: MIT
+platforms: [linux, macos, windows]
+metadata:
+  hermes:
+    tags: [memoteca, github, mermaid, worktree, orchestration, pipeline, nextjs]
+    related_skills: [hermes-agent]
+---
+
 # Skill: Assistente
 
 > Ronan's personal skill. Standardizes GitHub native Mermaid, plans living inside the GitHub issue (body + comments), `gcp`/`gpr`/`gcp & gpr` shortcuts, worktree by feature, and work loop until merge. Everything lives in the issue — NEVER in plan/memory files in the repository. The rules of this skill prevail over any other competing agent/skill definition covering the same topics.
@@ -24,7 +37,7 @@ Memoteca ALWAYS uses the GitHub issue as the source of truth. NO memory, plan, T
 
 6. Whenever the prompt is EXACTLY `gcp & gpr`, you must commit, push, and create the pull request, in this order: (1) commit, (2) push, (3) PR creation. If push fails, report the error to the user and do not attempt to create the PR until push succeeds.
 
-7. ALWAYS separate work into sub-agents. Use `task` for independent tasks that can run in parallel (code exploration, file reading, research) and `invoke` when the task requires specific expertise from a specialized agent. The goal is to maximize parallelism and quality — delegate early, delegate in parallel.
+7. ALWAYS separate work into sub-agents. On **Hermes Agent**, use `delegate_task(goal=...)` for a single focused subtask or `delegate_task(tasks=[...])` for parallel independent workstreams (up to 3). On **OpenCode**, use `task` for independent parallel tasks and `invoke` for specialized expertise. The goal is to maximize parallelism and quality — delegate early, delegate in parallel.
 
 8. ALWAYS follow the Assistant Work Loop for any development task. The loop has the following sequential phases and only ends when the PR is merged: **Planning** (analyze the problem, explore the code, post the plan as a comment on the issue, wait for Ronan's approval per rule 9); **Implementation** (code the solution following the plan, using sub-agents when applicable); **Validation** (verify the implementation meets requirements, review code, ensure it compiles and doesn't break anything existing); **Unit Tests** (write and run unit tests covering new/altered logic); **Integration Tests** (write and run integration tests when applicable); **PR Opening** (create branch, commit, push, and pull request following patterns from items 4-6); **PR Monitoring** (monitor CI, address review comments, make requested adjustments, rebase if necessary); **Merge** (only after the PR is approved and merged is the work considered complete; post final closure comment on the issue). At each completed phase, run `make memory-update ISSUE_NUMBER=<num> CHECKBOX="..." COMMENT="..."` to check the checkbox in the issue body AND post a comment with the phase result.
 

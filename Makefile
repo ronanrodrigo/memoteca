@@ -1,4 +1,4 @@
-.PHONY: memory-update memory-finalize search-projects gh-actions-setup tasks-listen process-issue test test-preview pr-create pr-merge deploy-preview deploy-production setup-vercel-secrets scaffold install lint typecheck build install-playwright test-e2e gcp gpr gcp-and-gpr project-create project-link-repo project-add-issue install-hooks
+.PHONY: memory-update memory-finalize search-projects gh-actions-setup tasks-listen process-issue test test-preview pr-create pr-merge deploy-preview deploy-production setup-vercel-secrets scaffold install lint typecheck build install-playwright test-e2e gcp gpr gcp-and-gpr project-create project-link-repo project-add-issue install-hooks hermes-setup
 
 # === MEMORY (issue body = source of truth; board Status mirrors pipeline phase) ===
 memory-update:
@@ -88,6 +88,12 @@ setup-vercel-secrets:
 # === SCAFFOLD ===
 scaffold:
 	@.memoteca/scripts/scaffold-project.sh
+
+# === HERMES AGENT ===
+# Install the 3 memoteca skills into the active Hermes profile skill tree.
+# Symlinks on POSIX, copies on Windows. Idempotent.
+hermes-setup:
+	@.memoteca/scripts/hermes-setup.sh
 
 # === HOOKS ===
 # Install the commit-msg hook enforcing <type>: <desc> (#<NN>) in the current repo.

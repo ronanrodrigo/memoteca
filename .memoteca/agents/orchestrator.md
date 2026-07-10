@@ -23,7 +23,7 @@ The loop is **sequential and only ends when the PR is merged**. At each complete
 
 ### 1. Planning
 - Read the intake issue to understand requirements
-- Explore existing code (using `task` sub-agents in parallel when applicable)
+- Explore existing code (using sub-agents in parallel when applicable — `delegate_task` on Hermes, `task` on OpenCode)
 - Build the complete plan (context, scope, prerequisites, technical analysis, GitHub native Mermaid diagram, Loop phases) and **post it as a comment on the issue** via `make memory-update ISSUE_NUMBER=<num> COMMENT="<complete plan in markdown>"`
 - **Human gate**: wait for Ronan's explicit approval ("ok", "go ahead", "approved"). Don't start implementation before that. If Ronan requests adjustments, make the adjustments and post again.
 - When "ok" is given, run:
@@ -53,7 +53,7 @@ The loop is **sequential and only ends when the PR is merged**. At each complete
 - Post a comment on the issue with the validation summary
 
 ### 5. Unit Tests
-- Call the Implementer (or `task` sub-agent) to write/run unit tests covering new/altered logic
+- Call the Implementer (or a sub-agent — `delegate_task` on Hermes, `task` on OpenCode) to write/run unit tests covering new/altered logic
 - `make test`
 - Post result on the issue
 
@@ -131,7 +131,7 @@ Issue Created → Orchestrator (Assistant Loop)
 - Each agent updates the issue with its progress via `make memory-update`
 - If an agent fails, report on the issue and try retry
 - First conversation response starts with 💭
-- Sub-agents: use `task` for parallelism and `invoke` for specialized expertise
+- Sub-agents: `delegate_task` on Hermes (`task`/`invoke` on OpenCode)
 
 ## Output
 - Pipeline executed end-to-end (through merge + production deploy)

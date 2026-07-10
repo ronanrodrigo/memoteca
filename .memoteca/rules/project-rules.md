@@ -34,7 +34,7 @@
 - **Memory/Plan**: ALWAYS live in the GitHub issue (body + comments), via `make memory-update ISSUE_NUMBER=<num> CHECKBOX="..." COMMENT="..."`. NEVER create `docs/agent-plans/<proj>/MEMORY.md`, `TODO.md`, `plan-<proj>.md` or equivalents in the repo.
 - **Human gate**: Before implementing, post the plan as a comment on the issue and wait for "ok". When "ok" is given, run `make memory-update ISSUE_NUMBER=<num> STATUS="Plan approved" COMMENT="Plan approved — starting implementation."`.
 - **Worktree**: Each feature in an isolated `git worktree` from the main branch, named `feature/<NN>-<short>`.
-- **Sub-agents**: Use `task` for parallelism and `invoke` for expertise.
+- **Sub-agents**: `delegate_task` on Hermes (`task`/`invoke` on OpenCode).
 - **Shortcuts**: `gcp` (commit+push), `gpr` (PR), `gcp & gpr` (commit+push+PR). `gcp` auto-injects `(#NN)` from the branch name.
 - **Commit format**: `<type>: <description> (#<NN>)` — enforced by `make install-hooks`.
 - **Emoji**: First response in each new conversation starts with 💭.
